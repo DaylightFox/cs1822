@@ -41,7 +41,7 @@ class GenerateMap:
     
     def getRandomPoint(self, radius):
         """
-        Generates random Vectors around a given radius
+        Generate a random Vector around a given radius
 
         Keyword arguments:
         radius - The radius to generate points within
@@ -62,8 +62,34 @@ class GenerateMap:
 
     def separateRooms(self):
         """
-        Uses separation steering to space the rooms out from each other
+        Uses (very basic) separation steering to space the rooms out from each other
         """
+        for room in self.rooms:
+            nearest_rooms = []
+            if room.getWidth() > room.getHeight():
+                radius = room.getWidth()
+            else:
+                radius = room.getHeight()
+            room1_center = room.getCenter()
+            for room2 in self.rooms:
+                if(room != room2):
+                    room2_center = room.getCenter()
+                    distance = math.sqrt(
+                        (room2_center.x - room1_center.x)**2
+                        +
+                        (room2_center.y - room1_center.y)**2
+                    )
+                    if distance < radius:
+                        nearest_rooms.append(room2)
+                if(len(nearest_rooms) == 5):
+                    break
+            for near_room in nearest_rooms:
+                angle = room1_center.angle(near_room.getCenter())
+                direction = Vector(1,1)
+                direction.rotate_rad(angle)
+                while(self.doOverlap(room, near_room)):
+                    room.addToPos(direction)     
+
 
     def doOverlap(self, room1, room2):
         """
@@ -80,16 +106,21 @@ class GenerateMap:
         # [2] = Bot Right
         # [3] = Bot Left
         for corner in room1_corners:
-            print((corner.x < room2_corners[1].x), corner.x, room2_corners[1].x)
-            print((corner.x > room2_corners[0].x), corner.x, room2_corners[0].x)
-            print((corner.y < room2_corners[1].y), corner.y, room2_corners[1].y)
-            print((corner.y > room2_corners[2].y), corner.y, room2_corners[2].y)
-            print(corner.x < room2_corners[1].x and corner.x > room2_corners[0].x)
-            print(corner.y < room2_corners[1].y and corner.y > room2_corners[2].y)
-            print("------------------------")
-            if((corner.x < room2_corners[1].x and corner.x > room2_corners[0].x)
-                and (corner.y < room2_corners[1].y and corner.y > room2_corners[2].y)):
+            if(corner.x in range(room2_corners[0].x, room2_corners[1].x)):
                 return True
+            elif(corner.y in range(room2_corners[0].y, room2_corners[3].y)):
+                return True
+        return False
+
+    def roomsOverlap(self):
+        """
+        Checks to see if there are any overlapping rooms
+        """
+        for room1 in self.rooms:
+            for room2 in self.rooms:
+                if(room1 != room2):
+                    if(self.doOverlap(room1, room2)):
+                        return True
         return False
 
 
@@ -116,6 +147,17 @@ class Room:
         self.__center = center
         self.__center.x = (WIDTH/2) + self.__center.x
         self.__center.y = (HEIGHT/2) + self.__center.y
+        self.__updatePosVectors()
+
+    def draw(self, canvas):
+        corners = [corner.get_p() for corner in self.__corners]
+        canvas.draw_polygon(corners, 5, "Red")
+
+    def addToPos(self, vector):
+        self.__center += vector
+        self.__updatePosVectors()
+
+    def __updatePosVectors(self):
         self.__top_left = Vector(math.floor(self.__center.x - (self.__width/2)),
                                  math.floor(self.__center.y - (self.__height/2)))
         self.__top_right = Vector(math.floor(self.__center.x + (self.__width/2)),
@@ -129,9 +171,6 @@ class Room:
                           self.__bot_right,
                           self.__bot_left]
 
-    def draw(self, canvas):
-        corners = [corner.get_p() for corner in self.__corners]
-        canvas.draw_polygon(corners, 5, "Red")
 
     def getCenter(self):
         return(self.__center)
@@ -139,16 +178,19 @@ class Room:
     def getCorners(self):
         return(self.__corners)
 
+    def getWidth(self):
+        return(self.__width)
+
+    def getHeight(self):
+        return(self.__height)
+
 
 mapGen = GenerateMap(WIDTH, HEIGHT)
-mapGen.generate(2)
+mapGen.generate(5)
 rooms = mapGen.getRooms()
 print(mapGen.doOverlap(rooms[0], rooms[1]))
-print("+++++++++++++++++++++++++++++")
 print(mapGen.doOverlap(rooms[1], rooms[0]))
-r1 = Room(50, 50, Vector(50,50))
-r2 = Room(50, 50, Vector(250,250))
-#print(mapGen.doOverlap(r1,r2))
+mapGen.separateRooms()
 
 def draw(canvas):
     global mapGen, points

@@ -1,3 +1,7 @@
+import math
+import random
+from Vector import Vector
+
 class Room:
     def __init__(self, min_size, max_size, center):
         self.__width = random.randint(min_size, max_size)

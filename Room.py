@@ -1,11 +1,10 @@
 import math
-import random
 from Vector import Vector
 
 class Room:
-    def __init__(self, min_size, max_size, center):
-        self.__width = random.randint(min_size, max_size)
-        self.__height = random.randint(min_size, max_size)
+    def __init__(self, center, width, height):
+        self.__width = width
+        self.__height = height
         self.__center = center
         #self.__center.x = (WIDTH/2) + self.__center.x
         #self.__center.y = (HEIGHT/2) + self.__center.y

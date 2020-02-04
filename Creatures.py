@@ -4,7 +4,8 @@ class Creature:
         self.radius = radius
         self.speed = 0
         self.level = 1
-        self.maxHp = 1
+        self.maxHpBase = 1
+        self.maxHpMultiplier = 1
         self.currentHp = 1
 
 

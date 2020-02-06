@@ -2,7 +2,7 @@ import random
 from Vector import Vector
 from Room import Room
 from Corridor import Corridor
-
+import math
 
 
 class MapGenerator:
@@ -43,6 +43,35 @@ class MapGenerator:
                 if(r1 != r2):
                     self.__corridors.append(Corridor(r1, r2))
 
+        self.__reduceCorridors()
+
+    def __reduceCorridors(self):
+        """
+        Creates a minimum spanning tree of corridors and then
+        adds extra_corridors_percent% extra corridors to make loops.
+        """
+        extra_corridors_percent = 0.1
+        corridors_to_keep = []
+        for room in self.__rooms:
+            shortest_distance = 999
+            for corridor in self.__corridors:
+                if room in corridor.getRooms():
+                    if corridor.getStraightDistance() < shortest_distance:
+                        shortest = corridor
+                        shortest_distance = corridor.getStraightDistance()
+            corridors_to_keep.append(shortest)
+        total_corridors = len(self.__corridors)
+        extra_corridors_to_keep = math.floor(total_corridors * extra_corridors_percent)
+        for corridor_to_keep in corridors_to_keep:
+            for corridor in self.__corridors:
+                if corridor_to_keep == corridor:
+                    self.__corridors.remove(corridor)
+        extra_corridors = []
+        while(len(extra_corridors) < extra_corridors_to_keep):
+            i = random.randint(0, len(self.__corridors)-1)
+            extra_corridors.append(self.__corridors[i])
+            self.__corridors.pop(i)
+        self.__corridors = corridors_to_keep + extra_corridors
 
 
     def __doOverlap(self, room1, room2):

@@ -1,3 +1,5 @@
+from Vector import Vector
+
 class Creature:
     def __init__(self, pos, radius, sprite):
         self.pos = pos #centre of sprite

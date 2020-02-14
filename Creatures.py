@@ -1,4 +1,7 @@
-from Vector import Vector
+try:
+    from Vector import Vector
+except ImportError:
+    from user304_rsf8mD0BOQ_1 import Vector
 
 class Creature:
     def __init__(self, pos, radius, sprite):

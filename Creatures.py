@@ -27,6 +27,20 @@ class Player(Creature):
         sprite = 1#replace with default sprite
         super().__init__(pos, playerRadius, sprite)
         self.speed = 1
+        
+        
+        
+        
+class Wizard(Player):
+    def __init__(self, pos):
+        super().__init__(pos)
+        
+    def main_attack(self, mouse_pos):
+        """
+        Vector: mouse_pos 
+        """
+        direction = (mouse_pos - self.pos).normalise
+        attack = ConeAttack(self.pos, direction)
 
 
 

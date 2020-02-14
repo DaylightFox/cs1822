@@ -22,7 +22,7 @@ def draw(canvas):
 
 
 
-
+player = Wizard(Vector(50,50))
 
 
 

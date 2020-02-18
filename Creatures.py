@@ -23,7 +23,7 @@ class Creature:
         self.DmgBase = 1
         
     def draw(self, canvas):
-        canvas.draw_image(self.sprite, self.center_source, self.width_height_source, self.pos, self.width_height_dest)
+        canvas.draw_image(self.sprite, self.center_source, self.width_height_source, self.pos.get_p(), self.width_height_dest)
 
     def take_damage(self, damage):
         self.currentHp -= damage

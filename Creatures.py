@@ -47,6 +47,7 @@ class Player(Creature):
 class Wizard(Player):
     def __init__(self, pos):
         super().__init__(pos)
+        sprite = 1#replace with wizard sprite
         
     def main_attack(self, mouse_pos):
         """

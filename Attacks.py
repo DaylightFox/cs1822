@@ -14,8 +14,9 @@ class Attack:
         creature.take_damage(self.damage)
 
 class ConeAttack(Attack):
-    def __init__(self, damage, pos):
+    def __init__(self, pos, direction, distance, angle):
         super().__init__(damage, pos)
         self.direction = direction
         self.distance = distance
+        self.angle = angle
         self.launch()

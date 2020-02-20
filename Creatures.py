@@ -53,6 +53,7 @@ class Wizard(Player):
         """
         Vector: mouse_pos 
         """
+        mouse_pos = Vector(mouse_pos[0], mouse_pos[1])
         direction = (mouse_pos - self.pos).normalise
         distance = 1#replace with value (probably level scale)
         attack = ConeAttack(self.pos, direction, distance)

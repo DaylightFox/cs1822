@@ -122,16 +122,8 @@ mvmt = Movement(ball, kbd)
 m = Map(200, 200, WIDTH, HEIGHT)
 m.generate(10, 8, [WIDTH, HEIGHT])
 rooms = m.getRooms()
-r1 = Room(Vector(WIDTH/2, HEIGHT/2), 200, 200)
-r2 = Room(Vector(WIDTH/2, HEIGHT/2), 300, 400)
-r3 = Room(Vector(WIDTH/2, HEIGHT/2), 400, 300)
-r1.addNeighbour(r2, "N")
-r2.addNeighbour(r1, "S")
-r1.addNeighbour(r3, "E")
-r3.addNeighbour(r1, "W")
 
 current_room = rooms[0]
-print(current_room.getNeighbours())
 
 def draw(canvas):
     #global mapgen

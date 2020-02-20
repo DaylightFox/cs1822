@@ -10,6 +10,7 @@ class Map:
         self.__max_height = max_height
         self.__rooms = []
         self.__max_neighbours = 3
+        self.__show_map = False
 
     def generate(self, map_size, max_rooms, screen_size):
         """
@@ -75,14 +76,15 @@ class Map:
                     valid_pos = True
                     self.__prev_heading = heading
                     self.__prev = room
-        print("Map generated:")
-        for row in self.__map_grid:
-            for col in range(len(row)-1):
-                if(row[col] != 0):
-                    print(" 1 ", end="")
-                else:
-                    print(" 0 ", end="")
-            print("\n")
+        if(self.__show_map):
+            print("Map generated:")
+            for row in self.__map_grid:
+                for col in range(len(row)-1):
+                    if(row[col] != 0):
+                        print(" 1 ", end="")
+                    else:
+                        print(" 0 ", end="")
+                print("\n")
 
     def __invertHeading(self, heading):
         if(heading == "N"):

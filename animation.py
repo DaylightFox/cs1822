@@ -64,23 +64,23 @@ class Keyboard:
         self.left = False
 
     def keyDown(self, key):
-        if key == simplegui.KEY_MAP['down']:
+        if key == simplegui.KEY_MAP['s']:
             self.down = True
-        elif key == simplegui.KEY_MAP['up']:
+        elif key == simplegui.KEY_MAP['w']:
             self.up = True
-        elif key == simplegui.KEY_MAP['right']:
+        elif key == simplegui.KEY_MAP['d']:
             self.right = True
-        elif key == simplegui.KEY_MAP['left']:
+        elif key == simplegui.KEY_MAP['a']:
             self.left = True
 
     def keyUp(self, key):
-        if key == simplegui.KEY_MAP['down']:
+        if key == simplegui.KEY_MAP['s']:
             self.down = False
-        elif key == simplegui.KEY_MAP['up']:
+        elif key == simplegui.KEY_MAP['w']:
             self.up = False
-        elif key == simplegui.KEY_MAP['right']:
+        elif key == simplegui.KEY_MAP['d']:
             self.right = False
-        elif key == simplegui.KEY_MAP['left']:
+        elif key == simplegui.KEY_MAP['a']:
             self.left = False
 
 class Interaction:
@@ -106,18 +106,18 @@ class Interaction:
 #Create objects from different classes
 bunny = MC(Vector(WIDTH/2, HEIGHT/2), mc_img, mc_width, mc_height, mc_columns, mc_rows)
 kbd = Keyboard()
-inter = Interaction(bunny, kbd)
+bunnyMove = Interaction(bunny, kbd)
 
 def draw(canvas):
-    inter.update()
+    bunnyMove.update()
     bunny.update()
     bunny.draw(canvas)
 
 
 
-# Create a frame and call events
-frame = simplegui.create_frame("Rabbit on Acid", WIDTH, HEIGHT)
-frame.set_draw_handler(draw)
-frame.set_keydown_handler(kbd.keyDown)
-frame.set_keyup_handler(kbd.keyUp)
-frame.start()
+#Create a frame and call events
+#frame = simplegui.create_frame("Rabbit on Acid", WIDTH, HEIGHT)
+#frame.set_draw_handler(draw)
+#frame.set_keydown_handler(kbd.keyDown)
+#frame.set_keyup_handler(kbd.keyUp)
+#frame.start()

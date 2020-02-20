@@ -12,3 +12,10 @@ class Attack:
 
     def deal_damage(self.creature):
         creature.take_damage(self.damage)
+
+class ConeAttack(Attack):
+    def __init__(self, damage, pos):
+        super().__init__(damage, pos)
+        self.direction = direction
+        self.distance = distance
+        self.launch()

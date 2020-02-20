@@ -2,6 +2,10 @@ try:
     from Vector import Vector
 except ImportError:
     from user304_rsf8mD0BOQ_1 import Vector
+try:
+    import simplegui
+except ImportError:
+    import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 
 class Creature:
     def __init__(self, pos, radius, sprite):
@@ -19,7 +23,7 @@ class Creature:
         self.DmgBase = 1
         
     def draw(self, canvas):
-        canvas.draw_image(self.sprite, self.center_source, self.width_height_source, self.pos, self.width_height_dest)
+        canvas.draw_image(self.sprite, self.center_source, self.width_height_source, self.pos.get_p(), self.width_height_dest)
 
     def take_damage(self, damage):
         self.currentHp -= damage
@@ -33,20 +37,25 @@ class Player(Creature):
         sprite = 1#replace with default sprite
         super().__init__(pos, playerRadius, sprite)
         self.speed = 1
-        
+        #replace with final values
+        self.center_source = []
+        self.width_height_source = [] 
+        self.width_height_dest = []
         
         
         
 class Wizard(Player):
     def __init__(self, pos):
         super().__init__(pos)
+        sprite = 1#replace with wizard sprite
         
     def main_attack(self, mouse_pos):
         """
         Vector: mouse_pos 
         """
         direction = (mouse_pos - self.pos).normalise
-        attack = ConeAttack(self.pos, direction)
+        distance = 1#replace with value (probably level scale)
+        attack = ConeAttack(self.pos, direction, distance)
 
 
 

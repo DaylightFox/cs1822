@@ -15,6 +15,7 @@ WIDTH, HEIGHT = 400, 400
 
 def draw(canvas):
     canvas.draw_polygon([(0,0),(WIDTH,0),(WIDTH,HEIGHT),(0,HEIGHT)], 5, "red")
+    player.draw(canvas)
     #room.draw(canvas)
 
 
@@ -22,8 +23,11 @@ def draw(canvas):
 
 
 
-player = Wizard(Vector(50,50))
-
+player = Wizard(Vector(200,200))
+player.sprite = simplegui.load_image("https://i.imgur.com/hpehVFb.png")
+player.center_source = [64,64]
+player.width_height_source = [64,64] 
+player.width_height_dest = [128,128]
 
 
 frame = simplegui.create_frame("Test Creatures", WIDTH, HEIGHT)

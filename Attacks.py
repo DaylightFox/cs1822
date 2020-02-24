@@ -38,8 +38,8 @@ class ProjectileAttack(Attack):
     
     def hit_creature(self, creature):
         difference = creature.pos - self.pos
-        if difference.length <= self.distance:
-            angle = self.direction.angle(difference.get_normalized())
-            if angle <= self.angle:
-                return True
-        return False
+        return difference.length <= (self.radius + creature.radius):
+            #angle = self.direction.angle(difference.get_normalized())
+            #if angle <= self.angle:
+                #return True
+        #return False

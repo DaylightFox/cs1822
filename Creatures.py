@@ -37,6 +37,7 @@ class Player(Creature):
         sprite = 1#replace with default sprite
         super().__init__(pos, playerRadius, sprite)
         self.speed = 1
+        self.exp = 0
         #replace with final values
         self.center_source = []
         self.width_height_source = [] 
@@ -67,6 +68,7 @@ class Enemy(Creature):
         sprite = 1#replace with default sprite
         super().__init__(pos, radius, sprite)
         self.speed = speed
+        self.base_exp
 
     def take_damage(self, damage):
         super().take_damage(damage)
@@ -76,5 +78,6 @@ class Enemy(Creature):
     def killed(self):
         a=1#placeholder
         #run death animation or delete
+        #increase Player exp
         
         

@@ -19,7 +19,7 @@ class ConeAttack(Attack):
         self.direction = direction
         self.distance = distance
         self.angle = angle
-        self.launch()
+        #self.launch()
     
     def hit_creature(self, creature):
         difference = creature.pos - self.pos

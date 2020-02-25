@@ -8,6 +8,9 @@ class Attack:
         self.damage = damage
         self.pos = pos
         self.sprite = 1  #replace with place holder
+        self.center_source = []
+        self.width_height_source = [] 
+        self.width_height_dest = []
         self.duration = 60 #frames on screen
 
     def deal_damage(self.creature):

@@ -14,7 +14,7 @@ class Attack:
         creature.take_damage(self.damage)
 
 class ConeAttack(Attack):
-    def __init__(self, pos, direction, distance, angle):
+    def __init__(self, damage, pos, direction, distance, angle):
         super().__init__(damage, pos)
         self.direction = direction
         self.distance = distance
@@ -43,3 +43,13 @@ class ProjectileAttack(Attack):
             #if angle <= self.angle:
                 #return True
         #return False
+
+
+class FlameBreath(ConeAttack):
+    def __init__(self, damage, pos, direction, distance):
+        angle = 45
+        super().__init__(damage, pos, direction, distance, angle)
+        self.sprite = 1#replace with sprite
+    
+    def next_frame():
+        a=1#add code for frame transition

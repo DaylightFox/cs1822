@@ -37,6 +37,7 @@ class ProjectileAttack(Attack):
         super().__init__(damage, pos)
         self.direction = direction
         self.radius = radius
+        self.trail = 1#length of the trail(texture) behind the projectile
         #self.launch()
     
     def hit_creature(self, creature):

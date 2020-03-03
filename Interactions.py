@@ -14,5 +14,16 @@ class Interaction:
         for i in range(len(self.interactor)):
             self.interactions[i].append(False)
     
-    def manageCollisions(self):
-        pass
+    def manageInteractions(self, intDetector, intResolver, sticky=True):
+        """
+        intDetector is the function that detects the interaction
+        intResolver is the function that resolves the interaction
+        sticky is True if the interations occour every game cycle(frame)
+        """
+        for inter in self.interactor:
+            inter = self.interactor[i]
+            for inted in self.interacted:
+                inted = self.interacted[j]
+                if sticky or not self.interactions[i,j]:
+                    if intDetector(inter, inted):
+                        intResolver(inter, inted)

@@ -21,13 +21,20 @@ class Creature:
         self.maxHpMultiplier = 1
         self.currentHp = 1
         self.DmgBase = 1
+        self.killed = False
         
     def draw(self, canvas):
         canvas.draw_image(self.sprite, self.center_source, self.width_height_source, self.pos.get_p(), self.width_height_dest)
 
     def take_damage(self, damage):
         self.currentHp -= damage
-        
+        if self.currentHp >= 0:
+            self.killed = True
+
+    def die(self):
+        a=1#placeholder
+        #run death animation
+        #increase Player exp
     
         
 
@@ -69,17 +76,16 @@ class Enemy(Creature):
         super().__init__(pos, radius, sprite)
         self.speed = speed
         self.base_exp = 1
-        self.killed = False
         
 
-    def take_damage(self, damage):
-        super().take_damage(damage)
-        if self.currentHp >= 0:  #will run in interaction
-            self.killed = True
+##    def take_damage(self, damage):
+##        super().take_damage(damage)
+##        if self.currentHp >= 0:
+##            self.killed = True
 
-    def killed(self):
-        a=1#placeholder
-        #run death animation or delete
+    def die(self):
+        super().die()
+        #run death animation
         #increase Player exp
         
         

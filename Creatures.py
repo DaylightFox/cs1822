@@ -68,12 +68,14 @@ class Enemy(Creature):
         sprite = 1#replace with default sprite
         super().__init__(pos, radius, sprite)
         self.speed = speed
-        self.base_exp
+        self.base_exp = 1
+        self.killed = False
+        
 
     def take_damage(self, damage):
         super().take_damage(damage)
-        if self.currentHp >= 0:
-            self.killed()
+        if self.currentHp >= 0:  #will run in interaction
+            self.killed = True
 
     def killed(self):
         a=1#placeholder

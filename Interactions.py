@@ -26,14 +26,18 @@ class Interaction:
                 inted = self.interacted[j]
                 if sticky or not self.interactions[i,j]:
                     if intDetector(inter, inted):
+                        interactions[i,j] = True
                         intResolver(inter, inted)
 
 class AttackCreatureInteraction(Interation):
     def __init__(self, attacks, creatures):
         super().__init__(attacks, creatures)
 
+    def hit_detector(attacker, attacked):
+        attacker.hit_creature(attacked)
+
     def manageInterations(self, sticky=True):
-        super().manageInterations(hit_creature, )
+        super().manageInterations(hit_detector, Attack.hit)
         removeList = []
         for creature in interacted:
             if creature.killed:

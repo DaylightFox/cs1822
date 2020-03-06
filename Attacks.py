@@ -13,7 +13,7 @@ class Attack:
         self.width_height_dest = []
         self.duration = 60 #frames on screen
 
-    def deal_damage(self.creature):
+    def deal_damage(self, creature):
         creature.take_damage(self.damage)
 
 class ConeAttack(Attack):

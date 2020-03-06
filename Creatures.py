@@ -65,6 +65,8 @@ class Wizard(Player):
         direction = (mouse_pos - self.pos).normalise
         distance = 1#replace with value (probably level scale)
         angle = 1
+        offset = 1
+        source = self.pos + ((self.radius + offset) * direction)
         attack = ConeAttack(self.pos, direction, distance, angle)
 
 

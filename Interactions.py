@@ -41,4 +41,5 @@ class AttackCreatureInteraction(Interation):
         removeList = []
         for creature in interacted:
             if creature.killed:
+                creature.die()
                 removeList.append(creature)

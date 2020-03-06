@@ -37,7 +37,7 @@ class AttackCreatureInteraction(Interation):
         attacker.hit_creature(attacked)
 
     def manageInterations(self, sticky=True):
-        super().manageInterations(hit_detector, Attack.hit)
+        super().manageInterations(hit_detector, Attack.deal_damage)
         removeList = []
         for creature in interacted:
             if creature.killed:

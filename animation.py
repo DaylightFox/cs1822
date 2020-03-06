@@ -5,8 +5,8 @@ except ImportError:
     import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 
 #Canvas dimensions
-WIDTH = 500
-HEIGHT = 500
+#WIDTH = 500
+#HEIGHT = 500
 
 #MC spritesheet + Spritesheet data
 mc_img = simplegui.load_image("https://i.imgur.com/hpehVFb.png")
@@ -38,6 +38,7 @@ class MC:
         self.frame_index = [1,0]
         self.frame_duration = 10
         self.frameclock = 0
+
     
     def update_frameindex(self):
         self.frame_index[1] = (self.frame_index[1] + 1) % self.img_rows
@@ -54,6 +55,12 @@ class MC:
     def update(self):
         self.pos.add(self.vel)
         self.vel.multiply(0.85)
+
+    def walls(self, WIDTH):
+        if (self.pos.x <= 5): #contant estimating size of sprite from centre to keep it on screen
+            self.pos.x = 5
+        if (self.pos.x >= WIDTH- 5): #same constant applied
+            self.pos.x = WIDTH - 5
 
 class Keyboard:
 
@@ -104,14 +111,14 @@ class Interaction:
             self.MC.frame_index[0]=0
 
 #Create objects from different classes
-bunny = MC(Vector(WIDTH/2, HEIGHT/2), mc_img, mc_width, mc_height, mc_columns, mc_rows)
-kbd = Keyboard()
-bunnyMove = Interaction(bunny, kbd)
+#bunny = MC(Vector(WIDTH/2, HEIGHT/2), mc_img, mc_width, mc_height, mc_columns, mc_rows)
+#kbd = Keyboard()
+#bunnyMove = Interaction(bunny, kbd)
 
-def draw(canvas):
-    bunnyMove.update()
-    bunny.update()
-    bunny.draw(canvas)
+#def draw(canvas):
+    #bunnyMove.update()
+    #bunny.update()
+    #bunny.draw(canvas)
 
 
 

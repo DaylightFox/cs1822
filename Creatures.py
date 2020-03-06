@@ -49,7 +49,9 @@ class Player(Creature):
         self.center_source = []
         self.width_height_source = [] 
         self.width_height_dest = []
-        
+
+    def die(self):
+        print("Death!!!!!!!")
         
         
 class Wizard(Player):

@@ -29,7 +29,7 @@ class Interaction:
                         interactions[i,j] = True
                         intResolver(inter, inted)
 
-class AttackCreatureInteraction(Interation):
+class AttackCreatureInteraction(Interaction):
     def __init__(self, attacks, creatures):
         super().__init__(attacks, creatures)
 

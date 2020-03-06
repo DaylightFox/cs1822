@@ -9,6 +9,7 @@ from animation import MC
 from animation import Keyboard
 from animation import Interaction
 
+
 import random
 
 
@@ -39,8 +40,7 @@ def randCol ():
     return 'rgb('+str(r)+ ','+str(g)+ ','+str(b)+ ')'
 '''
 
-#class Hero(MC):
-        
+
 class Projectiles:
     def __init__(self, pos, vel, colour): # all projectiles are the same except for where on the CANVAS WIDTH they spawn
         self.pos = pos
@@ -77,14 +77,9 @@ class SpriteProjectileInteraction:
         self.projectDiagonal = projectDiagonal
         self.numProjectiles = numProjectiles #constant
 
-    #def spriteStayonScreen(self): #Trying to keep the sprite in the walls
-    #    if ((self.bunny.pos.x) <= 0):
-    #        self.bunny.pos.x = 10
-    #def 
-
     def draw(self, canvas):
         global i, j, bunnyMove
-        #self.spriteStayonScreen
+        self.sprite.walls(WIDTH) #keeps sprite insidse hopefully
         
         if i < len(self.projectVertical):
             self.projectVertical[i].draw(canvas)

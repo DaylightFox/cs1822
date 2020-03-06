@@ -24,7 +24,7 @@ mc_rows = 4
 
 def ranPos ():
     x = random.randint(10,WIDTH)
-    y = -10
+    y = random.randint(-50,0)
     return Vector(x,y)
 '''
 def randVel():
@@ -39,6 +39,8 @@ def randCol ():
     return 'rgb('+str(r)+ ','+str(g)+ ','+str(b)+ ')'
 '''
 
+#class Hero(MC):
+        
 class Projectiles:
     def __init__(self, pos, vel, colour): # all projectiles are the same except for where on the CANVAS WIDTH they spawn
         self.pos = pos
@@ -52,13 +54,14 @@ class Projectiles:
 
     def walls(self):
         if(self.pos.x <= 0):
-            self.bounce( Vector(1, 0) )
+            self.bounce( Vector(1, 0))
         elif(self.pos.x >= WIDTH):
             self.bounce( Vector(1, 0))
     
     def update(self):
         self.walls()
         self.pos.add(self.vel)
+
 
     def draw(self,canvas):
         canvas.draw_circle(self.pos.get_p(), 
@@ -69,38 +72,49 @@ class Projectiles:
 
 class SpriteProjectileInteraction:
     def __init__(self, sprite, projectVertical, projectDiagonal):
-        self.bunny = sprite
+        self.sprite = sprite
         self.projectVertical = projectVertical
         self.projectDiagonal = projectDiagonal
         self.numProjectiles = numProjectiles #constant
 
+    #def spriteStayonScreen(self): #Trying to keep the sprite in the walls
+    #    if ((self.bunny.pos.x) <= 0):
+    #        self.bunny.pos.x = 10
+    #def 
 
     def draw(self, canvas):
-        global i, bunnyMove
+        global i, j, bunnyMove
+        #self.spriteStayonScreen
         
         if i < len(self.projectVertical):
             self.projectVertical[i].draw(canvas)
             self.projectVertical[i].update()
-
-            if self.projectVertical[i].pos.y >= HEIGHT + 30:
-                print(self.projectVertical)
+            #if (self.hit(self.sprite, self.projectVertical[i])):
+                #collide handle method
+            if (self.projectVertical[i].pos.y >= HEIGHT):
                 i+= 1
-                #self.projectiles.remove(self.projectiles[i])
-                #print("Prev Ball: " + str(i - 1))
-                #print("Current ball: " + str(i))
-                #print("List Length: " + str (len(self.projectiles)))
+
+
+        if j <len(self.projectDiagonal):
+            self.projectDiagonal[j].draw(canvas)
+            self.projectDiagonal[j].update()
+
+            if (self.projectDiagonal[j].pos.y >= HEIGHT):
+                j+= 1;
+                
+        
+        
 
         bunnyMove.update()
-        self.bunny.update()
-        self.bunny.draw(canvas)        
+        self.sprite.update()
+        self.sprite.draw(canvas)        
         
-        #else:
-            #when i is more than number of projectiles
-            #maybe call end game sequence?
 
-i= j = 0
+
+i= 0
+j = 0
 VProjectilesList = [Projectiles(ranPos(), Vector(0,5), "red" ) for i in range(numProjectiles) ]
-DProjectilesList = [Projectiles(ranPos(), Vector(3,5), "blue") for j in range(numProjectiles)]
+DProjectilesList = [Projectiles(ranPos().add(Vector(0, -50)), Vector(3,5), "blue") for j in range(numProjectiles)]
 
 bunny = MC(Vector(WIDTH/2, HEIGHT - 100), mc_img, mc_width, mc_height, mc_columns, mc_rows)
 kbd = Keyboard()

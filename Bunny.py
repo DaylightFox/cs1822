@@ -13,7 +13,7 @@ class Bunny(Creatures.Wizard, animation.MC):
     def __init__(self, pos):
         super().__init__(pos)
         self.frame_index = [1,0]
-        self.frame_duration = 1
+        self.frame_duration = 10
         self.frameclock = 0
         self.img_rows = 4
         self.img_columns = 4
@@ -32,4 +32,4 @@ class Bunny(Creatures.Wizard, animation.MC):
         if (self.frameclock % self.frame_duration == 0):
             self.update_frameindex()
         
-        self.center_source = (self.width_height_source_frame[0] * self.frame_index[0] + self.width_height_source_frame[0]/2, self.width_height_source_frame[1] * self.frame_index[1] + self.width_height_source_frame[1]/2)
+        self.center_source = (self.width_height_source[0] * self.frame_index[0] + self.width_height_source[0]/2, self.width_height_source[1] * self.frame_index[1] + self.width_height_source[1]/2)

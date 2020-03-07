@@ -48,7 +48,7 @@ class Player(Creature):
         #replace with final values
         self.center_source = []
         self.width_height_source = [] 
-        self.width_height_dest = []
+        self.width_height_dest = [32,32]
 
     def die(self):
         print("Death!!!!!!!")

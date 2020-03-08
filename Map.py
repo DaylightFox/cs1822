@@ -3,14 +3,20 @@ from Room import Room
 from Vector import Vector
 
 class Map:
-    def __init__(self, min_width, min_height, max_width, max_height):
+    def __init__(self, min_width, min_height, max_width, max_height, debug=False):
+        """
+
+        Notes:
+            mid_width & min_height need to be binary, as in 32/64/128 etc.
+        """
         self.__min_width = min_width
         self.__min_height = min_height
         self.__max_width = max_width
         self.__max_height = max_height
         self.__rooms = []
         self.__max_neighbours = 3
-        self.__show_map = False
+        self.__show_map = debug # for debug purposes
+        self.__tile_size = 32
 
     def generate(self, map_size, max_rooms, screen_size):
         """
@@ -29,18 +35,18 @@ class Map:
             center = Vector(screen_size[0]/2, screen_size[1]/2)
             if(num_of_rooms == 0):
                 room = Room(center,
-                            random.randint(self.__min_width, self.__max_width),
-                            random.randint(self.__min_height, self.__max_height),
+                            random.randrange(self.__min_width, self.__max_width, self.__tile_size),
+                            random.randrange(self.__min_height, self.__max_height, self.__tile_size),
                             "start" )
             elif(num_of_rooms == max_rooms):
                 room = Room(center,
-                            random.randint(self.__min_width, self.__max_width),
-                            random.randint(self.__min_height, self.__max_height),
+                            random.randrange(self.__min_width, self.__max_width, self.__tile_size),
+                            random.randrange(self.__min_height, self.__max_height, self.__tile_size),
                             "end" )
             else: 
                 room = Room(center,
-                            random.randint(self.__min_width, self.__max_width),
-                            random.randint(self.__min_height, self.__max_height)
+                            random.randrange(self.__min_width, self.__max_width, self.__tile_size),
+                            random.randrange(self.__min_height, self.__max_height, self.__tile_size)
                             )
 
             self.__map_grid[current[0]][current[1]] = room

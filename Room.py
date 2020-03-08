@@ -1,6 +1,7 @@
 from Vector import Vector
 from Wall import Wall
 from Door import Door
+import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 
 
 class Room:
@@ -12,14 +13,27 @@ class Room:
         self.__top_right = Vector( self.__center.x + self.__width/2, self.__center.y - self.__height/2 )
         self.__bot_left = Vector( self.__center.x - self.__width/2, self.__center.y + self.__height/2 )
         self.__bot_right = Vector( self.__center.x + self.__width/2, self.__center.y + self.__height/2 )
-        self.__walls = [ Wall(self.__top_left, self.__top_right),
-                         Wall(self.__top_right, self.__bot_right),
-                         Wall(self.__bot_right, self.__bot_left),
-                         Wall(self.__bot_left, self.__top_left) ]
+        self.__walls = [ Wall(self.__top_left, self.__top_right, "N"),
+                         Wall(self.__top_right, self.__bot_right, "E"),
+                         Wall(self.__bot_right, self.__bot_left, "S"),
+                         Wall(self.__bot_left, self.__top_left, "W") ]
         self.__type = type
         self.__characters = []
         self.__neighbours = {"N":None, "E":None, "S":None, "W":None}
         self.__doors = {}
+
+        self.__tileset = simplegui._load_local_image("game-map-tileset.png")
+        self.__wall_sprite_size = ( 32, 32 )
+        self.__wall_sprite_pos_dict = {"N": (  16 , ( 64 + self.__wall_sprite_size[1]/2 ) ),
+                                       "E": ( ( 32 + self.__wall_sprite_size[0]/2 ), ( 64 + self.__wall_sprite_size[1]/2 ) ),
+                                       "S": ( ( 96 + self.__wall_sprite_size[0]/2 ), ( 64 + self.__wall_sprite_size[1]/2 ) ),
+                                       "W": ( ( 64 + self.__wall_sprite_size[0]/2 ), ( 64 + self.__wall_sprite_size[1]/2 ) )}
+        self.__corner_sprite_pos_dict = {"NW": ( ( 128 + 16 ), ( 64 + 16 ) ),
+                                         "NE": (  16 , ( 96 + 16 ) ),
+                                         "SE": ( ( 32 + 16 ), ( 96 + 16 ) ),
+                                         "SW": ( ( 64 + 16 ), ( 96 + 16 ) )}
+        self.__door_sprite_size = ( 64, 32 )
+        self.__door_sprite_pos = ( ( 128 ), ( 128 + self.__door_sprite_pos[1]/2 ) )
 
     def isStart(self):
         return( self.__type == "start" )
@@ -82,15 +96,19 @@ class Room:
 
     def draw(self, canvas):
         """
-        Draws the walls and doors of the room
+        Draws the walls, doors & floor of the room
 
         Keyword arguments:
         canvas - the SimpleGUI canvas
         """
         for wall in self.__walls:
-            wall.draw(canvas)
+            wall.draw(canvas, self.__tileset, self.__wall_sprite_size, self.__wall_sprite_pos_dict, self.__corner_sprite_pos_dict)
+        canvas.draw_polygon([self.__top_left.get_p(),
+                             self.__top_right.get_p(),
+                             self.__bot_right.get_p(),
+                             self.__bot_left.get_p()], 0, 'rgb(66, 40, 53)', 'rgb(66, 40, 53)')
         for door in self.__doors:
-            door.draw(canvas)
+            door.draw(canvas, self.__tileset, self.__door_sprite_pos, self.__door_sprite_size)
 
 
     def addNeighbour(self, room, direction):
@@ -115,6 +133,12 @@ class Room:
             center = Vector( self.__bot_left.x, (self.__bot_left.y + self.__top_left.y)/2 )
             d = Door("W", center)
         self.__doors[d] = direction
+
+    def getWidth(self):
+        return(self.__width)
+
+    def getHeight(self):
+        return(self.__height)
 
     def __updateWalls(self):
         pass

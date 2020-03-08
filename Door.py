@@ -1,15 +1,19 @@
 from Vector import Vector
 
 class Door:
-    def __init__(self, heading, center):
+    def __init__(self, heading, center, debug=False):
         """
         Generate a Door object based on the heading and center pos.
+
+        Keyword arguments:
+        heading - The position of the door in the room (e.g. door is at top so pass in "N" for heading)
+        center - A Vector object containing the position of the center of the door
         """
         self.__heading = heading
-        self.__width = 40
+        self.__width = 64
         self.__center = center
         self.__col_box_size = 10
-        self.__show_col_box = False
+        self.__show_col_box = debug
         if(self.__heading == "N" or self.__heading == "S"):
             self.__p1 = Vector( (self.__center.x - self.__width/2), self.__center.y )
             self.__p2 = Vector( (self.__center.x + self.__width/2), self.__center.y )
@@ -26,15 +30,30 @@ class Door:
                             Vector(self.__p2.x - self.__col_box_size, self.__p2.y) ]
             
 
-    def draw(self, canvas):
+    def draw(self, canvas, tileset, sprite_pos, size):
         """
-        Draws the door on the canvas
+        Draws the door on the canvas. Rotates door sprite based on `self.__heading`.
+        Adjusts sprite position on canvas by a margin of 1 to fit walls.
 
         Keyword arguments:
         canvas - The SimpleGUI canvas
         """
-        canvas.draw_line(self.__p1.get_p(), self.__p2.get_p(), 5, "Yellow")
+        if(self.__heading == "N"):
+            rotation = 3.14159
+            dest = ( self.__center.x, self.__center.y + 1 )
+        elif(self.__heading == "E"):
+            rotation = 4.71239
+            dest = ( self.__center.x - 1, self.__center.y )
+        elif(self.__heading == "S"):
+            rotation = 0
+            dest = ( self.__center.x, self.__center.y - 1 )
+        elif(self.__heading == "W"):
+            rotation = 1.5708
+            dest = ( self.__center.x + 1, self.__center.y )
+        canvas.draw_image(tileset, sprite_pos, size, dest, size, rotation)
+        # For debug purposes:
         if(self.__show_col_box):
+            canvas.draw_line(self.__p1.get_p(), self.__p2.get_p(), 5, "Yellow")
             b_list = []
             for bound in self.bounds:
                 b_list.append(bound.get_p())

@@ -119,7 +119,7 @@ mvmt = Movement(ball, kbd)
 
 
 # rooms
-m = Map(200, 200, WIDTH, HEIGHT)
+m = Map(128, 128, WIDTH, HEIGHT)
 m.generate(10, 8, [WIDTH, HEIGHT])
 rooms = m.getRooms()
 
@@ -148,6 +148,7 @@ def draw(canvas):
 
 
 frame = simplegui.create_frame("Map Gen", WIDTH, HEIGHT)
+frame.set_canvas_background( "rgb(28, 17, 23)" )
 frame.set_draw_handler(draw)
 frame.set_keydown_handler(kbd.keyDown)
 frame.set_keyup_handler(kbd.keyUp)

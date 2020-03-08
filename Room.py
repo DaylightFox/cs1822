@@ -33,7 +33,7 @@ class Room:
                                          "SE": ( ( 32 + 16 ), ( 96 + 16 ) ),
                                          "SW": ( ( 64 + 16 ), ( 96 + 16 ) )}
         self.__door_sprite_size = ( 64, 32 )
-        self.__door_sprite_pos = ( ( 128 ), ( 128 + self.__door_sprite_pos[1]/2 ) )
+        self.__door_sprite_pos = ( ( 128 ), ( 128 + self.__door_sprite_size[1]/2 ) )
 
     def isStart(self):
         return( self.__type == "start" )

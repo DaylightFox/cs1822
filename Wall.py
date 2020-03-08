@@ -23,7 +23,7 @@ class Wall:
         top_right_corner = corners["NE"]
         bot_right_corner = corners["SE"]
         bot_left_corner = corners["SW"]
-        wall = wall[self.__heading]
+        wall = walls[self.__heading]
         half_tile_size_x = tile_size[0]/2
         half_tile_size_y = tile_size[1]/2
         if(self.__heading == "N"):

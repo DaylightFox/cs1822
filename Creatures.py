@@ -23,6 +23,12 @@ class Creature:
         self.DmgBase = 1
         self.killed = False
         
+    def getPos(self):
+        return(self.pos)
+
+    def setPos(self, pos):
+        self.pos = pos
+        
     def draw(self, canvas):
         canvas.draw_image(self.sprite, self.center_source, self.width_height_source, self.pos.get_p(), self.width_height_dest)
 

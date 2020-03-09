@@ -58,7 +58,7 @@ class Map:
 
         for i in range(random_rooms):
             chosen_room = self.__rooms[random.randint(0, len(self.__rooms)-1)]
-            while(len(chosen_room.getEmptyNeighbours()) == 0):
+            while(len(chosen_room.getEmptyNeighbours()) == 0 or chosen_room.isStart() or chosen_room.isEnd()):
                 chosen_room = self.__rooms[random.randint(0, len(self.__rooms)-1)]
             heading = self.__getRandomHeading()
             while(chosen_room.headingExists(heading)):

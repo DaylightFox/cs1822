@@ -62,6 +62,12 @@ class MC:
         if (self.pos.x >= WIDTH- 5): #same constant applied
             self.pos.x = WIDTH - 5
 
+    def getPos(self):
+        return(self.pos)
+
+    def setPos(self, pos):
+        self.pos = pos
+
 class Keyboard:
 
     def __init__(self):

@@ -61,8 +61,8 @@ bunnyMove = Interaction(bunny, kbd)
 
 
 # rooms
-m = Map(200, 200, WIDTH, HEIGHT)
-m.generate(10, 8, [WIDTH, HEIGHT])
+m = Map(256, 256, WIDTH, HEIGHT)
+m.generate(10, 0.4, [WIDTH, HEIGHT])
 rooms = m.getRooms()
 
 current_room = rooms[0]

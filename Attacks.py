@@ -15,6 +15,9 @@ class Attack:
 
     def deal_damage(self, creature):
         creature.take_damage(self.damage)
+        
+    def draw(self, canvas):
+        canvas.draw_image(self.sprite, self.center_source, self.width_height_source, self.pos.get_p(), self.width_height_dest)
 
 class ConeAttack(Attack):
     def __init__(self, damage, pos, direction, distance, angle):
@@ -35,7 +38,7 @@ class ConeAttack(Attack):
                 if (edge - creature.pos).length() <= creature.radius:
                     return True
                 else:
-                    edge = self.direction.copy().rotate(-self.angle) * difference.length()
+                    edge.rotate(self.angle * -2)
                     if (edge - creature.pos).length() <= creature.radius:
                         return True
             

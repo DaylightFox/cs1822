@@ -33,14 +33,15 @@ class ConeAttack(Attack):
             angle = self.direction.angle(difference.get_normalized())
             if angle <= self.angle:
                 return True
-            else:
-                edge = self.direction.copy().rotate(self.angle) * difference.length()
-                if (edge - creature.pos).length() <= creature.radius:
-                    return True
-                else:
-                    edge.rotate(self.angle * -2)
-                    if (edge - creature.pos).length() <= creature.radius:
-                        return True
+            
+            edge = self.direction.copy().rotate(self.angle) * difference.length()
+            if (edge - creature.pos).length() <= creature.radius:
+                return True
+            
+            edge.rotate(self.angle * -2)
+            #return (edge - creature.pos).length() <= creature.radius
+            if (edge - creature.pos).length() <= creature.radius:
+                return True
             
         return False
 

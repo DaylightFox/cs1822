@@ -46,6 +46,13 @@ class Room:
 
     def getNeighbours(self):
         return(self.__neighbours)
+    
+    def getEmptyNeighbours(self):
+        empty_neighbours = {}
+        for heading in self.__neighbours:
+            if(self.__neighbours[heading] != None):
+                empty_neighbours[heading] = self.__neighbours[heading]
+        return(empty_neighbours)
 
     def isCollidingWall(self, obj):
         """
@@ -133,6 +140,18 @@ class Room:
             center = Vector( self.__bot_left.x, (self.__bot_left.y + self.__top_left.y)/2 )
             d = Door("W", center)
         self.__doors[d] = direction
+
+    def headingExists(self, heading):
+        """
+        Returns true if a neighbour at the given heading already exists
+
+        Keyword arguments:
+        heading - a string that holds a heading
+        """
+        for key in self.__neighbours:
+            if(heading == key and self.__neighbours[key] != None):
+                return True
+        return False
 
     def getWidth(self):
         return(self.__width)

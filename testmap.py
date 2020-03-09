@@ -120,7 +120,7 @@ mvmt = Movement(ball, kbd)
 
 # rooms
 m = Map(128, 128, WIDTH, HEIGHT)
-m.generate(10, 8, [WIDTH, HEIGHT])
+m.generate(10, 0.4, [WIDTH, HEIGHT])
 rooms = m.getRooms()
 
 current_room = rooms[0]

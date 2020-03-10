@@ -16,8 +16,8 @@ class Attack:
     def deal_damage(self, creature):
         creature.take_damage(self.damage)
         
-    def draw(self, canvas):
-        canvas.draw_image(self.sprite, self.center_source, self.width_height_source, self.pos.get_p(), self.width_height_dest)
+    def draw(self, canvas, rotation=0):
+        canvas.draw_image(self.sprite, self.center_source, self.width_height_source, self.pos.get_p(), self.width_height_dest, rotation)
 
 class ConeAttack(Attack):
     def __init__(self, damage, pos, direction, distance, angle):

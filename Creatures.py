@@ -41,6 +41,8 @@ class Creature:
         a=1#placeholder
         #run death animation
         #increase Player exp
+
+    
     
         
 
@@ -63,7 +65,7 @@ class Player(Creature):
 class Wizard(Player):
     def __init__(self, pos):
         super().__init__(pos)
-        sprite = 1#replace with wizard sprite
+        self.sprite = 1#replace with wizard sprite
         
     def main_attack(self, mouse_pos):
         mouse_pos = Vector(mouse_pos[0], mouse_pos[1])
@@ -78,11 +80,12 @@ class Wizard(Player):
 
 
 class Enemy(Creature):
-    def __init__(self, radius, sprite, speed):
+    def __init__(self, pos, radius, sprite, speed, ideal_range):
         sprite = 1#replace with default sprite
         super().__init__(pos, radius, sprite)
         self.speed = speed
         self.base_exp = 1
+        self.ideal_range = ideal_range#replace with 3/4 main attack range
         
 
 ##    def take_damage(self, damage):
@@ -94,5 +97,33 @@ class Enemy(Creature):
         super().die()
         #run death animation
         #increase Player exp
-        
+
+class Goblin(Enemy):
+    def __init__(self, pos):
+        radius = 1#will be small
+        sprite = 1#replace with sprite
+        speed = 3#will be fast
+        ideal_range = 1
+        super().__init__(pos, radius, sprite, speed, ideal_range)
+
+class DaggerGoblin(Goblin):
+    def __init__(self, pos):
+        super().__init__(pos)
+        self.ideal_range = 7#approx
+
+    def main_attack(self, player_pos):
+        direction = (player_pos - self.pos).normalise
+        distance = 1#short #replace with value (probably level scale)
+        angle = 1#wide
+        offset = 1
+        source = self.pos + ((self.radius + offset) * direction)
+        attack = ConeAttack(self.pos, direction, distance, angle)
+
+class Dragon(Enemy):
+    def __init__(self, pos):
+        radius = 10#will be large
+        sprite = 1#replace with sprite
+        speed = 3#will be slow
+        ideal_range = 1
+        super().__init__(pos, radius, sprite, speed, ideal_range)
         

@@ -7,6 +7,7 @@ class Attack:
     def __init__(self, pos, damage):
         self.damage = damage
         self.pos = pos
+        self.direction = direction
         self.sprite = 1  #replace with place holder
         self.center_source = []
         self.width_height_source = [] 
@@ -21,8 +22,7 @@ class Attack:
 
 class ConeAttack(Attack):
     def __init__(self, damage, pos, direction, distance, angle):
-        super().__init__(damage, pos)
-        self.direction = direction
+        super().__init__(damage, pos, direction)
         self.distance = distance
         self.angle = angle
         #self.launch()
@@ -47,8 +47,7 @@ class ConeAttack(Attack):
 
 class ProjectileAttack(Attack):
     def __init__(self, pos, direction, radius, vel):
-        super().__init__(damage, pos)
-        self.direction = direction
+        super().__init__(damage, pos, direction)
         self.radius = radius
         self.trail = 1#length of the trail(texture) behind the projectile
         self.vel = vel

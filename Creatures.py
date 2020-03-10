@@ -114,7 +114,7 @@ class DaggerGoblin(Goblin):
     def main_attack(self, player_pos):
         direction = (player_pos - self.pos).normalise
         distance = 1#short #replace with value (probably level scale)
-        angle = 1#wide
+        angle = 135#wide
         offset = 1
         source = self.pos + ((self.radius + offset) * direction)
         attack = ConeAttack(self.pos, direction, distance, angle)
@@ -126,4 +126,12 @@ class Dragon(Enemy):
         speed = 3#will be slow
         ideal_range = 1
         super().__init__(pos, radius, sprite, speed, ideal_range)
+
+    def main_attack(self, player_pos):
+        direction = (player_pos - self.pos).normalise
+        distance = 20#short #replace with value (probably level scale)
+        angle = 15#wide
+        offset = 1
+        source = self.pos + ((self.radius + offset) * direction)
+        attack = ConeAttack(self.pos, direction, distance, angle)
         

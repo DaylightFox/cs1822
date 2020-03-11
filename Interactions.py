@@ -6,7 +6,7 @@ class Interaction:
         for i in self.interactor:
             self.interactions.append([False] * len(self.interacted))
     
-    def appendInteractor(self, interator):
+    def appendInteractor(self, interactor):
         self.interactor.append(interactor)
         self.interactions.append([False] * len(self.interacted))
     def appendInteracted(self, interacted):
@@ -26,7 +26,7 @@ class Interaction:
                 inted = self.interacted[j]
                 if sticky or not self.interactions[i,j]:
                     if intDetector(inter, inted):
-                        interactions[i,j] = True
+                        interactions[i][j] = True
                         intResolver(inter, inted)
 
 class AttackCreatureInteraction(Interaction):

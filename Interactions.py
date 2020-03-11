@@ -46,3 +46,22 @@ class AttackCreatureInteraction(Interaction):
             if creature.killed:
                 creature.die()
                 removeList.append(creature)
+
+class AttackRoomInteraction(Interaction):
+    def __init__(self, attacks, rooms):
+        super().__init__(attacks, rooms)
+    
+    def hit_detector(attack, room):
+        attack.hit_room(room)
+        
+    def hit_resolver(attack, room):
+        pass
+    
+    def manageInteractions(self):
+        super().manageInteractions(hit_detector, hit_resolver)
+        removeList = []
+        for a in range(len(interactor)):
+            attack = interactor[a]
+            if isinstance(attack, ProjectileAttack):
+                if sum(interactions[a]):
+                    removeList.append(attack)

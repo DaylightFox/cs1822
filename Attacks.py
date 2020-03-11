@@ -4,7 +4,7 @@ except ImportError:
     from user304_rsf8mD0BOQ_1 import Vector
 
 class Attack:
-    def __init__(self, pos, damage):
+    def __init__(self, pos, damage, direction):
         self.damage = damage
         self.pos = pos
         self.direction = direction
@@ -60,6 +60,10 @@ class ProjectileAttack(Attack):
             #if angle <= self.angle:
                 #return True
         #return False
+        
+    def hit_room(self, room):
+        return(self.pos.x >= room.top_right.x) or (self.pos.x <= room.top_left.x) or (self.pos.y <= room.top_right.y) or (self.pos.y >= room.bot_right.y )
+            
 
 
 class FlameBreath(ConeAttack):

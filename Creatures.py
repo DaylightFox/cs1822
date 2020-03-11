@@ -48,7 +48,7 @@ class Creature:
 
 class Player(Creature):
     def __init__(self, pos):
-        playerRadius = 20
+        playerRadius = 16
         sprite = 1#replace with default sprite
         super().__init__(pos, playerRadius, sprite)
         self.speed = 1

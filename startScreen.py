@@ -59,9 +59,9 @@ class Start():
         
 
 
-startScreen = Start()
+#startScreen = Start()
 
-frame = simplegui.create_frame('Start Screen', WIDTH, HEIGHT)
-frame.set_draw_handler(startScreen.tutorial)
+#frame = simplegui.create_frame('Start Screen', WIDTH, HEIGHT)
+#frame.set_draw_handler(startScreen.tutorial)
 #frame.set_keydown_handler(startScreen.keyDown)
-frame.start()
+#frame.start()

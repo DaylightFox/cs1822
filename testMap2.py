@@ -16,7 +16,8 @@ mc_rows = 4
 
 WIDTH = 500
 HEIGHT = 500
-ROOMS = 2
+ROOMS = 10
+RANDOM_ROOMS = 0.4
 
 #mapgen = Map(WIDTH, HEIGHT)
 #mapgen.generate(30, 80, ROOMS)
@@ -36,11 +37,15 @@ class Collisions:
         self.__room = room
         self.__in_collision = False
         self.__new_room = None
+        self.__new_map = False
     
     def update(self):
         door = self.__room.getCollidingDoor(self.__ball)
         if(door != None):
             self.__new_room = self.__room.getRoomFromDoor(door)
+        if(self.__room.isEnd()):
+            if(self.__room.isCollidingLevelDoor(self.__ball)):
+                self.__new_map = True
         if(self.__room.isCollidingWall(self.__ball)):
             if(not self.__in_collision):
                 self.__ball.vel = self.__ball.vel.rotate(180)
@@ -53,6 +58,11 @@ class Collisions:
         self.__new_room = None
         return(room)
 
+    def doGenerateNewMap(self):
+        new = self.__new_map
+        self.__new_map = False
+        return(new)
+
 
 # ball & int
 bunny = MC(Vector(WIDTH/2, HEIGHT/2), mc_img, mc_width, mc_height, mc_columns, mc_rows)
@@ -62,7 +72,7 @@ bunnyMove = Interaction(bunny, kbd)
 
 # rooms
 m = Map(256, 256, WIDTH, HEIGHT)
-m.generate(10, 0.4, [WIDTH, HEIGHT])
+m.generate(ROOMS, RANDOM_ROOMS, [WIDTH, HEIGHT])
 rooms = m.getRooms()
 
 current_room = rooms[0]
@@ -79,6 +89,9 @@ def draw(canvas):
         old_room = current_room
         current_room = new_room
         bunny.setPos( current_room.getNewRoomPos(old_room) )
+    if(collisions_handler.doGenerateNewMap()):
+        m.generate(ROOMS, RANDOM_ROOMS, [WIDTH, HEIGHT])
+        current_room = m.getRooms()[0]
     bunny.update()
     bunny.draw(canvas)
     
@@ -92,6 +105,7 @@ def draw(canvas):
 frame = simplegui.create_frame("Map Gen", WIDTH, HEIGHT)
 frame.set_draw_handler(draw)
 frame.set_keydown_handler(kbd.keyDown)
+frame.set_canvas_background( "rgb(28, 17, 23)" )
 frame.set_keyup_handler(kbd.keyUp)
 
 frame.start()

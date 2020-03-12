@@ -37,7 +37,7 @@ class Map:
                         random.randrange(self.__min_width, self.__max_width, self.__tile_size),
                         random.randrange(self.__min_height, self.__max_height, self.__tile_size),
                         "start" )
-            elif(i == linear_rooms):
+            elif(i == linear_rooms-1):
                 r = Room(center,
                         random.randrange(self.__min_width, self.__max_width, self.__tile_size),
                         random.randrange(self.__min_height, self.__max_height, self.__tile_size),
@@ -69,6 +69,7 @@ class Map:
                      )
             chosen_room.addNeighbour(r, heading)
             r.addNeighbour(chosen_room, self.__invertHeading(heading))
+            self.__rooms.append(r)
                     
 
     def __getRandomHeading(self):

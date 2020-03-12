@@ -35,6 +35,11 @@ class Room:
         self.__door_sprite_size = ( 64, 32 )
         self.__door_sprite_pos = ( ( 128 ), ( 128 + self.__door_sprite_size[1]/2 ) )
 
+        if(type == "end"):
+            self.__ladder_pos = ( (96 + 16), (96 + 16))
+            self.__ladder_size = (32, 32)
+            self.__level_door = Door("C", self.__center)
+
     def isStart(self):
         return( self.__type == "start" )
 
@@ -67,6 +72,15 @@ class Room:
                 or obj_x <= self.__top_left.x
                 or obj_y <= self.__top_right.y
                 or obj_y >= self.__bot_right.y )
+
+    def isCollidingLevelDoor(self, obj):
+        """
+        Returns a boolean if the gicen obj is colliding with the level door
+
+        Keyword arguments:
+        obj - an object that has a getPos() method that returns a Vector
+        """
+        return(self.__level_door.inBounds(obj))
 
     def getCollidingDoor(self, obj):
         """
@@ -116,6 +130,8 @@ class Room:
                              self.__bot_left.get_p()], 0, 'rgb(66, 40, 53)', 'rgb(66, 40, 53)')
         for door in self.__doors:
             door.draw(canvas, self.__tileset, self.__door_sprite_pos, self.__door_sprite_size)
+        if(self.isEnd()):
+            self.__level_door.draw(canvas, self.__tileset, self.__ladder_pos, self.__ladder_size)
 
 
     def addNeighbour(self, room, direction):

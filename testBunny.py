@@ -1,5 +1,5 @@
 from Vector import Vector
-from animationV2 import*
+from animationV4 import*
 try:
     import simplegui
 except ImportError:

@@ -1,5 +1,6 @@
 from Attacks import *
 from Creatures import *
+from Interactions import *
 import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 from Vector import Vector
 

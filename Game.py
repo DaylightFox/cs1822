@@ -1,5 +1,6 @@
 from Attacks import *
 from Creatures import *
+from Interactions import *
 import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 from Vector import Vector
 
@@ -18,6 +19,7 @@ class Game:
         self.attacks = []
 
         self.objects = [self.creatures, self.attacks]
+        self.removeList = []
         
         room_minimum_size = 256
         self.map = Map(room_minimum_size, room_minimum_size, self.canvas_width, self.canvas_height)

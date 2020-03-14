@@ -21,8 +21,8 @@ HEIGHT = 500
 class Start():
     def __init__(self):
         '''
-        title - Beginning title text list
-        storyText - Short Story Text
+        title - list of 2 strings showing title
+        storyText - list of strings that show the story scenario
         '''
         #Start Screen Info
         #self.spaceKey = False
@@ -44,20 +44,19 @@ class Start():
         self.centre = (2048/2, 2048/2)
 
         #SPRITE SHOW
-        self.mc = MC(Vector(WIDTH/2,HEIGHT/2))
+        self.mc = MC(Vector(60, HEIGHT - 60))
 
     #def goToNext(self):
     #    return (self.spaceKey == simplegui.KEY_MAP['space'])
 
-    '''
-    def click(pos):
+
+    def click(self, pos):
         #size of start key
         a = WIDTH/4
         b = HEIGHT - HEIGHT/4
         if (pos[0] >= a and pos[0] <= a + self.startKey[0]) and (pos[1] >= b and pos[1] <= b + self.startKey[1]):
             self.startClick = True
         
-    '''
 
     
     def startKeyEvent(self, canvas):
@@ -70,9 +69,6 @@ class Start():
         height = self.startKey[1]
         canvas.draw_polygon([(a, b), (a, b + height), (a + width, b + height), (a + width, b)],1, "grey", "Green")
         canvas.draw_text('START', (width/2 + a/2 + 10, height/2 + b + 10), 30, 'white', 'monospace')
-
-    
-
         #return (width, height)
 
     def tutorial(self, canvas):
@@ -98,6 +94,8 @@ class Start():
                          self.rightPos,
                          self.resize)
 
+        self.mc.draw(canvas)
+
     
     def titleSequence(self,canvas):
         if (self.counter%30 == 0):
@@ -105,14 +103,14 @@ class Start():
 
     
     def update(self, canvas):
-        
         #self.titleSequence(canvas)
         '''
         self.counter +=1
         if (self.goToNext()):
             self.tutorial(canvas)
         '''
-        self.startKeyEvent(canvas)
+        if (self.startClick == False):
+            self.startKeyEvent(canvas)
         if (self.startClick == True):
             self.tutorial(canvas)
 

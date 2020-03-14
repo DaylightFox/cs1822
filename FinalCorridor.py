@@ -5,11 +5,8 @@ except ImportError :
 
 
 from Vector import*
-from animation import MC
-from animation import Keyboard
-from animation import Interaction
-
-
+from animationV4 import*
+from Room import Room
 import random
 
 
@@ -17,11 +14,6 @@ WIDTH = 200
 HEIGHT = 500
 numProjectiles = 5
 
-mc_img = simplegui.load_image("https://i.imgur.com/hpehVFb.png")
-mc_width = 128
-mc_height = 128
-mc_columns = 4
-mc_rows = 4
 
 def ranPos ():
     x = random.randint(10,WIDTH)
@@ -70,16 +62,19 @@ class Projectiles:
                            self.colour,
                            self.colour)
 
-class SpriteProjectileInteraction:
-    def __init__(self, sprite, projectVertical, projectDiagonal):
-        self.sprite = sprite
+class CorridorSequence:
+    def __init__(self, inter, projectVertical, projectDiagonal):
+        self.bunny = bunny
+        self.steps = 0
         self.projectVertical = projectVertical
         self.projectDiagonal = projectDiagonal
         self.numProjectiles = numProjectiles #constant
+        self.room = Room(Vector(WIDTH/2, HEIGHT/2), WIDTH, HEIGHT)
 
+    #Room.draw(canvas)
     def draw(self, canvas):
-        global i, j, bunnyMove
-        self.sprite.walls(WIDTH) #keeps sprite insidse hopefully
+        global i, j, inter
+        #self.bunny.walls(WIDTH) #keeps sprite insidse hopefully
         
         if i < len(self.projectVertical):
             self.projectVertical[i].draw(canvas)
@@ -96,14 +91,9 @@ class SpriteProjectileInteraction:
 
             if (self.projectDiagonal[j].pos.y >= HEIGHT):
                 j+= 1;
-                
-        
-        
 
-        bunnyMove.update()
-        self.sprite.update()
-        self.sprite.draw(canvas)        
-        
+
+        self.room.draw(canvas)
 
 
 i= 0
@@ -111,18 +101,16 @@ j = 0
 VProjectilesList = [Projectiles(ranPos(), Vector(0,5), "red" ) for i in range(numProjectiles) ]
 DProjectilesList = [Projectiles(ranPos().add(Vector(0, -50)), Vector(3,5), "blue") for j in range(numProjectiles)]
 
-bunny = MC(Vector(WIDTH/2, HEIGHT - 100), mc_img, mc_width, mc_height, mc_columns, mc_rows)
+bunny = MC(Vector(WIDTH/2, HEIGHT - 100))
 kbd = Keyboard()
-bunnyMove = Interaction(bunny, kbd)
+mouse = Mouse(bunny.pos.get_p())
+inter = Interaction(bunny, kbd, mouse)
 
-spriteCollide = SpriteProjectileInteraction(bunny,VProjectilesList, DProjectilesList) #sprite, vertical and diagonal projectiles interaction definition
+holeUp = CorridorSequence(inter,VProjectilesList, DProjectilesList) #sprite, vertical and diagonal projectiles interaction definition
 
-
-
-
-frame = simplegui.create_frame("Collisions Corridor", WIDTH, HEIGHT)
-frame.set_draw_handler(spriteCollide.draw)
-frame.set_keydown_handler(kbd.keyDown)
-frame.set_keyup_handler(kbd.keyUp)
-
+frame = simplegui.create_frame("Up the Rabbit Hole", WIDTH, HEIGHT)
+frame.set_draw_handler(holeUp.draw)
+frame.set_keydown_handler(inter.MCkeyD)
+frame.set_keyup_handler(inter.MCkeyU)
+frame.set_mouseclick_handler(inter.MCclick)
 frame.start()

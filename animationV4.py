@@ -18,7 +18,7 @@ class MC:
         self.vel = Vector()
 
         #Spritesheet data
-        self.spritesheet = simplegui.load_image("https://i.imgur.com/hpehVFb.png")
+        self.spritesheet = simplegui._load_local_image('mcsprite.png')
         self.img_width = 128
         self.img_height = 128
         self.img_columns = 4
@@ -47,7 +47,7 @@ class MC:
     
     def update(self):
         self.pos.add(self.vel)
-        self.vel.multiply(0.85)
+        self.vel.multiply(0.75)
 
 class Mouse:
 
@@ -102,6 +102,7 @@ class Interaction:
         self.keyboard = keyboard
         self.mouse = mouse
         self.ListProject = []
+        self.counter = 7
 
     def update(self):
         if self.mouse.is_newpos():
@@ -110,16 +111,18 @@ class Interaction:
             currpos = self.MC.pos.get_p()
             direction = Vector(mousepos[0]-currpos[0], mousepos[1]-currpos[1])
 
-
-            currposV = Vector(currpos[0], currpos[1])
-            direction.normalize()
-            direction.multiply(3)
-            if (mousepos[1]>currpos[1]):
-                angle = -direction.angle(Vector(-1, 0))
-            else:
-                angle = (direction.angle(Vector(-1, 0)))
-            fireball = Projectile(currposV, direction, angle)
-            self.ListProject.append(fireball)
+            if (self.counter%5==0):
+                currposV = Vector(currpos[0], currpos[1])
+                direction = direction.normalize()
+                offset = Vector(direction.x, direction.y)
+                direction = direction.multiply(5)
+                currposV = currposV.add(offset.multiply(15))
+                if (mousepos[1]>currpos[1]):
+                    angle = -direction.angle(Vector(-1, 0))
+                else:
+                    angle = (direction.angle(Vector(-1, 0)))
+                fireball = Projectile(currposV, direction, angle)
+                self.ListProject.append(fireball)
             
             if (direction.angle(Vector(1,0))>0.785 and direction.angle(Vector(1,0))<2.356) and (mousepos[1]<=currpos[1]):
                 self.MC.frame_index[0]=2
@@ -157,16 +160,16 @@ class Interaction:
         self.update()
         self.MC.update()
         self.MC.draw(canvas)
+        self.counter += 1
         remove = []
-        if len(self.ListProject)>0:
-            for i in self.ListProject:
-                if (i.pos.x<WIDTH) or (i.pos.x>0) or (i.pos.y<HEIGHT) or (i.pos.y>0):
-                    i.drawprojectile(canvas)
-                    i.update()
-                else:
-                    remove.append(i)
-            for i in remove:
-                self.ListProject.remove(i)
+        for i in self.ListProject:
+            if (i.pos.x<WIDTH) or (i.pos.x>0) or (i.pos.y<HEIGHT) or (i.pos.y>0):
+                i.drawprojectile(canvas)
+                i.update()
+            else:
+                remove.append(i)
+        for i in remove:
+            self.ListProject.remove(i)
 
     
     def MCdrag(self, position):
@@ -181,34 +184,3 @@ class Interaction:
     def MCkeyU(self, key):
         self.keyboard.keyUp(key)
 
-'''#Create objects from different classes
-bunny = MC(Vector(WIDTH/2, HEIGHT/2))
-kbd = Keyboard()
-mouse = Mouse(bunny.pos.get_p())
-inter = Interaction(bunny, kbd, mouse)
-
-def draw_handler(canvas):
-    inter.MCdraw(canvas)
-
-def drag_handler(position):
-    inter.MCdrag(position)
-
-def click_handler(position):
-    inter.MCclick(position)
-
-def keyDown_handler(key):
-    inter.MCkeyD(key)
-
-def keyUp_handler(key):
-    inter.MCkeyU(key)
-
-
-
-# Create a frame and call events
-frame = simplegui.create_frame("Rabbit on Acid", WIDTH, HEIGHT)
-frame.set_draw_handler(draw_handler)
-frame.set_keydown_handler(keyDown_handler)
-frame.set_keyup_handler(keyUp_handler)
-frame.set_mousedrag_handler(drag_handler)
-frame.set_mouseclick_handler(click_handler)
-frame.start()'''

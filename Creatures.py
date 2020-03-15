@@ -43,7 +43,14 @@ class Creature:
         #run death animation
         #increase Player exp
 
-    
+    def setLevel(self, level):
+        self.level = level
+        self.maxHp = self.maxHpBase * (
+        self.maxHpMultiplier ** level)
+        self.currentHp = self.maxHp
+        
+    def levelUp(self):
+        self.setLevel(self.level + 1)
     
         
 

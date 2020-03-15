@@ -20,16 +20,18 @@ class PlayerHealthbar:
         
     def draw(self, canvas):
         hp_percent = self.player.currentHp / self.player.maxHp
-        split_x = hp_percent * self.length
+        split_x = self.topL[0] + hp_percent * self.length
         
         if hp_percent < 1:
             canvas.draw_line((self.botR[0], self.V_centre), (split_x, self.V_centre), self.width, "red")
-        canvas.draw_line((self.topL[0], self.V_centre), (split_x, self.V_centre), self.width, "green")
+        canvas.draw_line((self.topL[0], self.V_centre), (min(self.botR[0], split_x), self.V_centre), self.width, "green")
+        if hp_percent > 1:
+            canvas.draw_line((self.botR[0], self.V_centre), (split_x, self.V_centre), self.width, "blue")
         
         hp_str = str(self.player.currentHp)+"/"+str(self.player.maxHp)
         canvas.draw_text(hp_str, (self.topL[0], self.botR[1]), 12, "white")
-
-"""def inputHandler(key):
+"""
+def inputHandler(key):
     if key == simplegui.KEY_MAP["space"]:
         p1.currentHp -= 1
     else:

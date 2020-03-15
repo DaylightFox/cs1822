@@ -19,6 +19,7 @@ class Creature:
         self.level = 1
         self.maxHpBase = 1
         self.maxHpMultiplier = 1
+        self.maxHp = 1
         self.currentHp = 1
         self.DmgBase = 1
         self.killed = False

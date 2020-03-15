@@ -21,7 +21,9 @@ class Creature:
         self.maxHpMultiplier = 1
         self.maxHp = 1
         self.currentHp = 1
+        self.Dmg = 1
         self.DmgBase = 1
+        self.DmgMultiplier = 1
         self.killed = False
         
     def getPos(self):
@@ -48,6 +50,8 @@ class Creature:
         self.maxHp = self.maxHpBase * (
         self.maxHpMultiplier ** level)
         self.currentHp = self.maxHp
+        
+        self.Dmg = self.DmgBase * (self.DmgMultiplier ** level)
         
     def levelUp(self):
         self.setLevel(self.level + 1)

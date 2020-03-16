@@ -49,6 +49,12 @@ class MC:
         self.pos.add(self.vel)
         self.vel.multiply(0.75)
 
+    def getPos(self):
+        return self.pos
+
+    def setPos(self, pos):
+        self.pos = pos
+
 class Mouse:
 
     def __init__(self, pos):

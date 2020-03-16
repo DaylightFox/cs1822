@@ -3,10 +3,9 @@ from Vector import Vector
 import math, random
 from Room import Room
 from Map import Map
-from animationV4 import MC
-from animationV4 import Keyboard
-from animationV4 import Mouse
-from animationV4 import Interaction
+from playerAnimation import*
+from Keyboard import Keyboard
+from Mouse import Mouse
 
 WIDTH = 500
 HEIGHT = 500
@@ -15,7 +14,7 @@ RANDOM_ROOMS = 0.4
 
 #mapgen = Map(WIDTH, HEIGHT)
 #mapgen.generate(30, 80, ROOMS)
-
+'''
 class Keyboard(Keyboard): #Who did this??
     
     def disableKey(self, key):
@@ -24,7 +23,7 @@ class Keyboard(Keyboard): #Who did this??
 
     def enableKey(self, key):
         self.disabled_keys.pop(key)
-
+'''
 class Collisions:
     def __init__(self, sprite, room):
         self.__sprite = sprite
@@ -98,7 +97,7 @@ def draw(canvas):
 
 
 
-frame = simplegui.create_frame("Map Gen", WIDTH, HEIGHT)
+frame = simplegui.create_frame("TestMap2", WIDTH, HEIGHT)
 frame.set_draw_handler(draw)
 frame.set_keydown_handler(spriteInter.keyboard.keyDown)
 frame.set_canvas_background( "rgb(28, 17, 23)" )

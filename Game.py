@@ -59,6 +59,7 @@ class Game:
             pass #draw all and update all
         elif self.state == "pause": #pressing Esc while in game loop switches to pause
             #set click handlers
+            self.draw_all(canvas)
             pass #draw all but dont update
         elif self.state == "corridor":
             pass #run corridor 

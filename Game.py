@@ -22,8 +22,6 @@ class Game:
         self.attacks = []
 
         self.player = Player( Vector(self.canvas_width/2, self.canvas_height/2) )
-        self.player.maxHp = 300
-        self.player.currentHp = 300
         self.health = PlayerHealthbar(self.player, ( 20, 20 ), ( 120, 120 ))
         self.score = 0
         self.floor = 0

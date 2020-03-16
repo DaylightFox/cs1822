@@ -1,8 +1,11 @@
 from Attacks import *
 from Creatures import *
 from Interactions import *
+from Map import Map
+from Healthbar import PlayerHealthbar
 import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 from Vector import Vector
+from Score import Score
 
 
 
@@ -18,11 +21,21 @@ class Game:
         self.creatures = []
         self.attacks = []
 
+        self.player = Player( Vector(self.canvas_width/2, self.canvas_height/2) )
+        self.player.maxHp = 300
+        self.player.currentHp = 300
+        self.health = PlayerHealthbar(self.player, ( 20, 20 ), ( 120, 120 ))
+        self.score = 0
+        self.floor = 0
+
         self.objects = [self.creatures, self.attacks]
         self.removeList = []
         
-        room_minimum_size = 256
-        self.map = Map(room_minimum_size, room_minimum_size, self.canvas_width, self.canvas_height)
+        self.__min_room_size = 256
+        self.__max_rooms = 12
+        self.__random_rooms = 0.4
+
+        self.map = Map(self.__min_room_size, self.__min_room_size, self.canvas_width, self.canvas_height)
 
 
 
@@ -39,6 +52,8 @@ class Game:
             #set event handlers for screen
             #the start screen should return the name of a different state
         elif self.state == "game":
+            self.map.generate(self.__max_rooms, self.__random_rooms, [self.canvas_width, self.canvas_height])
+            rooms = self.map.getRooms()
             #set event handlers for screen
             pass #draw all and update all
         elif self.state == "pause": #pressing Esc while in game loop switches to pause

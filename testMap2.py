@@ -3,16 +3,10 @@ from Vector import Vector
 import math, random
 from Room import Room
 from Map import Map
-from animation import MC
-from animation import Keyboard
-from animation import Interaction
-
-mc_img = simplegui.load_image("https://i.imgur.com/hpehVFb.png")
-mc_width = 128
-mc_height = 128
-mc_columns = 4
-mc_rows = 4
-
+from animationV4 import MC
+from animationV4 import Keyboard
+from animationV4 import Mouse
+from animationV4 import Interaction
 
 WIDTH = 500
 HEIGHT = 500
@@ -22,7 +16,7 @@ RANDOM_ROOMS = 0.4
 #mapgen = Map(WIDTH, HEIGHT)
 #mapgen.generate(30, 80, ROOMS)
 
-class Keyboard(Keyboard):
+class Keyboard(Keyboard): #Who did this??
     
     def disableKey(self, key):
         self.disabled_keys.append(key)
@@ -32,23 +26,23 @@ class Keyboard(Keyboard):
         self.disabled_keys.pop(key)
 
 class Collisions:
-    def __init__(self, ball, room):
-        self.__ball = ball
+    def __init__(self, sprite, room):
+        self.__sprite = sprite
         self.__room = room
         self.__in_collision = False
         self.__new_room = None
         self.__new_map = False
-    
+
     def update(self):
-        door = self.__room.getCollidingDoor(self.__ball)
+        door = self.__room.getCollidingDoor(self.__sprite)
         if(door != None):
             self.__new_room = self.__room.getRoomFromDoor(door)
         if(self.__room.isEnd()):
-            if(self.__room.isCollidingLevelDoor(self.__ball)):
+            if(self.__room.isCollidingLevelDoor(self.__sprite)):
                 self.__new_map = True
-        if(self.__room.isCollidingWall(self.__ball)):
+        if(self.__room.isCollidingWall(self.__sprite)):
             if(not self.__in_collision):
-                self.__ball.vel = self.__ball.vel.rotate(180)
+                self.__sprite.vel = self.__sprite.vel.rotate(180)
                 self.__in_collision = True
         else:
             self.__in_collision = False
@@ -64,11 +58,11 @@ class Collisions:
         return(new)
 
 
-# ball & int
-bunny = MC(Vector(WIDTH/2, HEIGHT/2), mc_img, mc_width, mc_height, mc_columns, mc_rows)
+#Sprite
+bunny = MC(Vector(WIDTH/2, HEIGHT/2))
 kbd = Keyboard()
-bunnyMove = Interaction(bunny, kbd)
-
+mouse = Mouse(bunny.pos.get_p())
+bunnyMove = Interaction(bunny, kbd, mouse)
 
 # rooms
 m = Map(256, 256, WIDTH, HEIGHT)
@@ -79,12 +73,13 @@ current_room = rooms[0]
 
 def draw(canvas):
     #global mapgen
-    global bunny, bunnyMove, current_room, rooms
+    global bunny, bunnyMove, current_room, rooms, mouse
     collisions_handler = Collisions(bunny, current_room)
     current_room.draw(canvas)
-    bunnyMove.update()
+    bunnyMove.MCdraw(canvas)
     collisions_handler.update()
     new_room = collisions_handler.getNewRoom()
+
     if(new_room != None):
         old_room = current_room
         current_room = new_room
@@ -92,8 +87,9 @@ def draw(canvas):
     if(collisions_handler.doGenerateNewMap()):
         m.generate(ROOMS, RANDOM_ROOMS, [WIDTH, HEIGHT])
         current_room = m.getRooms()[0]
-    bunny.update()
-    bunny.draw(canvas)
+   
+    #bunny.update()
+    
     
 
     
@@ -107,5 +103,8 @@ frame.set_draw_handler(draw)
 frame.set_keydown_handler(kbd.keyDown)
 frame.set_canvas_background( "rgb(28, 17, 23)" )
 frame.set_keyup_handler(kbd.keyUp)
+
+frame.set_mousedrag_handler(bunnyMove.MCdrag)
+frame.set_mouseclick_handler(bunnyMove.MCclick)
 
 frame.start()

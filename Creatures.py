@@ -65,10 +65,17 @@ class Player(Creature):
         playerRadius = 16
         sprite = 1#replace with default sprite
         super().__init__(pos, playerRadius, sprite)
+        self.width_height_dest = [self.radius*2,self.radius*2]
         self.speed = 1
         self.exp = 0
         #replace with final values
-        self.width_height_dest = [self.radius*2,self.radius*2]
+        self.maxHpBase = 300
+        self.maxHpMultiplier = 1.09
+        self.maxHp = self.maxHpBase
+        self.currentHp = 1
+        self.DmgBase = 10
+        self.Dmg = self.DmgBase
+        self.DmgMultiplier = 1.09
 
     def die(self):
         print("Death!!!!!!!")

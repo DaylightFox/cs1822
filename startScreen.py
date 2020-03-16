@@ -23,14 +23,15 @@ class Start():
         '''
         title - list of 2 strings showing title
         storyText - list of strings that show the story scenario
+        counter - for incrementing through title and storyText. Used in titleSequence, and storySequence
         '''
         #Start Screen Info
         #self.spaceKey = False
         self.title = ["Welcome to...", "Trip: Down The Rabbit Hole"]
         self.storyText = ["HUH... WHERE AM I?", "It's another one...", "... get him...", "!!! I NEED TO GET OUT OF HERE"]
-        self.counter = 0
         self.startKey = [250, 80]
         self.startClick = False
+        self.counter = 0
        
         #TUTORIAL IMAGE INFO
         self.wasd = simplegui._load_local_image("Images/WASDkeys.png")
@@ -44,21 +45,20 @@ class Start():
         self.centre = (2048/2, 2048/2)
 
         #SPRITE SHOW
-        self.mc = MC(Vector(60, HEIGHT - 60))
+        self.mc = MC(Vector(WIDTH/2, HEIGHT/2))
 
     #def goToNext(self):
     #    return (self.spaceKey == simplegui.KEY_MAP['space'])
 
-
-    def click(self, pos):
-        #size of start key
+    def startKeyClick(self, pos):
+        '''
+        defines click area for start key
+        '''
         a = WIDTH/4
         b = HEIGHT - HEIGHT/4
         if (pos[0] >= a and pos[0] <= a + self.startKey[0]) and (pos[1] >= b and pos[1] <= b + self.startKey[1]):
             self.startClick = True
-        
-
-    
+            
     def startKeyEvent(self, canvas):
         #(a,b) is the top  left corner of rectangle fixed to WIDTH = 500, HEIGHT = 500
         a = WIDTH/4
@@ -69,9 +69,12 @@ class Start():
         height = self.startKey[1]
         canvas.draw_polygon([(a, b), (a, b + height), (a + width, b + height), (a + width, b)],1, "grey", "Green")
         canvas.draw_text('START', (width/2 + a/2 + 10, height/2 + b + 10), 30, 'white', 'monospace')
-        #return (width, height)
+
 
     def tutorial(self, canvas):
+        '''
+        Tutorial Page
+        '''
         canvas.draw_text('Tutorial', (180, 50), 30, 'white', 'monospace')
         canvas.draw_text('Move Character', (150, 150), 20, 'white', 'monospace')
         canvas.draw_text('Left Click & Drag to Shoot', (150, 250), 20, 'white', 'monospace')
@@ -94,25 +97,39 @@ class Start():
                          self.rightPos,
                          self.resize)
 
-        self.mc.draw(canvas)
+    def counterInc(self):
+        self.counter += 1
 
-    
-    def titleSequence(self,canvas):
-        if (self.counter%30 == 0):
-            canvas.draw_text(self.title[0], (180, 50), 30, 'white', 'monospace')
+    def counterReset(self):
+        self.counter = 0
+
+    def textSequence(self, canvas, text):
+        '''
+        self.counter goes to next text string in text LIST
+        if (self.counter < len(text)):
+        '''
+        canvas.draw_text(text[0], (150, 100), 30, 'white', 'monospace')
+        canvas.draw_text(text[1], (20, 150), 30, 'white', 'monospace')
+        #self.counterInc()
+        #print(self.counter)
 
     
     def update(self, canvas):
         #self.titleSequence(canvas)
         '''
-        self.counter +=1
         if (self.goToNext()):
             self.tutorial(canvas)
         '''
         if (self.startClick == False):
             self.startKeyEvent(canvas)
+            self.textSequence(canvas, self.title)
+            self.mc.draw(canvas)
+            
         if (self.startClick == True):
+            self.counterReset()
             self.tutorial(canvas)
-
-    
-    #def keyDown(self):
+        '''
+        if (self.goToNext == True):
+            self.mc(Vector(WIDTH/2,HEIGHT/2))
+            self.mc.draw(canvas)
+        '''

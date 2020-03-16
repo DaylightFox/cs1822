@@ -36,6 +36,12 @@ class MC:
         self.frame_index = [1,0]
         self.frame_duration = 10
         self.frameclock = 0
+
+    def getPos(self):
+        return self.pos
+    
+    def setPos(self, pos):
+        self.pos = pos
     
     def distFromMouse(self, mouse):
         mousepos = mouse.pos

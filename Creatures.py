@@ -68,9 +68,7 @@ class Player(Creature):
         self.speed = 1
         self.exp = 0
         #replace with final values
-        self.center_source = []
-        self.width_height_source = [] 
-        self.width_height_dest = [32,32]
+        self.width_height_dest = [self.radius*2,self.radius*2]
 
     def die(self):
         print("Death!!!!!!!")

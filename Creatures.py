@@ -79,8 +79,7 @@ class Player(Creature):
         print("Death!!!!!!!")
         
     def needLevelUp(self):
-        if self.exp >= self.expTarget:
-            self.levelUp()
+        return self.exp >= self.expTarget
     
     def setLevel(self, level):
         super().setLevel(level)

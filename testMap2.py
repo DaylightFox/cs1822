@@ -62,7 +62,7 @@ class Collisions:
 bunny = MC(Vector(WIDTH/2, HEIGHT/2))
 kbd = Keyboard()
 mouse = Mouse(bunny.pos.get_p())
-bunnyMove = Interaction(bunny, kbd, mouse)
+spriteInter = Interaction(bunny, kbd, mouse)
 
 # rooms
 m = Map(256, 256, WIDTH, HEIGHT)
@@ -73,10 +73,10 @@ current_room = rooms[0]
 
 def draw(canvas):
     #global mapgen
-    global bunny, bunnyMove, current_room, rooms, mouse
+    global bunny, spriteInter, current_room, rooms, mouse
     collisions_handler = Collisions(bunny, current_room)
     current_room.draw(canvas)
-    bunnyMove.MCdraw(canvas)
+    spriteInter.MCdraw(canvas)
     collisions_handler.update()
     new_room = collisions_handler.getNewRoom()
 
@@ -100,11 +100,11 @@ def draw(canvas):
 
 frame = simplegui.create_frame("Map Gen", WIDTH, HEIGHT)
 frame.set_draw_handler(draw)
-frame.set_keydown_handler(kbd.keyDown)
+frame.set_keydown_handler(spriteInter.keyboard.keyDown)
 frame.set_canvas_background( "rgb(28, 17, 23)" )
-frame.set_keyup_handler(kbd.keyUp)
+frame.set_keyup_handler(spriteInter.keyboard.keyUp)
 
-frame.set_mousedrag_handler(bunnyMove.MCdrag)
-frame.set_mouseclick_handler(bunnyMove.MCclick)
+frame.set_mousedrag_handler(spriteInter.MCdrag)
+frame.set_mouseclick_handler(spriteInter.MCclick)
 
 frame.start()

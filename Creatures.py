@@ -1,3 +1,5 @@
+from Attacks import *
+
 try:
     from Vector import Vector
 except ImportError:

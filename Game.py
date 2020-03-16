@@ -55,9 +55,15 @@ class Game:
             self.map.generate(self.__max_rooms, self.__random_rooms, [self.canvas_width, self.canvas_height])
             rooms = self.map.getRooms()
             #set event handlers for screen
+            self.draw_all(canvas)
             pass #draw all and update all
         elif self.state == "pause": #pressing Esc while in game loop switches to pause
             #set click handlers
             pass #draw all but dont update
         elif self.state == "corridor":
             pass #run corridor 
+        
+    def draw_all(self,canvas):
+        for array in self.objects:
+            for item in array:
+                item.draw(canvas)

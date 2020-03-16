@@ -1,6 +1,7 @@
 import random
 from Room import Room
 from Vector import Vector
+from Creatures import *
 
 class Map:
     def __init__(self, min_width, min_height, max_width, max_height, debug=False):
@@ -70,7 +71,27 @@ class Map:
             chosen_room.addNeighbour(r, heading)
             r.addNeighbour(chosen_room, self.__invertHeading(heading))
             self.__rooms.append(r)
+
+        #self.__addEnemies()
                     
+
+    def __addEnemies(self):
+        """
+        Adds enemies to the rooms on map generated
+        """
+        num_of_enemy_types = 3
+        for room in self.getRooms():
+            enemies = []
+            num_to_spawn = random.randint(1,2)
+            for e in range(num_to_spawn):
+                for i in range(num_of_enemy_types-1):
+                    if(i == 0):
+                        enemies.append( Goblin(room.getRandomPos()) )
+                    elif(i == 1):
+                        enemies.append( DaggerGoblin(room.getRandomPos()) )
+            room.addEnemies(enemies)
+
+
 
     def __getRandomHeading(self):
         """

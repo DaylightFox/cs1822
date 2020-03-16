@@ -2,6 +2,7 @@ from Vector import Vector
 from Wall import Wall
 from Door import Door
 import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
+import random
 
 
 class Room:
@@ -21,6 +22,7 @@ class Room:
         self.__characters = []
         self.__neighbours = {"N":None, "E":None, "S":None, "W":None}
         self.__doors = {}
+        self.__enemies = []
 
         self.__tileset = simplegui._load_local_image("game-map-tileset.png")
         self.__wall_sprite_size = ( 32, 32 )
@@ -53,6 +55,9 @@ class Room:
         return(self.__neighbours)
     
     def getEmptyNeighbours(self):
+        """
+        Returns a dictionary of empty neighbour positions
+        """
         empty_neighbours = {}
         for heading in self.__neighbours:
             if(self.__neighbours[heading] != None):
@@ -157,6 +162,27 @@ class Room:
             d = Door("W", center)
         self.__doors[d] = direction
 
+    def addEnemies(self, enemies):
+        """
+        Adds enemies to the room
+
+        Keyword arguments:
+        enemies - an array of enemy objects
+        """
+        for enemy in enemies:
+            self.__enemies.add(enemy)
+
+    def getEnemies(self):
+        """
+        Returns an array of enemy objects in the given room
+        """
+        return(self.__enemies)
+
+    def getRandomPos(self):
+        x = random.randint(self.__top_left.x+10, self.__top_right.x-10)
+        y = random.randint(self.__top_left.y+10, self.__bot_left.y-10)
+        return( Vector(x, y) )
+
     def headingExists(self, heading):
         """
         Returns true if a neighbour at the given heading already exists
@@ -174,6 +200,3 @@ class Room:
 
     def getHeight(self):
         return(self.__height)
-
-    def __updateWalls(self):
-        pass

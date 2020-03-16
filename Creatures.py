@@ -89,6 +89,7 @@ class Wizard(Player):
         offset = 1
         source = self.pos + ((self.radius + offset) * direction)
         attack = ConeAttack(self.pos, direction, distance, angle)
+        return attack
 
 
 
@@ -132,6 +133,7 @@ class DaggerGoblin(Goblin):
         offset = 1
         source = self.pos + ((self.radius + offset) * direction)
         attack = ConeAttack(self.pos, direction, distance, angle)
+        return attack
 
 class Dragon(Enemy):
     def __init__(self, pos):
@@ -148,4 +150,5 @@ class Dragon(Enemy):
         offset = 1
         source = self.pos + ((self.radius + offset) * direction)
         attack = ConeAttack(self.pos, direction, distance, angle)
+        return attack
         

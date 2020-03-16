@@ -19,13 +19,12 @@ class Creature:
         self.width_height_dest = []
         self.speed = 0
         self.level = 1
+        self.levelScaleMultplier = 1
         self.maxHpBase = 1
-        self.maxHpMultiplier = 1
         self.maxHp = 1
         self.currentHp = 1
         self.Dmg = 1
         self.DmgBase = 1
-        self.DmgMultiplier = 1
         self.killed = False
         
     def getPos(self):
@@ -49,11 +48,10 @@ class Creature:
 
     def setLevel(self, level):
         self.level = level
-        self.maxHp = self.maxHpBase * (
-        self.maxHpMultiplier ** level)
+        self.maxHp = int(self.maxHpBase * (
+        self.levelScaleMultplier ** level))
         self.currentHp = self.maxHp
-        
-        self.Dmg = self.DmgBase * (self.DmgMultiplier ** level)
+        self.Dmg = int(self.DmgBase * (self.levelScaleMultplier ** level))
         
     def levelUp(self):
         self.setLevel(self.level + 1)
@@ -67,19 +65,27 @@ class Player(Creature):
         super().__init__(pos, playerRadius, sprite)
         self.width_height_dest = [self.radius*2,self.radius*2]
         self.speed = 1
+        self.levelScaleMultplier = 1.09
         self.exp = 0
-        #replace with final values
+        self.expTargetBase = 500
+        self.expTarget = self.expTargetBase
         self.maxHpBase = 300
-        self.maxHpMultiplier = 1.09
         self.maxHp = self.maxHpBase
-        self.currentHp = 1
+        self.currentHp = self.maxHp
         self.DmgBase = 10
         self.Dmg = self.DmgBase
-        self.DmgMultiplier = 1.09
 
     def die(self):
         print("Death!!!!!!!")
         
+    def needLevelUp(self):
+        if self.exp >= self.expTarget:
+            self.levelUp()
+    
+    def setLevel(self, level):
+        super().setLevel(level)
+        self.exp = 0
+        self.expTarget = int(self.expTargetBase * (self.levelScaleMultplier ** level))
         
 class Wizard(Player):
     def __init__(self, pos):

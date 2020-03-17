@@ -200,3 +200,6 @@ class Room:
 
     def getHeight(self):
         return(self.__height)
+
+    def getCenter(self):
+        return (self.__center)

@@ -14,9 +14,8 @@ class MC:
 
     def __init__(self, pos):
        
-        #Movement
+        #Movement vectors
         self.pos = pos
-        self.speed = 0.75
         self.vel = Vector()
 
         #Attacks parameters
@@ -44,32 +43,24 @@ class MC:
     
     def setPos(self, pos):
         self.pos = pos
-    
-    def pauseMove(self, room):
-        '''
-        Takes a room object room.
-        Keeps Sprite within the room by:
-            -Pausing the movement if the sprite touches the walls
-        '''
-        wall_left = room.getCenter().x - room.getWidth()/2
-        wall_right = room.getCenter().x + room.getWidth()/2
 
+    def pauseMove(self, room):
+        wall_left = (room.getCenter().x - room.getWidth()/2) 
+        wall_right = room.getCenter().x + room.getWidth()/2
         wall_up = room.getCenter().y - room.getHeight()/2
         wall_down = room.getCenter().y + room.getHeight()/2
 
-        if (self.pos.x <= wall_left):
+        if (self.pos.x - 5 <= wall_left):
             self.pos.x = wall_left
-            print(self.pos.x)
-            
-        if (self.pos.x >=  wall_right):
+        
+        if (self.pos.x + 5>= wall_right):
             self.pos.x = wall_right
-            print(self.pos.x)
-
-        if (self.pos.y <= wall_up):
+        
+        if (self.pos.y - 5<= wall_up):
             self.pos.y = wall_up
-        if (self.pos.y >= wall_down):
+        
+        if (self.pos.y + 5>= wall_down):
             self.pos.y = wall_down
-    
     
     def distFromMouse(self, mouse):
         mousepos = mouse.pos
@@ -159,7 +150,7 @@ class MC:
     
     def update(self):
         self.pos.add(self.vel)
-        self.vel.multiply(self.speed)
+        self.vel.multiply(0.75)
     
     def playerDraw(self, canvas, mouse, keyboard):
         self.movement(keyboard, mouse)

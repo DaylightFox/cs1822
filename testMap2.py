@@ -41,7 +41,7 @@ class Collisions:
                 self.__new_map = True
         if(self.__room.isCollidingWall(self.__sprite)):
             if(not self.__in_collision):
-                self.__sprite.vel = self.__sprite.vel.rotate(180)
+                self.__sprite.pauseMove(self.__room)
                 self.__in_collision = True
         else:
             self.__in_collision = False
@@ -75,6 +75,8 @@ def draw(canvas):
     global bunny, spriteInter, current_room, rooms, mouse
     collisions_handler = Collisions(bunny, current_room)
     current_room.draw(canvas)
+
+    
     spriteInter.MCdraw(canvas)
     collisions_handler.update()
     new_room = collisions_handler.getNewRoom()

@@ -66,3 +66,14 @@ class Game:
         for array in self.objects:
             for item in array:
                 item.draw(canvas)
+                
+    def remove_objects(self):
+        for item in self.removeList:
+            for array in self.objects:
+                if item in array:
+                    array.remove(item)
+                    break
+        ##if self.removeList != []:
+        ##    #raise Exception()#
+        ##    pass
+        self.removeList = []

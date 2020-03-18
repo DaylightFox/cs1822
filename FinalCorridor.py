@@ -23,7 +23,6 @@ def randVel():
     x = random.randint(-5, 5)
     y = random.randint(-5, 5)
     return( Vector(x, y) )
-
 def randCol ():
     r = random.randrange (0, 256)
     g = random.randrange (0, 256)
@@ -31,26 +30,6 @@ def randCol ():
     return 'rgb('+str(r)+ ','+str(g)+ ','+str(b)+ ')'
 '''
 
-class Bunny(MC):
-    def __init__(self, pos):
-        super().__init__(pos)
-        self.inCorridor = True
-        self.size = 5  #5 pixels to account for sprite width
-
-    #Checks that the sprite is within the Corridor
-    def isInCorridor(self, width):
-        self.centre = width/2
-        if not (self.pos.x >= centre + 100) or (self.pos.x <= centre - 100):
-            self.isInCorridor = False
-        return self.inCorridor
-    '''
-    def hitWalls(self, width):
-        #self.
-        if (self.pos.x <= self.size):
-            self.pos.x = self.size
-        if (self.pos.x >= WIDTH- self.size):
-            self.pos.x = WIDTH - self.size
-    '''
 
 class Projectiles:
     def __init__(self, pos, vel, colour): # all projectiles are the same except for where on the CANVAS WIDTH they spawn
@@ -61,19 +40,23 @@ class Projectiles:
         self.border = 1
         self.__numProjectiles = 10
         self.__centre = 0
+        self.in_collision = False
 
     def bounce(self, normal):
         self.vel.reflect(normal)
 
-    def hitWalls(self, width):
-        self.__centre = width/2
-        if(self.pos.x <= self.__centre + 100):
-            self.bounce(Vector(1, 0))
-        elif(self.pos.x >=  self.__centre - 100):
-            self.bounce(Vector(1, 0))
-    
+    def walls(self, room):
+        wall_left = room.getCenter().x - room.getWidth()/2
+        wall_right = room.getCenter().x + room.getWidth()/2
+
+        if (self.pos.x <= wall_left) or (self.pos.x >= wall_right):
+            self.bounce(Vector(1,0))
+            self.in_collision = True
+
+    def isHittingWalls(self):
+        return (self.in_collision)
+
     def update(self):
-        self.walls()
         self.pos.add(self.vel)
 
     def generateProjectiles(self):
@@ -111,6 +94,7 @@ class Corridor:
         '''
         self.room1 = Room(Vector(self.canvas_width/2,self.height/2), self.room_width, self.height)
         self.room2 = Room(Vector(self.canvas_width/2, self.height/2), self.room_width, self.height)
+        self.rooms = [self.room1, self.room2]
         
         
         #self.projectVertical = [Projectiles(ranPos(), Vector(0,5), "red" ) for i in range(self.numProjectiles)]
@@ -121,28 +105,26 @@ class Corridor:
     def stepReset(self):
         self.step = 0
     
+    def linkRooms(self):
+        self.room1.addNeighbour(self.room2, "N")
+        self.room2.addNeighbour(self.room1, "S")
     '''
     def disappearingProjectiles room
-
     def bouncing room
-
     def reset:
         if (self.bunny.isDead):
             resetstep counter
             call corridor here again
+    '''
+    def collisions(self):
 
-    '''       
 
     def main(self, canvas):
 
         self.room1.draw(canvas)
         self.spriteInter.MCdraw(canvas)
-
-        #self.spriteInter.MC.walls(self.room_width)
-
-        
-
-        #collisions = Collisions(self.spriteInter.MC, self.room1)
+        if (self.spriteInter.MC.pos )
+        #collisions = Collisions(self.spriteInter.MC)
         #collisions.update()
 
     '''
@@ -158,14 +140,10 @@ class Corridor:
                 #collide handle method
             if (self.projectVertical[i].pos.y >= HEIGHT):
                 i+= 1
-
-
         if j <len(self.projectDiagonal):
             self.projectDiagonal[j].draw(canvas)
             self.projectDiagonal[j].update()
-
             if (self.projectDiagonal[j].pos.y >= HEIGHT):
                 j+= 1;
         self.room.draw(canvas)
         '''
-

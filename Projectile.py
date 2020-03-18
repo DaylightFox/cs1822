@@ -51,3 +51,9 @@ class Projectile:
     def update(self):
         self.pos.add(self.vel)
         #self.vel.multiply(0.85)
+
+class EnemyProjectile(Projectile):
+
+    def __init__(self, pos, vel, angle):
+        super().__init__(pos, vel, angle)
+        self.spritesheet = simplegui._load_local_image('blackball.png')

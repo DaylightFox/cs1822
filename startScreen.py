@@ -23,7 +23,8 @@ class Start():
         '''
         title - list of 2 strings showing title
         storyText - list of strings that show the story scenario
-        counter - for incrementing through title and storyText. Used in titleSequence, and storySequence
+        counter - for incrementing through storytextstorySequence
+
         '''
         #Start Screen Info
         #self.spaceKey = False
@@ -38,8 +39,10 @@ class Start():
         self.wasdPos = (60,150)
         self.left = simplegui._load_local_image("Images/leftKey.png")
         self.leftPos = (50, 250)
-        self.right = simplegui._load_local_image("Images/rightKey.png")
-        self.rightPos = (50, 350)
+        #self.right = simplegui._load_local_image("Images/rightKey.png")
+        #self.rightPos = (50, 350)
+        self.space = simplegui._load_local_image("Images/spaceKey.png")
+        self.spacePos = (80, 350)
         self.size = (2048, 2048)
         self.resize = (150,150)
         self.centre = (2048/2, 2048/2)
@@ -47,19 +50,15 @@ class Start():
         #SPRITE SHOW
         self.mc = MC(Vector(WIDTH/2, HEIGHT/2))
 
-    #def goToNext(self):
-    #    return (self.spaceKey == simplegui.KEY_MAP['space'])
-
     def startKeyClick(self, pos):
-        '''
-        defines click area for start key
-        '''
+        #defines click area for start key
+        
         a = WIDTH/4
         b = HEIGHT - HEIGHT/4
         if (pos[0] >= a and pos[0] <= a + self.startKey[0]) and (pos[1] >= b and pos[1] <= b + self.startKey[1]):
             self.startClick = True
-            
-    def startKeyEvent(self, canvas):
+      
+    def startKeyDraw(self, canvas):
         #(a,b) is the top  left corner of rectangle fixed to WIDTH = 500, HEIGHT = 500
         a = WIDTH/4
         b = HEIGHT - HEIGHT/4
@@ -78,7 +77,7 @@ class Start():
         canvas.draw_text('Tutorial', (180, 50), 30, 'white', 'monospace')
         canvas.draw_text('Move Character', (150, 150), 20, 'white', 'monospace')
         canvas.draw_text('Left Click & Drag to Shoot', (150, 250), 20, 'white', 'monospace')
-        canvas.draw_text('Right Click to ____', (150, 350), 20, 'white', 'monospace')
+        canvas.draw_text('Space for Alternate Fire', (180, 350), 20, 'white', 'monospace')
 
         canvas.draw_image(self.wasd, 
                           self.centre,
@@ -91,11 +90,13 @@ class Start():
                          self.size,
                          self.leftPos,
                          self.resize)
-        canvas.draw_image(self.right, 
+        
+        canvas.draw_image(self.space, 
                          self.centre,
                          self.size,
-                         self.rightPos,
-                         self.resize)
+                         self.spacePos,
+                         (self.resize[0] + 50, self.resize[1] + 50))
+        
 
     def counterInc(self):
         self.counter += 1
@@ -103,7 +104,7 @@ class Start():
     def counterReset(self):
         self.counter = 0
 
-    def textSequence(self, canvas, text):
+    def titleSequence(self, canvas, text):
         '''
         self.counter goes to next text string in text LIST
         if (self.counter < len(text)):
@@ -121,13 +122,14 @@ class Start():
             self.tutorial(canvas)
         '''
         if (self.startClick == False):
-            self.startKeyEvent(canvas)
-            self.textSequence(canvas, self.title)
+            self.startKeyDraw(canvas)
+            self.titleSequence(canvas, self.title)
             self.mc.draw(canvas)
             
         if (self.startClick == True):
             self.counterReset()
             self.tutorial(canvas)
+
         '''
         if (self.goToNext == True):
             self.mc(Vector(WIDTH/2,HEIGHT/2))

@@ -2,6 +2,7 @@ import random
 import math
 from Vector import Vector
 from Projectile import Projectile
+from Projectile import EnemyProjectile
 try:
     import simplegui
 except ImportError:
@@ -108,7 +109,7 @@ class Enemy:
                     angle = -direction.angle(Vector(-1, 0))
                 else:
                     angle = (direction.angle(Vector(-1, 0)))
-                fireball = Projectile(aim, direction, angle)
+                fireball = EnemyProjectile(aim, direction, angle)
                 self.ListAttack.append(fireball)
     
     def drawshooting(self, canvas):

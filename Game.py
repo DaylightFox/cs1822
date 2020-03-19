@@ -57,7 +57,10 @@ class Game:
             if newState == "start screen":
                 pass#set handlers
             elif newState == "game":
-                pass#set handlers
+                #set handlers
+                self.frame.set_mouseclick_handler(self.player.main_attack)
+                self.frame.set_keydown_handler(self.player.moveD)
+                self.frame.set_keydown_handler(self.player.moveU)
             elif newState == "pause":
                 pass#set handlers
             elif newState == "corridor":

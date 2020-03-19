@@ -27,6 +27,7 @@ class Game:
 
         self.objects = [self.creatures, self.attacks]
         self.removeList = []
+        self.interactions = [AttackCreatureInteraction(self.attacks, self.creatures)]
         
         self.__min_room_size = 256
         self.__max_rooms = 12
@@ -46,6 +47,7 @@ class Game:
         #does stuff to prepare for the game to begin
         self.map.generate(self.__max_rooms, self.__random_rooms, [self.canvas_width, self.canvas_height])
         self.rooms = self.map.getRooms()
+        self.interactions.append(AttackRoomInteraction(self.attacks, self.rooms))
 
 
     def draw_handler(self, canvas):

@@ -12,7 +12,6 @@ class Attack:
         self.center_source = []
         self.width_height_source = [] 
         self.width_height_dest = []
-        self.duration = 60 #frames on screen
 
     def deal_damage(self, creature):
         creature.take_damage(self.damage)

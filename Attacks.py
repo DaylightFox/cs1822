@@ -90,11 +90,11 @@ class ProjectileAttack(Attack):
     def update(self):
         self.pos += self.direction * self.speed
 
-class FlameBreath(ConeAttack):
+class BurningHands(ConeAttack):
     def __init__(self, damage, pos, direction, distance):
-        angle = math.pi/4
+        angle = 0.5
         super().__init__(damage, pos, direction, distance, angle)
-        self.sprite = 1#replace with sprite
+        self.colour = 1#replace with sprite
     
     def next_frame():
         a=1#add code for frame transition

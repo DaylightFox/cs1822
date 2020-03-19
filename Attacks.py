@@ -8,7 +8,8 @@ class Attack:
         self.damage = damage
         self.pos = pos
         self.direction = direction
-        self.sprite = 1  #replace with place holder
+        self.sprite = 1  #replace with
+        self.colour = "white"#to be used if there is no sprite
         self.center_source = []
         self.width_height_source = [] 
         self.width_height_dest = []

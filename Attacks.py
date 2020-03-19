@@ -13,6 +13,7 @@ class Attack:
         self.center_source = []
         self.width_height_source = [] 
         self.width_height_dest = []
+        self.done = False
 
     def deal_damage(self, creature):
         creature.take_damage(self.damage)
@@ -25,6 +26,7 @@ class ConeAttack(Attack):
         super().__init__(damage, pos, direction)
         self.distance = distance
         self.angle = angle
+        self.done = True
         #self.launch()
     
     def hit_creature(self, creature):
@@ -56,6 +58,9 @@ class ConeAttack(Attack):
             p4 = (self.direction.copy().rotate(self.angle * -2) * difference.length()).get_p()
             
             canvas.draw_polygon([p1,p2,p3,p4], 1, self.colour, self.colour)
+            
+    def update(self):
+        self.done = not self.done
 
 class ProjectileAttack(Attack):
     def __init__(self, pos, direction, radius, speed):
@@ -81,6 +86,9 @@ class ProjectileAttack(Attack):
             super().draw(canvas)
         else:
             canvas.draw_circle(self.pos.get_p(), self.radius, 1, self.colour)
+            
+    def update(self):
+        self.pos += self.direction * self.speed
 
 class FlameBreath(ConeAttack):
     def __init__(self, damage, pos, direction, distance):

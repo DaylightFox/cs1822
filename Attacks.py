@@ -5,8 +5,8 @@ except ImportError:
 
 class Attack:
     def __init__(self, pos, damage, direction):
-        self.damage = damage
         self.pos = pos
+        self.damage = damage
         self.direction = direction
         self.sprite = 1  #replace with
         self.colour = "white"#to be used if there is no sprite
@@ -22,7 +22,7 @@ class Attack:
         canvas.draw_image(self.sprite, self.center_source, self.width_height_source, self.pos.get_p(), self.width_height_dest, rotation)
 
 class ConeAttack(Attack):
-    def __init__(self, damage, pos, direction, distance, angle):
+    def __init__(self, pos, damage, direction, distance, angle):
         super().__init__(damage, pos, direction)
         self.distance = distance
         self.angle = angle
@@ -63,8 +63,8 @@ class ConeAttack(Attack):
         self.done = not self.done
 
 class ProjectileAttack(Attack):
-    def __init__(self, pos, direction, radius, speed):
-        super().__init__(damage, pos, direction)
+    def __init__(self, pos, damage, direction, radius, speed):
+        super().__init__(pos, damage, direction)
         self.radius = radius
         self.trail = 1#length of the trail(texture) behind the projectile
         self.speed = speed

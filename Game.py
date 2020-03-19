@@ -42,6 +42,10 @@ class Game:
         self.state = "start screen"
         #probably extras
         frame.start()
+        
+    def start_game(self):#called from the start screen 
+        self.map.generate(self.__max_rooms, self.__random_rooms, [self.canvas_width, self.canvas_height])
+        self.rooms = self.map.getRooms()
 
 
     def draw_handler(self, canvas):
@@ -50,8 +54,6 @@ class Game:
             #set event handlers for screen
             #the start screen should return the name of a different state
         elif self.state == "game":
-            self.map.generate(self.__max_rooms, self.__random_rooms, [self.canvas_width, self.canvas_height])
-            rooms = self.map.getRooms()
             #set event handlers for screen
             self.draw_all(canvas)
             pass #draw all and update all

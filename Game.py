@@ -44,6 +44,7 @@ class Game:
         frame.start()
         
     def start_game(self):#called from the start screen 
+        #does stuff to prepare for the game to begin
         self.map.generate(self.__max_rooms, self.__random_rooms, [self.canvas_width, self.canvas_height])
         self.rooms = self.map.getRooms()
 

@@ -1,5 +1,7 @@
+import math
 from Vector import Vector
-from Projectile import Projectile
+from Projectile import*
+from FireBreath import FireBreath
 from Room import Room
 try:
     import simplegui
@@ -16,10 +18,15 @@ class MC:
        
         #Movement vectors
         self.pos = pos
+        self.speed = 0.75
         self.vel = Vector()
 
         #Attacks parameters
         self.firespeed = 0
+        self.ultcount = 0
+        self.ultlength = 480
+        self.ulting = False
+        self.ultAttack = FireBreath(self.pos, 0)
         self.ListAttack = []
 
         #Spritesheet data
@@ -34,6 +41,7 @@ class MC:
         self.frame_height = self.img_height / self.img_rows
         self.frame_centre_x = self.frame_width / 2
         self.frame_centre_y = self.frame_height / 2
+        self.radius = self.frame_width/2
         self.frame_index = [1,0]
         self.frame_duration = 10
         self.frameclock = 0
@@ -45,12 +53,12 @@ class MC:
         self.pos = pos
 
     def pauseMove(self, room):
-        wall_left = (room.getCenter().x - room.getWidth()/2) 
+        wall_left = (room.getCenter().x - room.getWidth()/2)
         wall_right = room.getCenter().x + room.getWidth()/2
         wall_up = room.getCenter().y - room.getHeight()/2
         wall_down = room.getCenter().y + room.getHeight()/2
 
-        if (self.pos.x - 5 <= wall_left):
+        if (self.pos.x - 5 < wall_left):
             self.pos.x = wall_left
         
         if (self.pos.x + 5>= wall_right):
@@ -80,8 +88,7 @@ class MC:
                 self.frame_index[0]=3
             if (angleAlpha>=2.356):
                 self.frame_index[0]=0
-            self.shooting(mouse)
-            mouse.save_lastpos()
+            
 
             if keyboard.up:
                 self.vel.add(Vector(0, -0.75))
@@ -91,6 +98,14 @@ class MC:
                 self.vel.add(Vector(0.75, 0))
             if keyboard.left:
                 self.vel.add(Vector(-0.75, 0))
+            if keyboard.spacebar:
+                if self.ultcount==10:
+                    self.ulting=True
+            if self.ulting:
+                self.FBupdate(mouse)
+            else:
+                self.shooting(mouse)
+            mouse.save_lastpos()
         
          #Input based movement + Sprite looking toward the direction the object is going
         else:
@@ -116,7 +131,6 @@ class MC:
                 offset = direction.copy()
                 direction.multiply(5)
                 currpos = self.pos.copy().add(offset.multiply(15))
-
                 if (mouse.pos[1]>currpos.y):
                     angle = -direction.angle(Vector(-1, 0))
                 else:
@@ -124,17 +138,28 @@ class MC:
                 fireball = Projectile(currpos, direction, angle)
                 self.ListAttack.append(fireball)
         mouse.save_lastpos()
+        self.ultcount +=1
+    
+    def FBupdate(self, mouse):
+        if (self.ultlength>0):
+            if mouse.is_newpos():
+                direction = self.distFromMouse(mouse)
+                direction.normalize()
+                offset = direction.copy()
+                currpos = self.pos.copy().add(offset.multiply(15))
+                if (mouse.pos[1]>currpos.y):
+                    angle = -direction.angle(Vector(-1, 0))
+                else:
+                    angle = (direction.angle(Vector(-1, 0)))
+                self.ultAttack.pos = currpos
+                self.ultAttack.angle = angle
+            self.ultlength -= 1
+        else:
+            self.ultcount=0
+            self.ulting = False
+            self.ultlength = 480
 
-    def drawshooting(self, canvas): #Need to add real conditions + add wall/ennemy as argument
-        remove = []
-        for i in self.ListAttack:
-            if (i.pos.x<WIDTH) or (i.pos.x>0) or (i.pos.y<HEIGHT) or (i.pos.y>0):
-                i.drawprojectile(canvas)
-                i.update()
-            else:
-                remove.append(i)
-        for i in remove:
-            self.ListAttack.remove(i)
+
 
     def update_frameindex(self):
         self.frame_index[1] = (self.frame_index[1] + 1) % self.img_rows
@@ -150,13 +175,13 @@ class MC:
     
     def update(self):
         self.pos.add(self.vel)
-        self.vel.multiply(0.75)
+        self.vel.multiply(self.speed)
     
     def playerDraw(self, canvas, mouse, keyboard):
         self.movement(keyboard, mouse)
         self.update()
         self.draw(canvas)
-        self.drawshooting(canvas)
+        #self.drawshooting(canvas)
 
 class Interaction:
 

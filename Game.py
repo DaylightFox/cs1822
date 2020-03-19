@@ -50,6 +50,18 @@ class Game:
         self.rooms = self.map.getRooms()
         self.interactions.append(AttackRoomInteraction(self.attacks, self.rooms))
 
+    def change_state(self, newState):
+        states = ["start screen","game","pause","corridor"]
+        if newState in states:
+            self.state = newState
+            if newState == "start screen":
+                pass#set handlers
+            elif newState == "game":
+                pass#set handlers
+            elif newState == "pause":
+                pass#set handlers
+            elif newState == "corridor":
+                pass#set handlers
 
     def draw_handler(self, canvas):
         if self.state == "start screen":

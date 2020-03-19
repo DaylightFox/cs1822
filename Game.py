@@ -22,7 +22,7 @@ class Game:
 
         self.player = Player( Vector(self.canvas_width/2, self.canvas_height/2) )
         self.health = PlayerHealthbar(self.player, ( 20, 20 ), ( 120, 120 ))
-        self.score = Score(Vector(self.canvas_width - 50, 5))
+        self.score = Score(self.canvas_width - 50, 5)
         self.floor = 0
 
         self.objects = [self.creatures, self.attacks]

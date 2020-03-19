@@ -64,6 +64,13 @@ class Game:
         elif self.state == "corridor":
             pass #run corridor 
         
+    def update_all(self):
+        for interaction in self.interactions:
+            interaction.manageInteractions()
+        for array in self.objects:
+            for item in array:
+                item.update()
+    
     def draw_all(self,canvas):
         for array in self.objects:
             for item in array:

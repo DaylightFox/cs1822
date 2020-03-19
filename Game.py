@@ -89,4 +89,4 @@ class Game:
         ##if self.removeList != []:
         ##    #raise Exception()#
         ##    pass
-        self.removeList = []
+        ##self.removeList = []

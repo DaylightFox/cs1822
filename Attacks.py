@@ -94,7 +94,7 @@ class BurningHands(ConeAttack):
     def __init__(self, damage, pos, direction, distance):
         angle = 0.5
         super().__init__(damage, pos, direction, distance, angle)
-        self.colour = 1#replace with sprite
+        self.colour = "red"
     
     def next_frame():
         a=1#add code for frame transition

@@ -76,7 +76,11 @@ class ProjectileAttack(Attack):
     def hit_room(self, room):
         return(self.pos.x >= room.top_right.x) or (self.pos.x <= room.top_left.x) or (self.pos.y <= room.top_right.y) or (self.pos.y >= room.bot_right.y )
             
-
+    def draw(self,canvas):
+        if self.colour != 1:
+            super().draw(canvas)
+        else:
+            canvas.draw_circle(self.pos.get_p(), self.radius, 1, self.colour)
 
 class FlameBreath(ConeAttack):
     def __init__(self, damage, pos, direction, distance):

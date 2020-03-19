@@ -72,6 +72,7 @@ class Game:
         for array in self.objects:
             for item in array:
                 item.update()
+        remove_objects()
     
     def draw_all(self,canvas):
         for array in self.objects:

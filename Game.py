@@ -3,11 +3,10 @@ from Creatures import *
 from Interactions import *
 from Map import Map
 from Healthbar import PlayerHealthbar
+from Score import Score
 import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 from Vector import Vector
-from Score import Score
-
-
+from startScreen import Start
 
 
 
@@ -23,7 +22,7 @@ class Game:
 
         self.player = Player( Vector(self.canvas_width/2, self.canvas_height/2) )
         self.health = PlayerHealthbar(self.player, ( 20, 20 ), ( 120, 120 ))
-        self.score = 0
+        self.score = Score(Vector(self.canvas_width - 50, 5))
         self.floor = 0
 
         self.objects = [self.creatures, self.attacks]

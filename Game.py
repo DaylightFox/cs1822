@@ -82,6 +82,9 @@ class Game:
         for array in self.objects:
             for item in array:
                 item.update()
+        for attack in attacks:
+            if attack.done:
+                removeList.append(attack)
         remove_objects()
     
     def draw_all(self,canvas):

@@ -36,11 +36,11 @@ class ConeAttack(Attack):
             if angle <= self.angle:
                 return True
             
-            edge = self.direction.copy().rotate(self.angle) * difference.length()
+            edge = self.direction.copy().rotate_rad(self.angle) * difference.length()
             if (edge - creature.pos).length() <= creature.radius:
                 return True
             
-            edge.rotate(self.angle * -2)
+            edge.rotate_rad(self.angle * -2)
             #return (edge - creature.pos).length() <= creature.radius
             if (edge - creature.pos).length() <= creature.radius:
                 return True
@@ -52,10 +52,10 @@ class ConeAttack(Attack):
             super().draw(canvas)
         else:
             p1 = self.pos.get_p()
-            p2 = (self.direction.copy().rotate(self.angle) * difference.length()).get_p()
+            p2 = (self.direction.copy().rotate_rad(self.angle) * difference.length()).get_p()
             p3 = (self.direction.copy() * difference.length()
             canvas.draw()).get_p()
-            p4 = (self.direction.copy().rotate(self.angle * -2) * difference.length()).get_p()
+            p4 = (self.direction.copy().rotate_rad(self.angle * -2) * difference.length()).get_p()
             
             canvas.draw_polygon([p1,p2,p3,p4], 1, self.colour, self.colour)
             
@@ -92,7 +92,7 @@ class ProjectileAttack(Attack):
 
 class FlameBreath(ConeAttack):
     def __init__(self, damage, pos, direction, distance):
-        angle = 45
+        angle = math.pi/4
         super().__init__(damage, pos, direction, distance, angle)
         self.sprite = 1#replace with sprite
     

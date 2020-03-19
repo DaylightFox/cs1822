@@ -44,6 +44,18 @@ class ConeAttack(Attack):
                 return True
             
         return False
+    
+    def draw(self,canvas):
+        if self.colour != 1:
+            super().draw(canvas)
+        else:
+            p1 = self.pos.get_p()
+            p2 = (self.direction.copy().rotate(self.angle) * difference.length()).get_p()
+            p3 = (self.direction.copy() * difference.length()
+            canvas.draw()).get_p()
+            p4 = (self.direction.copy().rotate(self.angle * -2) * difference.length()).get_p()
+            
+            canvas.draw_polygon([p1,p2,p3,p4], 1, self.colour, self.colour)
 
 class ProjectileAttack(Attack):
     def __init__(self, pos, direction, radius, speed):

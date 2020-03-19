@@ -33,11 +33,13 @@ class AttackCreatureInteraction(Interaction):
     def __init__(self, attacks, creatures):
         super().__init__(attacks, creatures)
 
-    def hit_detector(attacker, attacked):
-        attacker.hit_creature(attacked)
+    def hit_detector(attack, attacked):
+        attack.hit_creature(attacked)
         
-    def hit_resolver(attacker, attacked):
-        attacker.deal_damage(attacked)
+    def hit_resolver(attack, attacked):
+        attack.deal_damage(attacked)
+        if isinstance(attack, ProjectileAttack):
+                attack.done = True
 
     def manageInterations(self, sticky=True):
         super().manageInterations(hit_detector, hit_resolver)
@@ -64,4 +66,4 @@ class AttackRoomInteraction(Interaction):
             attack = interactor[a]
             if isinstance(attack, ProjectileAttack):
                 if sum(interactions[a]):
-                    removeList.append(attack)
+                    attack.done = True

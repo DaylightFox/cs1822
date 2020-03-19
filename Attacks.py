@@ -52,10 +52,10 @@ class ConeAttack(Attack):
             super().draw(canvas)
         else:
             p1 = self.pos.get_p()
-            p2 = (self.direction.copy().rotate_rad(self.angle) * difference.length()).get_p()
-            p3 = (self.direction.copy() * difference.length()
+            p2 = (self.direction.copy().rotate_rad(self.angle) * self.distance).get_p()
+            p3 = (self.direction.copy() * self.distance
             canvas.draw()).get_p()
-            p4 = (self.direction.copy().rotate_rad(self.angle * -2) * difference.length()).get_p()
+            p4 = (self.direction.copy().rotate_rad(self.angle * -2) * self.distance).get_p()
             
             canvas.draw_polygon([p1,p2,p3,p4], 1, self.colour, self.colour)
             

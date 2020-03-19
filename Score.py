@@ -12,7 +12,7 @@ class Score:
         """
         self.__pos = pos
         self.__score = score
-
+        
     def getScore(self):
         """
         Returns the score
@@ -44,4 +44,4 @@ class Score:
         Keyword arguments:
         canvas - the SimpleGUI canvas object
         """
-        pass
+        canvas.draw_text("Score: " + str(self.__score), self.pos, 25 , 'white', 'monospace')

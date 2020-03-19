@@ -84,9 +84,8 @@ class Collisions:
 
     def update(self):
         door = self.__corridor.getCollidingDoor(self.__sprite)
-        self.__projectiles.nextCollide(self.__projectiles)
-        
-        
+        #self.__projectiles.walls(self.__corridor)
+             
         if(door != None):
             self.__nextRoom = self.__corridor.getRoomFromDoor(door)
              

@@ -26,7 +26,7 @@ class Game:
         self.score = Score(self.canvas_width - 50, 5)
         self.floor = 0
 
-        self.objects = [self.creatures, self.attacks]
+        self.objects = [self.creatures, self.attacks, [self.health]]
         self.removeList = []
         self.interactions = [AttackCreatureInteraction(self.attacks, self.creatures)]
         

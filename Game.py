@@ -63,17 +63,14 @@ class Game:
             elif newState == "corridor":
                 pass#set handlers
 
-    def draw_handler(self, canvas):
+    def draw_handler(self, canvas):#always draw handler
         if self.state == "start screen":
             pass #play the start screen
-            #set event handlers for screen
             #the start screen should return the name of a different state
         elif self.state == "game":
-            #set event handlers for screen
             self.draw_all(canvas)
             pass #draw all and update all
         elif self.state == "pause": #pressing Esc while in game loop switches to pause
-            #set click handlers
             self.draw_all(canvas)
             pass #draw all but dont update
         elif self.state == "corridor":

@@ -13,23 +13,25 @@ import random
 from testMap2 import Collisions
 #import character death??
 
+WIDTH = 500
+HEIGHT = 500
 
-def ranPos ():
-    x = random.randint(10,WIDTH)
-    y = random.randint(100, HEIGHT+ 100)
+def ranPos(xLimit, yLimit):
+    x = random.randint(xLimit[0],xLimit[1])
+    y = random.randint(yLimit[0],yLimit[1])
     return Vector(x,y)
-'''
+
 def randVel():
-    x = random.randint(-5, 5)
-    y = random.randint(-5, 5)
+    x = random.randint(-3, 3)
+    y = random.randint(-3, 3)
     return( Vector(x, y) )
+
+
 def randCol ():
     r = random.randrange (0, 256)
     g = random.randrange (0, 256)
     b = random.randrange (0, 256)
     return 'rgb('+str(r)+ ','+str(g)+ ','+str(b)+ ')'
-'''
-
 
 class Projectiles:
     def __init__(self, pos, vel, colour): # all projectiles are the same except for where on the CANVAS WIDTH they spawn
@@ -38,8 +40,7 @@ class Projectiles:
         self.vel = vel
         self.colour = colour
         self.border = 1
-        self.__numProjectiles = 10
-        self.__centre = 0
+        self.numProjectiles = 10
         self.in_collision = False
 
     def bounce(self, normal):
@@ -49,9 +50,11 @@ class Projectiles:
         wall_left = room.getCenter().x - room.getWidth()/2
         wall_right = room.getCenter().x + room.getWidth()/2
 
-        if (self.pos.x <= wall_left) or (self.pos.x >= wall_right):
+        if (self.pos.x - self.radius <= wall_left) or (self.pos.x + self.radius >= wall_right):
             self.bounce(Vector(1,0))
             self.in_collision = True
+        else:
+            self.in_collision = False
 
     def isHittingWalls(self):
         return (self.in_collision)
@@ -59,22 +62,119 @@ class Projectiles:
     def update(self):
         self.pos.add(self.vel)
 
-    def generateProjectiles(self):
-        '''
-        returns a list of projectiles with random velocities
-        '''
-        plist = [Projectiles(ranPos(), ranPos(), "red" ) for i in range(self.numProjectiles)]
-        return plist
-
     def draw(self,canvas):
         canvas.draw_circle(self.pos.get_p(), 
                            self.radius,
                            self.border,
                            self.colour,
                            self.colour)
+      
+    def getNext(self, pList):
+        for projectile in pList:
+            if (projectile.isHittingWalls()):
+                projectile.walls(self.__room)
 
-class Corridor:
-    def __init__(self):
+class Collisions:
+    def __init__(self, corridor, sprite, projectiles):
+        self.__corridor = corridor
+        self.__sprite = sprite
+        self.__projectiles = projectiles
+        self.__nextCorridor = None
+        self.__in_collision = False
+
+    def update(self):
+        door = self.__corridor.getCollidingDoor(self.__sprite)
+        self.__projectiles.nextCollide(self.__projectiles)
+        
+        
+        if(door != None):
+            self.__nextRoom = self.__corridor.getRoomFromDoor(door)
+             
+        if (self.__sprite.pos == self.__projectlies):
+            print("I have no clue")
+
+        if(self.__corridor.isCollidingWall(self.__sprite)):
+            if(not self.__in_collision):
+                self.__sprite.pauseMove(self.__corridor)
+                self.__in_collision = True
+        else:
+            self.__in_collision = False
+
+    def getNextCorridor(self):
+        corridor = self.__nextCorridor
+        self.__nextCorridor = None
+        return(corridor)
+
+class Corridor(Room):
+    def __init__(self, center, width, height, type='none', projectileTypes = 'none'):
+        super().__init__(center, width, height, type=type)
+        self.projectiles = []
+        self.numProjectiles =10
+        self.counter = 0
+
+    def resetProjectileCounter(self):
+        self.counter = 0
+    
+    def incCounter(self):
+        self.counter +=1
+  
+    def generateProjectiles(self, kind):
+        '''
+        returns a list of projectiles given a type: random, vertical, horizontal, diagonal
+        Uses ranPos() to generate varied projectiles
+        Random = random colours
+        horizontal = RED
+        vertical = BLUE
+        diagonal = GREEN
+        '''
+        corridor_left = (WIDTH/2) - 101
+        corridor_right = (WIDTH/2) + 101
+
+        corridor_top = 0
+        corridor_bottom = HEIGHT
+
+        plist = []
+        if (kind == "random"):
+            plist = [Projectiles(ranPos([corridor_left,corridor_right], 
+                                        [corridor_top, corridor_bottom]), 
+                                        randVel(), 
+                                        randCol()) for i in range(self.numProjectiles)]
+            
+        if (kind == "vertical"):
+            plist = [Projectiles(ranPos([corridor_left, corridor_right], 
+                                        [-100, -10]), 
+                                        randVel(), 
+                                        "blue")  for i in range(self.numProjectiles)]
+            
+        if (kind == "horizontal"):
+            vel = randVel()
+            x = random.randint(corridor_left, corridor_right)
+            y = random.randint(corridor_top, corridor_bottom)
+            plist = [Projectiles(Vector(x,y), 
+                    vel, 
+                    "red" ) for i in range(int(self.numProjectiles/2))]
+            
+        if (kind == "diagonal"):
+            plist = [Projectiles(ranPos(), randVel(), "red" ) for i in range(self.numProjectiles)]
+
+        else:
+            self.projectiles = []
+
+        self.projectiles = plist
+
+
+    def drawProjectiles(self, canvas):
+    
+        if (self.counter < len(self.projectiles)):
+            self.projectiles[self.counter].draw(canvas)
+            self.projectiles[self.counter].update()
+            if (self.projectiles[self.counter].pos.y >= HEIGHT):
+                self.incCounter()
+
+            if (len(self.projectiles) == self.counter):
+                self.resetProjectileCounter()
+
+        '''
 
         #Corridor Info
         self.canvas_width = 500
@@ -87,28 +187,29 @@ class Corridor:
         self.__mouse = Mouse(self.bunny.getPos())
         self.spriteInter = Interaction(self.bunny, self.__kbd, self.__mouse)
         self.steps = 0
+
+        self.counter = 0
  
-        '''
+        
         Room1 has vertical projectiles 
         Room2 has projectiles(vertical and horizontal?) shooting from the top
-        '''
+        
         self.room1 = Room(Vector(self.canvas_width/2,self.height/2), self.room_width, self.height)
         self.room2 = Room(Vector(self.canvas_width/2, self.height/2), self.room_width, self.height)
-        self.rooms = [self.room1, self.room2]
+        self.current_room = self.room1
         
+        self.current_projectiles = Projectile(Vector(), Vector(), "white")
+
         
-        #self.projectVertical = [Projectiles(ranPos(), Vector(0,5), "red" ) for i in range(self.numProjectiles)]
-
-    def stepCount(self):
-        self.step +=1
-
-    def stepReset(self):
-        self.step = 0
-    
     def linkRooms(self):
         self.room1.addNeighbour(self.room2, "N")
         self.room2.addNeighbour(self.room1, "S")
-    '''
+
+    
+    
+    
+
+    
     def disappearingProjectiles room
     def bouncing room
     def reset:
@@ -116,16 +217,9 @@ class Corridor:
             resetstep counter
             call corridor here again
     '''
-    def collisions(self):
+        
 
-
-    def main(self, canvas):
-
-        self.room1.draw(canvas)
-        self.spriteInter.MCdraw(canvas)
-        if (self.spriteInter.MC.pos )
-        #collisions = Collisions(self.spriteInter.MC)
-        #collisions.update()
+        
 
     '''
     #room.draw(canvas)

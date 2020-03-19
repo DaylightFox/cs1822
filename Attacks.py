@@ -46,11 +46,11 @@ class ConeAttack(Attack):
         return False
 
 class ProjectileAttack(Attack):
-    def __init__(self, pos, direction, radius, vel):
+    def __init__(self, pos, direction, radius, speed):
         super().__init__(damage, pos, direction)
         self.radius = radius
         self.trail = 1#length of the trail(texture) behind the projectile
-        self.vel = vel
+        self.speed = speed
         #self.launch()
     
     def hit_creature(self, creature):

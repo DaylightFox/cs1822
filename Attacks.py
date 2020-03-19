@@ -91,9 +91,10 @@ class ProjectileAttack(Attack):
         self.pos += self.direction * self.speed
 
 class BurningHands(ConeAttack):
-    def __init__(self, damage, pos, direction, distance):
+    def __init__(self, pos, damage, direction):
         angle = 0.5
-        super().__init__(damage, pos, direction, distance, angle)
+        distance = 15#subject to change
+        super().__init__(pos, damage, direction, distance, angle)
         self.colour = "red"
     
     def next_frame():

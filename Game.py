@@ -84,6 +84,8 @@ class Game:
             interaction.manageInteractions()
         for array in self.objects:
             for item in array:
+                if isinstance(item, Enemy):
+                    a=1#set enemy direction
                 item.update()
         for attack in attacks:
             if attack.done:

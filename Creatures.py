@@ -65,6 +65,9 @@ class Creature:
         attack = attackClass(source, self.Dmg, direction)
         return attack
 
+    def update(self):
+        self.pos += self.direction * self.speed
+
 class Player(Creature):
     def __init__(self, pos):
         playerRadius = 16
@@ -131,6 +134,9 @@ class Enemy(Creature):
         super().die()
         #run death animation
         #increase Player exp
+        
+    def update(self):
+        self.pos += self.direction * self.speed
 
 class Goblin(Enemy):
     def __init__(self, pos):

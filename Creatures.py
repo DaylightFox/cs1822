@@ -56,7 +56,13 @@ class Creature:
     def levelUp(self):
         self.setLevel(self.level + 1)
     
-        
+    def create_attack(self, target_pos, attackClass):
+        target_pos = Vector(target_pos[0], target_pos[1])
+        direction = (target_pos - self.pos).normalise
+        offset = 1
+        source = self.pos + ((self.radius + offset) * direction)
+        attack = attackClass(source, self.Dmg, direction)
+        return attack
 
 class Player(Creature):
     def __init__(self, pos):
@@ -92,19 +98,21 @@ class Wizard(Player):
         self.sprite = 1#replace with wizard sprite
         
     def main_attack(self, mouse_pos):
-        mouse_pos = Vector(mouse_pos[0], mouse_pos[1])
-        direction = (mouse_pos - self.pos).normalise
-        offset = 1
-        source = self.pos + ((self.radius + offset) * direction)
-        attack = FireBolt(source, self.Dmg, direction)
+        attack = create_attack(mouse_pos, FireBolt)
+        #mouse_pos = Vector(mouse_pos[0], mouse_pos[1])
+        #direction = (mouse_pos - self.pos).normalise
+        #offset = 1
+        #source = self.pos + ((self.radius + offset) * direction)
+        #attack = FireBolt(source, self.Dmg, direction)
         return attack
     
     def alt_attack(self, mouse_pos):
-        mouse_pos = Vector(mouse_pos[0], mouse_pos[1])
-        direction = (mouse_pos - self.pos).normalise
-        offset = 1
-        source = self.pos + ((self.radius + offset) * direction)
-        attack = BurningHands(source, self.Dmg, direction)
+        attack = create_attack(mouse_pos, BurningHands)
+        #mouse_pos = Vector(mouse_pos[0], mouse_pos[1])
+        #direction = (mouse_pos - self.pos).normalise
+        #offset = 1
+        #source = self.pos + ((self.radius + offset) * direction)
+        #attack = BurningHands(source, self.Dmg, direction)
         return attack
 
 

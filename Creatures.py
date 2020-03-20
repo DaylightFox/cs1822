@@ -18,6 +18,7 @@ class Creature:
         self.width_height_source = [] 
         self.width_height_dest = []
         self.speed = 0
+        self.direction = 1#unit vector
         self.level = 1
         self.levelScaleMultplier = 1
         self.maxHpBase = 1

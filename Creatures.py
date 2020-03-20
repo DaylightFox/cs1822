@@ -98,6 +98,14 @@ class Wizard(Player):
         source = self.pos + ((self.radius + offset) * direction)
         attack = BurningHands(source, self.Dmg, direction)
         return attack
+    
+    def alt_attack(self, mouse_pos):
+        mouse_pos = Vector(mouse_pos[0], mouse_pos[1])
+        direction = (mouse_pos - self.pos).normalise
+        offset = 1
+        source = self.pos + ((self.radius + offset) * direction)
+        attack = BurningHands(source, self.Dmg, direction)
+        return attack
 
 
 

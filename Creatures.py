@@ -96,7 +96,7 @@ class Wizard(Player):
         direction = (mouse_pos - self.pos).normalise
         offset = 1
         source = self.pos + ((self.radius + offset) * direction)
-        attack = BurningHands(source, self.Dmg, direction)
+        attack = FireBolt(source, self.Dmg, direction)
         return attack
     
     def alt_attack(self, mouse_pos):

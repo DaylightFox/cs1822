@@ -117,12 +117,6 @@ class Enemy(Creature):
         self.speed = speed
         self.base_exp = 1
         self.ideal_range = ideal_range#replace with 3/4 main attack range
-        
-
-##    def take_damage(self, damage):
-##        super().take_damage(damage)
-##        if self.currentHp >= 0:
-##            self.killed = True
 
     def die(self):
         super().die()

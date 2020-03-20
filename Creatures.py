@@ -94,11 +94,9 @@ class Wizard(Player):
     def main_attack(self, mouse_pos):
         mouse_pos = Vector(mouse_pos[0], mouse_pos[1])
         direction = (mouse_pos - self.pos).normalise
-        distance = 1#replace with value (probably level scale)
-        angle = 1
         offset = 1
         source = self.pos + ((self.radius + offset) * direction)
-        attack = ConeAttack(self.pos, direction, distance, angle)
+        attack = BurningHands(source, self.Dmg, direction)
         return attack
 
 

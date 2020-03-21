@@ -99,6 +99,43 @@ class Player(Creature):
         super().setLevel(level)
         self.exp = 0
         self.expTarget = int(self.expTargetBase * (self.levelScaleMultplier ** level))
+    
+    def moveD(self, key):
+        if key == 87:#w
+            self.up = True
+        elif key == 83:#s
+            self.down = True
+        elif key == 65:#a
+            self.left = True
+        elif key == 68:#d
+            self.right = True
+        elif key == 32:#space
+            pass#trigger alt_attack
+        self.setDirection()
+    
+    def moveU(self, key):
+        if key in [87,83,65,68]:
+            if key == 87:#w
+                self.up = False
+            elif key == 83:#s
+                self.down = False
+            elif key == 65:#a
+                self.left = False
+            elif key == 68:#d
+                self.right = False
+        self.setDirection()
+        
+    def setDirection(self):
+        self.direction = Vector(0,0)
+        if self.up and (not self.down):
+            self.direction.add(Vector(0,-1))
+        if self.down and (not self.up):
+            self.direction.add(Vector(0,1))
+        if self.left and (not self.right):
+            self.direction.add(Vector(-1,0))
+        if self.right and (not self.left):
+            self.direction.add(Vector(1,0))
+        self.direction.normalise()
         
 class Wizard(Player):
     def __init__(self, pos):

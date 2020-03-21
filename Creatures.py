@@ -84,6 +84,10 @@ class Player(Creature):
         self.currentHp = self.maxHp
         self.DmgBase = 10
         self.Dmg = self.DmgBase
+        self.up = False
+        self.down = False
+        self.left = False
+        self.right = False
 
     def die(self):
         print("Death!!!!!!!")

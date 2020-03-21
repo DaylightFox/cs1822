@@ -21,6 +21,7 @@ class Creature:
         self.direction = 1#unit vector
         self.level = 1
         self.levelScaleMultplier = 1
+        self.exp = 0
         self.maxHpBase = 1
         self.maxHp = 1
         self.currentHp = 1
@@ -100,6 +101,14 @@ class Player(Creature):
         self.exp = 0
         self.expTarget = int(self.expTargetBase * (self.levelScaleMultplier ** level))
     
+    def increaseExp(self, x):
+        self.exp += x
+    
+    def update(self):
+        super().update()
+        if self.needLevelUp():
+            self.levelUp()
+    
     def moveD(self, key):
         if key in [87,83,65,68]:
             if key == 87:#w
@@ -165,12 +174,18 @@ class Wizard(Player):
 
 
 class Enemy(Creature):
-    def __init__(self, pos, radius, sprite, speed, ideal_range):
+    def __init__(self, pos, radius, sprite, speed, base_exp, level, ideal_range):
         sprite = 1#replace with default sprite
         super().__init__(pos, radius, sprite)
         self.speed = speed
-        self.base_exp = 1
+        self.base_exp = base_exp
+        self.setLevel(level)
         self.ideal_range = ideal_range#replace with 3/4 main attack range
+
+    def setLevel(self, level):
+        super().setLevel(level)
+        expModifier = 1.08
+        self.exp = self.base_exp * (expModifier**self.level)
 
     def die(self):
         super().die()
@@ -181,16 +196,17 @@ class Enemy(Creature):
         self.pos += self.direction * self.speed
 
 class Goblin(Enemy):
-    def __init__(self, pos):
+    def __init__(self, pos, level):
         radius = 1#will be small
         sprite = 1#replace with sprite
         speed = 3#will be fast
+        base_exp = 5
         ideal_range = 1
-        super().__init__(pos, radius, sprite, speed, ideal_range)
+        super().__init__(pos, radius, sprite, speed, base_exp, level, ideal_range)
 
 class DaggerGoblin(Goblin):
-    def __init__(self, pos):
-        super().__init__(pos)
+    def __init__(self, pos, level):
+        super().__init__(pos, level)
         self.ideal_range = 7#approx
 
     def main_attack(self, player_pos):
@@ -203,10 +219,11 @@ class DaggerGoblin(Goblin):
         return attack
 
 class Dragon(Enemy):
-    def __init__(self, pos):
+    def __init__(self, pos, level):
         radius = 10#will be large
         sprite = 1#replace with sprite
         speed = 3#will be slow
+        base_exp = 7
         ideal_range = 1
         super().__init__(pos, radius, sprite, speed, ideal_range)
 

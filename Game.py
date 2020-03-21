@@ -101,6 +101,9 @@ class Game:
         for item in self.removeList:
             for array in self.objects:
                 if item in array:
+                    if isinstance(item, Enemy):
+                        if item.killed:
+                            self.player.increaseExp(item.exp)
                     array.remove(item)
                     break
         ##if self.removeList != []:

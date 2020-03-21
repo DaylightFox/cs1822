@@ -101,17 +101,18 @@ class Player(Creature):
         self.expTarget = int(self.expTargetBase * (self.levelScaleMultplier ** level))
     
     def moveD(self, key):
-        if key == 87:#w
-            self.up = True
-        elif key == 83:#s
-            self.down = True
-        elif key == 65:#a
-            self.left = True
-        elif key == 68:#d
-            self.right = True
+        if key in [87,83,65,68]:
+            if key == 87:#w
+                self.up = True
+            elif key == 83:#s
+                self.down = True
+            elif key == 65:#a
+                self.left = True
+            elif key == 68:#d
+                self.right = True
+            self.setDirection()
         elif key == 32:#space
             pass#trigger alt_attack
-        self.setDirection()
     
     def moveU(self, key):
         if key in [87,83,65,68]:

@@ -54,8 +54,7 @@ class ConeAttack(Attack):
             p1 = self.pos.get_p()
             p2 = (self.direction.copy().rotate_rad(self.angle) * self.distance).get_p()
             p3 = (self.direction.copy().rotate_rad(self.angle * 0.5) * self.distance).get_p()
-            p4 = self.direction.copy() * self.distance
-            canvas.draw().get_p()
+            p4 = (self.direction.copy() * self.distance).get_p()
             p5 = (self.direction.copy().rotate_rad(self.angle * -0.5) * self.distance).get_p()
             p6 = (self.direction.copy().rotate_rad(self.angle * -1) * self.distance).get_p()
             

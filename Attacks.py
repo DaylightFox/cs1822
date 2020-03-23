@@ -114,3 +114,9 @@ class SwordSlash(ConeAttack):
         super().__init__(pos, damage, direction, distance, angle)
         self.colour = "white"
     
+class IceBreath(ConeAttack):
+    def __init__(self, pos, damage, direction):
+        angle = 0.6
+        distance = 20#subject to change
+        super().__init__(pos, damage, direction, distance, angle)
+        self.colour = "aqua"

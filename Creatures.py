@@ -223,11 +223,6 @@ class Dragon(Enemy):
         super().__init__(pos, radius, sprite, speed, ideal_range)
 
     def main_attack(self, player_pos):
-        direction = (player_pos - self.pos).normalise
-        distance = 20#short #replace with value (probably level scale)
-        angle = 15#wide
-        offset = 1
-        source = self.pos + ((self.radius + offset) * direction)
-        attack = ConeAttack(self.pos, direction, distance, angle)
+        attack = create_attack(player.pos, IceBreath)
         return attack
         

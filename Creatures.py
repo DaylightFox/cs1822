@@ -227,19 +227,20 @@ class DaggerGoblin(Goblin):
         return attack
     
     def update(self):
-        self.setDirection()
-        distance = (self.player.pos - self.pos).length()
         if not self.hit:
-            ideal_range = self.ideal_range
-            if ideal_range[0] <= distance <= ideal_range[0]:
-                self.main_attack(self.player.pos.get_p())
-                self.hit = True
-            elif ideal_range[0] > distance:
-                self.direction.rotate(math.pi)
-                self.pos += self.direction * self.speed
-            else:
-                self.pos += self.direction * self.speed
+            super().update()
+            #ideal_range = self.ideal_range
+            #if ideal_range[0] <= distance <= ideal_range[0]:
+                #self.main_attack(self.player.pos.get_p())
+                #self.hit = True
+            #elif ideal_range[0] > distance:
+                #self.direction.rotate(math.pi)
+                #self.pos += self.direction * self.speed
+            #else:
+                #self.pos += self.direction * self.speed
         else:
+            self.setDirection()
+            distance = (self.player.pos - self.pos).length()
             safeDistance = 100
             if distance >= safeDistance:
                 self.hit = False

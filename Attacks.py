@@ -5,14 +5,15 @@ except ImportError:
 
 class Attack:
     def __init__(self, pos, damage, direction):
-        self.damage = damage
         self.pos = pos
+        self.damage = damage
         self.direction = direction
-        self.sprite = 1  #replace with place holder
+        self.sprite = 1  #replace with
+        self.colour = "white"#to be used if there is no sprite
         self.center_source = []
         self.width_height_source = [] 
         self.width_height_dest = []
-        self.duration = 60 #frames on screen
+        self.done = False
 
     def deal_damage(self, creature):
         creature.take_damage(self.damage)
@@ -21,10 +22,11 @@ class Attack:
         canvas.draw_image(self.sprite, self.center_source, self.width_height_source, self.pos.get_p(), self.width_height_dest, rotation)
 
 class ConeAttack(Attack):
-    def __init__(self, damage, pos, direction, distance, angle):
+    def __init__(self, pos, damage, direction, distance, angle):
         super().__init__(damage, pos, direction)
         self.distance = distance
         self.angle = angle
+        self.done = True
         #self.launch()
     
     def hit_creature(self, creature):
@@ -34,20 +36,37 @@ class ConeAttack(Attack):
             if angle <= self.angle:
                 return True
             
-            edge = self.direction.copy().rotate(self.angle) * difference.length()
+            edge = self.direction.copy().rotate_rad(self.angle) * difference.length()
             if (edge - creature.pos).length() <= creature.radius:
                 return True
             
-            edge.rotate(self.angle * -2)
+            edge.rotate_rad(self.angle * -2)
             #return (edge - creature.pos).length() <= creature.radius
             if (edge - creature.pos).length() <= creature.radius:
                 return True
             
         return False
+    
+    def draw(self,canvas):
+        if self.colour != 1:
+            super().draw(canvas)
+        else:
+            p1 = self.pos.get_p()
+            p2 = (self.direction.copy().rotate_rad(self.angle) * self.distance).get_p()
+            p3 = (self.direction.copy().rotate_rad(self.angle * 0.5) * self.distance).get_p()
+            p4 = (self.direction.copy() * self.distance
+            canvas.draw()).get_p()
+            p5 = (self.direction.copy().rotate_rad(self.angle * -0.5) * self.distance).get_p()
+            p6 = (self.direction.copy().rotate_rad(self.angle * -1) * self.distance).get_p()
+            
+            canvas.draw_polygon([p1,p2,p3,p4,p5,p6], 1, self.colour, self.colour)
+            
+    def update(self):
+        self.done = not self.done
 
 class ProjectileAttack(Attack):
-    def __init__(self, pos, direction, radius, speed):
-        super().__init__(damage, pos, direction)
+    def __init__(self, pos, damage, direction, radius, speed):
+        super().__init__(pos, damage, direction)
         self.radius = radius
         self.trail = 1#length of the trail(texture) behind the projectile
         self.speed = speed
@@ -64,13 +83,42 @@ class ProjectileAttack(Attack):
     def hit_room(self, room):
         return(self.pos.x >= room.top_right.x) or (self.pos.x <= room.top_left.x) or (self.pos.y <= room.top_right.y) or (self.pos.y >= room.bot_right.y )
             
+    def draw(self,canvas):
+        if self.colour != 1:
+            super().draw(canvas)
+        else:
+            canvas.draw_circle(self.pos.get_p(), self.radius, 1, self.colour)
+            
+    def update(self):
+        self.pos += self.direction * self.speed
 
-
-class FlameBreath(ConeAttack):
-    def __init__(self, damage, pos, direction, distance):
-        angle = 45
-        super().__init__(damage, pos, direction, distance, angle)
-        self.sprite = 1#replace with sprite
+class BurningHands(ConeAttack):
+    def __init__(self, pos, damage, direction):
+        angle = 0.5
+        distance = 15#subject to change
+        super().__init__(pos, damage, direction, distance, angle)
+        self.colour = "red"
     
     def next_frame():
         a=1#add code for frame transition
+
+class FireBolt(ProjectileAttack):
+    def __init__(self, pos, damage, direction):
+        radius = 5
+        speed = 5
+        super.__init__(pos, damage, direction, radius, speed)
+        self.colour = "red"
+        
+class SwordSlash(ConeAttack):
+    def __init__(self, pos, damage, direction):
+        angle = 2/3 * math.pi
+        distance = 5#subject to change
+        super().__init__(pos, damage, direction, distance, angle)
+        self.colour = "white"
+    
+class IceBreath(ConeAttack):
+    def __init__(self, pos, damage, direction):
+        angle = 0.6
+        distance = 20#subject to change
+        super().__init__(pos, damage, direction, distance, angle)
+        self.colour = "aqua"

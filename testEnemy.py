@@ -1,7 +1,10 @@
 from Vector import Vector
-from Projectile import Projectile
+from Projectile import*
 from playerAnimation import*
 from enemyAnimation import Enemy
+from Keyboard import Keyboard
+from Mouse import Mouse
+from PlayerGameInter import PlayerGameInter
 try:
     import simplegui
 except ImportError:
@@ -13,10 +16,12 @@ HEIGHT = 500
 
 #Create objects from different classes
 deadb = Enemy(Vector(WIDTH/2, HEIGHT/2))
+LE = [deadb]
 bunny = MC(Vector(50,50))
 kbd = Keyboard()
 mouse = Mouse(bunny.pos.get_p())
 inter = Interaction(bunny, kbd, mouse)
+PGI = PlayerGameInter(bunny, LE)
 
 def drag_handler(position):
     inter.MCdrag(position)
@@ -32,7 +37,9 @@ def keyUp_handler(key):
 
 def draw(canvas):
     inter.MCdraw(canvas)
-    deadb.enemyDraw(canvas, bunny)
+    for i in LE:
+        i.enemyDraw(canvas, bunny)
+    PGI.drawfight(canvas)
 
 
 # Create a frame and call events

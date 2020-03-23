@@ -7,12 +7,12 @@ class Score:
         Creates a Score object
 
         Keyword arguments:
-        pos - a Vector object for the position of the top left corner of the score
+        pos - an object for the position of the top left corner of the score
         score - the initial score (default: 0)
         """
         self.__pos = pos
         self.__score = score
-
+        
     def getScore(self):
         """
         Returns the score
@@ -44,4 +44,4 @@ class Score:
         Keyword arguments:
         canvas - the SimpleGUI canvas object
         """
-        pass
+        canvas.draw_text("Score: " + str(self.__score), self.pos, 25 , 'white', 'monospace')

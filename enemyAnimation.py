@@ -1,8 +1,8 @@
 import random
 import math
 from Vector import Vector
-from Projectile import Projectile
-from Projectile import EnemyProjectile
+from Projectile import*
+from Room import Room
 try:
     import simplegui
 except ImportError:
@@ -40,6 +40,7 @@ class Enemy:
         self.frame_height = self.img_height / self.img_rows
         self.frame_centre_x = self.frame_width / 2
         self.frame_centre_y = self.frame_height / 2
+        self.radius = self.frame_width/2
         self.frame_index = [3,0]
         self.frame_duration = 10
         self.frameclock = 0
@@ -133,19 +134,8 @@ class Enemy:
                     angle = -direction.angle(Vector(-1, 0))
                 else:
                     angle = (direction.angle(Vector(-1, 0)))
-                fireball = EnemyProjectile(aim, direction, angle)
+                fireball = BProjectile(aim, direction, angle)
                 self.ListAttack.append(fireball)
-    
-    def drawshooting(self, canvas):
-        remove = []
-        for i in self.ListAttack:
-            if (i.pos.x<WIDTH) or (i.pos.x>0) or (i.pos.y<HEIGHT) or (i.pos.y>0): #CHANGE FOR REAL CONDITIONS!
-                i.drawprojectile(canvas)
-                i.update()
-            else:
-                remove.append(i)
-        for i in remove:
-            self.Attack.remove(i)
 
     def update_frameindex(self):
         self.frame_index[1] = (self.frame_index[1] + 1) % self.img_rows
@@ -168,6 +158,6 @@ class Enemy:
         self.movement(Player)
         self.update(Player)
         self.draw(canvas)
-        self.drawshooting(canvas)
+        #self.drawshooting(canvas)
 
         

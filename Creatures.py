@@ -207,7 +207,7 @@ class Goblin(Enemy):
 class DaggerGoblin(Goblin):
     def __init__(self, pos, level):
         super().__init__(pos, level)
-        self.ideal_range = 7#approx
+        self.ideal_range = [0.5,4]#approx
 
     def main_attack(self, player_pos):
         attack = create_attack(player.pos, SwordSlash)
@@ -219,7 +219,7 @@ class Dragon(Enemy):
         sprite = 1#replace with sprite
         speed = 3#will be slow
         base_exp = 7
-        ideal_range = 1
+        ideal_range = [5,17]
         super().__init__(pos, radius, sprite, speed, ideal_range)
 
     def main_attack(self, player_pos):

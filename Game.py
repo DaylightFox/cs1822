@@ -6,6 +6,7 @@ from Healthbar import PlayerHealthbar
 import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 from Vector import Vector
 from Score import Score
+from Collisions import Collisions
 
 
 
@@ -51,7 +52,7 @@ class Game:
             #the start screen should return the name of a different state
         elif self.state == "game":
             self.map.generate(self.__max_rooms, self.__random_rooms, [self.canvas_width, self.canvas_height])
-            rooms = self.map.getRooms()
+            self.current_room = self.map.getRooms()[0]
             #set event handlers for screen
             self.draw_all(canvas)
             pass #draw all and update all
@@ -63,6 +64,20 @@ class Game:
             pass #run corridor 
         
     def draw_all(self,canvas):
+        collisions_handler = Collisions(self.player, self.current_room)
+        self.current_room.draw()
+
+        collisions_handler.update()
+        new_room = collisions_handler.getNewRoom()
+
+        if(new_room != None):
+            old_room = self.current_room
+            current_room = new_room
+            self.player.setPos( current_room.getNewRoomPos(old_room) )
+        if(collisions_handler.doGenerateNewMap()):
+            self.map.generate(self.__max_rooms, self.__random_rooms, [self.canvas_width, self.canvas_height])
+            self.current_room = self.map.getRooms()[0]
+
         for array in self.objects:
             for item in array:
                 item.draw(canvas)

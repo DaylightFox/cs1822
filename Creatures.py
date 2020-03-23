@@ -210,12 +210,7 @@ class DaggerGoblin(Goblin):
         self.ideal_range = 7#approx
 
     def main_attack(self, player_pos):
-        direction = (player_pos - self.pos).normalise
-        distance = 1#short #replace with value (probably level scale)
-        angle = 135#wide
-        offset = 1
-        source = self.pos + ((self.radius + offset) * direction)
-        attack = ConeAttack(self.pos, direction, distance, angle)
+        attack = create_attack(player.pos, SwordSlash)
         return attack
 
 class Dragon(Enemy):

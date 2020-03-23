@@ -174,13 +174,14 @@ class Wizard(Player):
 
 
 class Enemy(Creature):
-    def __init__(self, pos, radius, sprite, speed, base_exp, level, ideal_range):
+    def __init__(self, pos, radius, sprite, speed, base_exp, level, ideal_range, player):
         sprite = 1#replace with default sprite
         super().__init__(pos, radius, sprite)
         self.speed = speed
         self.base_exp = base_exp
         self.setLevel(level)
         self.ideal_range = ideal_range#replace with 3/4 main attack range
+        self.player = player
 
     def setLevel(self, level):
         super().setLevel(level)
@@ -192,8 +193,19 @@ class Enemy(Creature):
         #run death animation
         #increase Player exp
         
+    def setDirection(self):
+        self.direction = (self.player.pos - self.pos).normalise
+        
     def update(self):
-        self.pos += self.direction * self.speed
+        self.setDirection()
+        distance = (self.player.pos - self.pos).length()
+        ideal_range = self.ideal_range
+        if ideal_range[0] <= distance <= ideal_range[0]:
+            self.main_attack(self.player.pos.get_p())
+        elif ideal_range[0] > distance:
+            self.direction.rotate(math.pi)
+        else:
+            self.pos += self.direction * self.speed
 
 class Goblin(Enemy):
     def __init__(self, pos, level):
@@ -208,10 +220,32 @@ class DaggerGoblin(Goblin):
     def __init__(self, pos, level):
         super().__init__(pos, level)
         self.ideal_range = [0.5,4]#approx
+        self.hit = False
 
     def main_attack(self, player_pos):
         attack = create_attack(player.pos, SwordSlash)
         return attack
+    
+    def update(self):
+        self.setDirection()
+        distance = (self.player.pos - self.pos).length()
+        if not self.hit:
+            ideal_range = self.ideal_range
+            if ideal_range[0] <= distance <= ideal_range[0]:
+                self.main_attack(self.player.pos.get_p())
+                self.hit = True
+            elif ideal_range[0] > distance:
+                self.direction.rotate(math.pi)
+                self.pos += self.direction * self.speed
+            else:
+                self.pos += self.direction * self.speed
+        else:
+            safeDistance = 100
+            if distance >= safeDistance:
+                self.hit = False
+            else:
+                self.direction.rotate(math.pi)
+            self.pos += self.direction * self.speed
 
 class Dragon(Enemy):
     def __init__(self, pos, level):

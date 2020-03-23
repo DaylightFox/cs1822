@@ -25,7 +25,7 @@ class Game:
         self.attacks = []
 
         self.player = Wizard( Vector(self.canvas_width/2, self.canvas_height/2) )
-        self.creatures.append(player)
+        self.creatures.append(self.player)
         self.health = PlayerHealthbar(self.player, ( 20, 20 ), ( 120, 120 ))
         self.score = Score(self.canvas_width - 50, 5)
         self.floor = 0
@@ -44,8 +44,9 @@ class Game:
 
 
     def start(self):
-        self.state = "start screen"
+        self.change_state("game")#self.change_state("start screen")
         #probably extras
+        frame.set_draw_handler(draw_handler)
         frame.start()
         
     def start_game(self):#called from the start screen 

@@ -134,7 +134,7 @@ class Enemy:
                     angle = -direction.angle(Vector(-1, 0))
                 else:
                     angle = (direction.angle(Vector(-1, 0)))
-                fireball = BProjectile(aim, direction, angle)
+                fireball = EnemyProjectile(aim, direction, angle)
                 self.ListAttack.append(fireball)
 
     def update_frameindex(self):

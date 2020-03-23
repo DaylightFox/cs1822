@@ -33,6 +33,7 @@ class Projectile:
         self.frame_index = [1,0]
         self.frame_duration = 2
         self.frameclock = 0
+        self.radius = self.frame_width/2
     
     def update_frameindex(self):
         self.frame_index[0] = (self.frame_index[0] + 1) % self.img_columns
@@ -48,6 +49,11 @@ class Projectile:
         frame_size = (self.frame_width, self.frame_height)
         canvas.draw_image(self.spritesheet, frame_centre, frame_size, self.pos.get_p(), frame_size, self.angle)
     
+    def hit_creature(self, creature):
+        difference = creature.pos - self.pos
+        distance = difference.length()
+        return distance <= (self.radius + creature.radius)
+
     def update(self):
         self.pos.add(self.vel)
         #self.vel.multiply(0.85)

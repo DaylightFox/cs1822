@@ -58,32 +58,29 @@ class Game:
     def change_state(self, newState):
         states = ["start screen","game","pause","corridor"]
         if newState in states:
-            self.state = newState
             if newState == "start screen":
                 pass#set handlers
             elif newState == "game":
                 #set handlers
                 self.frame.set_mouseclick_handler(self.player.main_attack)
                 self.frame.set_keydown_handler(self.player.moveD)
-                self.frame.set_keydown_handler(self.player.moveU)
+                self.frame.set_keyup_handler(self.player.moveU)
             elif newState == "pause":
                 pass#set handlers
             elif newState == "corridor":
                 pass#set handlers
+            self.state = newState
 
     def draw_handler(self, canvas):#always draw handler
         if self.state == "start screen":
             pass #play the start screen
-            #the start screen should return the name of a different state
         elif self.state == "game":
             self.map.generate(self.__max_rooms, self.__random_rooms, [self.canvas_width, self.canvas_height])
             self.current_room = self.map.getRooms()[0]
-            #set event handlers for screen
             self.draw_all(canvas)
             pass #draw all and update all
         elif self.state == "pause": #pressing Esc while in game loop switches to pause
             self.draw_all(canvas)
-            pass #draw all but dont update
         elif self.state == "corridor":
             pass #run corridor 
         
@@ -92,8 +89,6 @@ class Game:
             interaction.manageInteractions()
         for array in self.objects:
             for item in array:
-                if isinstance(item, Enemy):
-                    a=1#set enemy direction
                 item.update()
         for attack in attacks:
             if attack.done:
@@ -128,7 +123,3 @@ class Game:
                             self.player.increaseExp(item.exp)
                     array.remove(item)
                     break
-        ##if self.removeList != []:
-        ##    #raise Exception()#
-        ##    pass
-        ##self.removeList = []

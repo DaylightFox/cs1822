@@ -24,9 +24,9 @@ class MC:
         #Attacks parameters
         self.firespeed = 0
         self.ultcount = 0
-        self.ultlength = 480
-        self.ulting = False
-        self.ultAttack = FireBreath(self.pos, 0)
+        self.ultLength = 1000
+        self.ultOn = False
+        self.Ultimate= FireBreath(self.pos, 0)
         self.ListAttack = []
 
         #Spritesheet data
@@ -101,8 +101,8 @@ class MC:
             if keyboard.spacebar:
                 if self.ultcount==10:
                     self.ulting=True
-            if self.ulting:
-                self.FBupdate(mouse)
+            if self.ultOn:
+                self.ultUpdate()
             else:
                 self.shooting(mouse)
             mouse.save_lastpos()
@@ -121,6 +121,8 @@ class MC:
             if keyboard.left:
                 self.vel.add(Vector(-0.75, 0))
                 self.frame_index[0]=0
+            if self.ultOn:
+                self.ultUpdate()
     
     def shooting(self, mouse):
         self.firespeed += 1
@@ -137,29 +139,39 @@ class MC:
                     angle = (direction.angle(Vector(-1, 0)))
                 fireball = Projectile(currpos, direction, angle)
                 self.ListAttack.append(fireball)
+                self.ultcount += 1
         mouse.save_lastpos()
-        self.ultcount +=1
     
-    def FBupdate(self, mouse):
-        if (self.ultlength>0):
-            if mouse.is_newpos():
-                direction = self.distFromMouse(mouse)
-                direction.normalize()
-                offset = direction.copy()
-                currpos = self.pos.copy().add(offset.multiply(15))
-                if (mouse.pos[1]>currpos.y):
-                    angle = -direction.angle(Vector(-1, 0))
-                else:
-                    angle = (direction.angle(Vector(-1, 0)))
-                self.ultAttack.pos = currpos
-                self.ultAttack.angle = angle
-            self.ultlength -= 1
+    def ultUpdate(self): #add mouse as an argument if you want to test mouse control
+        '''if mouse.is_newpos():
+            direction = self.distFromMouse(mouse)
+            direction.normalize()
+            offset = direction.copy()
+            FBpos = self.pos.copy().add(offset.multiply(50))
+            if (mouse.pos[1]>FBpos.y):
+                alpha = -direction.angle(Vector(-1, 0))
+            else:
+                alpha = (direction.angle(Vector(-1, 0)))
+            self.Ultimate.pos = FBpos
+            self.Ultimate.angle = alpha
+        else:'''
+        direction = self.vel.copy()
+        direction.normalize()
+        offset = direction.copy()
+        FBpos = self.pos.copy().add(offset.multiply(50))
+        if (self.vel.y>0):
+            alpha = -(direction.angle(Vector(-1, 0)))
         else:
-            self.ultcount=0
-            self.ulting = False
-            self.ultlength = 480
-
-
+            alpha = (direction.angle(Vector(-1, 0)))
+        self.Ultimate.pos = FBpos
+        self.Ultimate.angle = alpha
+        #mouse.save_lastpos()
+    
+    def activateUlt(self, keyboard):
+        if (self.ultcount>=10):
+            if keyboard.spacebar:
+                self.ultOn = True
+                self.ultcount = 0
 
     def update_frameindex(self):
         self.frame_index[1] = (self.frame_index[1] + 1) % self.img_rows
@@ -180,8 +192,8 @@ class MC:
     def playerDraw(self, canvas, mouse, keyboard):
         self.movement(keyboard, mouse)
         self.update()
+        self.activateUlt(keyboard)
         self.draw(canvas)
-        #self.drawshooting(canvas)
 
 class Interaction:
 

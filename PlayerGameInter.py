@@ -28,12 +28,16 @@ class PlayerGameInter:
         for i in remove:
             self.player.ListAttack.remove(i)
     
-    def playerUlt(self, canvas):
-        if (self.player.ultlength>0) and (self.player.ulting):
-            self.player.ultAttack.drawfb(canvas)
-            """for i in self.listEnemy:
-                if self.player.ultAttack.hit_creature(i):
-                    self.player.ultAttack.deal_damage(i)"""
+    def ulting(self, canvas):
+        if (self.player.ultOn):
+            self.player.Ultimate.drawfb(canvas)
+            self.player.ultLength -= 1
+            #for i in self.listEnemy:
+                #if self.player.Ultimate.hit_creature(i):
+                    #self.player.Ultimate.deal_damge(i)
+        if (self.player.ultLength < 0):
+            self.player.ultOn = False
+            self.player.ultLength = 100
 
     def enemyShoot(self, canvas):
         for i in self.listEnemy:
@@ -54,9 +58,8 @@ class PlayerGameInter:
     
     def drawfight(self, canvas):
         self.playerShoot(canvas)
-        self.playerUlt(canvas)
+        self.ulting(canvas)
         self.enemyShoot(canvas)
-        self.playerUlt(canvas)
 
 
 

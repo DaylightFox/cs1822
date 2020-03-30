@@ -204,7 +204,7 @@ class Enemy(Creature):
         if ideal_range[0] <= distance <= ideal_range[0]:
             self.main_attack(self.player.pos.get_p())
         elif ideal_range[0] > distance:
-            self.direction.rotate(math.pi)
+            self.direction.rotate_rad(math.pi)
         else:
             self.pos += self.direction * self.speed
 
@@ -246,7 +246,7 @@ class DaggerGoblin(Goblin):
             if distance >= safeDistance:
                 self.hit = False
             else:
-                self.direction.rotate(math.pi)
+                self.direction.rotate_rad(math.pi)
             self.pos += self.direction * self.speed
             
     def draw(self, canvas):

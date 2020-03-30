@@ -208,17 +208,17 @@ class Enemy(Creature):
             self.pos += self.direction * self.speed
 
 class Goblin(Enemy):
-    def __init__(self, pos, level):
+    def __init__(self, pos, level, player):
         radius = 1#will be small
         sprite = 1#replace with sprite
         speed = 3#will be fast
         base_exp = 5
         ideal_range = 1
-        super().__init__(pos, radius, sprite, speed, base_exp, level, ideal_range)
+        super().__init__(pos, radius, sprite, speed, base_exp, level, ideal_range, player)
 
 class DaggerGoblin(Goblin):
-    def __init__(self, pos, level):
-        super().__init__(pos, level)
+    def __init__(self, pos, level, player):
+        super().__init__(pos, level, player)
         self.ideal_range = [0.5,4]#approx
         self.hit = False
 
@@ -249,13 +249,13 @@ class DaggerGoblin(Goblin):
             self.pos += self.direction * self.speed
 
 class Dragon(Enemy):
-    def __init__(self, pos, level):
+    def __init__(self, pos, level, player):
         radius = 10#will be large
         sprite = 1#replace with sprite
         speed = 3#will be slow
         base_exp = 7
         ideal_range = [5,17]
-        super().__init__(pos, radius, sprite, speed, ideal_range)
+        super().__init__(pos, radius, sprite, speed, ideal_range, player)
 
     def main_attack(self, player_pos):
         attack = create_attack(player.pos, IceBreath)

@@ -160,7 +160,7 @@ class Wizard(Player):
         #offset = 1
         #source = self.pos + ((self.radius + offset) * direction)
         #attack = FireBolt(source, self.Dmg, direction)
-        return attack
+        self.attackList.append(attack)
     
     def alt_attack(self, mouse_pos):
         attack = create_attack(mouse_pos, BurningHands)
@@ -169,7 +169,7 @@ class Wizard(Player):
         #offset = 1
         #source = self.pos + ((self.radius + offset) * direction)
         #attack = BurningHands(source, self.Dmg, direction)
-        return attack
+        self.attackList.append(attack)
 
 
 
@@ -225,7 +225,7 @@ class DaggerGoblin(Goblin):
 
     def main_attack(self, player_pos):
         attack = create_attack(player.pos, SwordSlash)
-        return attack
+        self.attackList.append(attack)
     
     def update(self):
         if not self.hit:
@@ -248,6 +248,12 @@ class DaggerGoblin(Goblin):
             else:
                 self.direction.rotate(math.pi)
             self.pos += self.direction * self.speed
+            
+    def draw(self, canvas):
+        if sprite==1:
+            canvas.draw_circle(self.pos, self.radius, 1, "Gray", "Green")
+        else:
+            super().draw(canvas)
 
 class Dragon(Enemy):
     def __init__(self, pos, level, player, attackList):
@@ -260,5 +266,10 @@ class Dragon(Enemy):
 
     def main_attack(self, player_pos):
         attack = create_attack(player.pos, IceBreath)
-        return attack
+        self.attackList.append(attack)
         
+    def draw(self, canvas):
+        if sprite==1:
+            canvas.draw_circle(self.pos, self.radius, 1, "CadetBlue", "CadetBlue")
+        else:
+            super().draw(canvas)

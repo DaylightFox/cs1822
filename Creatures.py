@@ -10,7 +10,7 @@ except ImportError:
     import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 
 class Creature:
-    def __init__(self, pos, radius, sprite):
+    def __init__(self, pos, radius, sprite, attackList):
         self.pos = pos #centre of sprite
         self.radius = radius
         self.sprite = sprite
@@ -19,6 +19,7 @@ class Creature:
         self.width_height_dest = []
         self.speed = 0
         self.direction = 1#unit vector
+        self.attackList = attackList
         self.level = 1
         self.levelScaleMultplier = 1
         self.exp = 0
@@ -70,10 +71,10 @@ class Creature:
         self.pos += self.direction * self.speed
 
 class Player(Creature):
-    def __init__(self, pos):
+    def __init__(self, pos, attackList):
         playerRadius = 16
         sprite = 1#replace with default sprite
-        super().__init__(pos, playerRadius, sprite)
+        super().__init__(pos, playerRadius, sprite, attackList)
         self.width_height_dest = [self.radius*2,self.radius*2]
         self.speed = 1
         self.levelScaleMultplier = 1.09
@@ -148,8 +149,8 @@ class Player(Creature):
         self.direction.normalise()
         
 class Wizard(Player):
-    def __init__(self, pos):
-        super().__init__(pos)
+    def __init__(self, pos, attackList):
+        super().__init__(pos, attackList)
         self.sprite = 1#replace with wizard sprite
         
     def main_attack(self, mouse_pos):
@@ -174,9 +175,9 @@ class Wizard(Player):
 
 
 class Enemy(Creature):
-    def __init__(self, pos, radius, sprite, speed, base_exp, level, ideal_range, player):
+    def __init__(self, pos, radius, sprite, speed, base_exp, level, ideal_range, player, attackList):
         sprite = 1#replace with default sprite
-        super().__init__(pos, radius, sprite)
+        super().__init__(pos, radius, sprite, attackList)
         self.speed = speed
         self.base_exp = base_exp
         self.setLevel(level)
@@ -208,17 +209,17 @@ class Enemy(Creature):
             self.pos += self.direction * self.speed
 
 class Goblin(Enemy):
-    def __init__(self, pos, level, player):
+    def __init__(self, pos, level, player, attackList):
         radius = 1#will be small
         sprite = 1#replace with sprite
         speed = 3#will be fast
         base_exp = 5
         ideal_range = 1
-        super().__init__(pos, radius, sprite, speed, base_exp, level, ideal_range, player)
+        super().__init__(pos, radius, sprite, speed, base_exp, level, ideal_range, player, attackList)
 
 class DaggerGoblin(Goblin):
-    def __init__(self, pos, level, player):
-        super().__init__(pos, level, player)
+    def __init__(self, pos, level, player, attackList):
+        super().__init__(pos, level, player, attackList)
         self.ideal_range = [0.5,4]#approx
         self.hit = False
 
@@ -249,13 +250,13 @@ class DaggerGoblin(Goblin):
             self.pos += self.direction * self.speed
 
 class Dragon(Enemy):
-    def __init__(self, pos, level, player):
+    def __init__(self, pos, level, player, attackList):
         radius = 10#will be large
         sprite = 1#replace with sprite
         speed = 3#will be slow
         base_exp = 7
         ideal_range = [5,17]
-        super().__init__(pos, radius, sprite, speed, ideal_range, player)
+        super().__init__(pos, radius, sprite, speed, ideal_range, player, attackList)
 
     def main_attack(self, player_pos):
         attack = create_attack(player.pos, IceBreath)

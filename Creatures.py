@@ -15,8 +15,8 @@ class Creature:
         self.radius = radius
         self.sprite = sprite
         self.center_source = []
-        self.width_height_source = [] 
-        self.width_height_dest = []
+        self.width_height_source = []
+        self.width_height_dest = [self.radius*2, self.radius*2]
         self.speed = 0
         self.direction = 1#unit vector
         self.attackList = attackList
@@ -151,8 +151,29 @@ class Player(Creature):
 class Wizard(Player):
     def __init__(self, pos, attackList):
         super().__init__(pos, attackList)
-        self.sprite = 1#replace with wizard sprite
+        self.sprite = simplegui.load_image("mcsprite.png")
+        self.center_source = [16,16]
+        self.width_height_source = [32,32]
+        self.frame_count = 0
         
+    def draw(self, canvas):
+        if -self.direction.x:#left
+            self.center_source[0] = 16
+        elif self.direction.x:#right
+            self.center_source[0] = 112
+        elif self.direction.y:#down
+            self.center_source[0] = 48
+        elif -self.direction.y:#up
+            self.center_source[0] = 80
+        else:
+            self.center_source[0] = 48 #default looking down
+        self.center_source[1] = 32*self.frame_count + 16
+        super().draw(canvas)
+        
+    def update(self):
+        self.frame_count = (self.frame_count+1) % 4
+        super().update()
+
     def main_attack(self, mouse_pos):
         attack = create_attack(mouse_pos, FireBolt)
         #mouse_pos = Vector(mouse_pos[0], mouse_pos[1])

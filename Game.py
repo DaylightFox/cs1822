@@ -46,8 +46,8 @@ class Game:
     def start(self):
         self.change_state("game")#self.change_state("start screen")
         #probably extras
-        frame.set_draw_handler(draw_handler)
-        frame.start()
+        self.frame.set_draw_handler(draw_handler)
+        self.frame.start()
         
     def start_game(self):#called from the start screen 
         #does stuff to prepare for the game to begin

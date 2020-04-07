@@ -89,10 +89,13 @@ class Game:
             interaction.manageInteractions()
         for array in self.objects:
             for item in array:
+                if isinstance(item, Enemy):
+                    item.update(self.player)
+                else:
+                    item.update()
                 if isinstance(item, Creature):
                     self.attacks.extend(item.attackList)
                     item.attackList = []
-                item.update()
         for attack in self.attacks:
             if attack.done:
                 removeList.append(attack)

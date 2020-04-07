@@ -196,14 +196,13 @@ class Wizard(Player):
 
 
 class Enemy(Creature):
-    def __init__(self, pos, radius, sprite, speed, base_exp, level, ideal_range, player):
+    def __init__(self, pos, radius, sprite, speed, base_exp, level, ideal_range):
         sprite = 1#replace with default sprite
         super().__init__(pos, radius, sprite)
         self.speed = speed
         self.base_exp = base_exp
         self.setLevel(level)
         self.ideal_range = ideal_range#replace with 3/4 main attack range
-        self.player = player
 
     def setLevel(self, level):
         super().setLevel(level)
@@ -215,45 +214,45 @@ class Enemy(Creature):
         #run death animation
         #increase Player exp
         
-    def setDirection(self):
-        self.direction = (self.player.pos - self.pos).normalise
+    def setDirection(self, player):
+        self.direction = (player.pos - self.pos).normalise
         
-    def update(self):
-        self.setDirection()
-        distance = (self.player.pos - self.pos).length()
+    def update(self, player):
+        self.setDirection(player)
+        distance = (player.pos - self.pos).length()
         ideal_range = self.ideal_range
         if ideal_range[0] <= distance <= ideal_range[0]:
-            self.main_attack(self.player.pos.get_p())
+            self.main_attack(player.pos.get_p())
         elif ideal_range[0] > distance:
             self.direction.rotate_rad(math.pi)
         else:
             self.pos += self.direction * self.speed
 
 class Goblin(Enemy):
-    def __init__(self, pos, level, player):
+    def __init__(self, pos, level):
         radius = 1#will be small
         sprite = 1#replace with sprite
         speed = 3#will be fast
         base_exp = 5
         ideal_range = 1
-        super().__init__(pos, radius, sprite, speed, base_exp, level, ideal_range, player)
+        super().__init__(pos, radius, sprite, speed, base_exp, level, ideal_range)
 
 class DaggerGoblin(Goblin):
-    def __init__(self, pos, level, player):
-        super().__init__(pos, level, player)
+    def __init__(self, pos, level):
+        super().__init__(pos, level)
         self.ideal_range = [0.5,4]#approx
         self.hit = False
 
-    def main_attack(self, player_pos):
+    def main_attack(self_pos):
         attack = create_attack(player.pos, SwordSlash)
         self.attackList.append(attack)
     
-    def update(self):
+    def update(self, player):
         if not self.hit:
-            super().update()
+            super().update(player)
             #ideal_range = self.ideal_range
             #if ideal_range[0] <= distance <= ideal_range[0]:
-                #self.main_attack(self.player.pos.get_p())
+                #self.main_attack(player.pos.get_p())
                 #self.hit = True
             #elif ideal_range[0] > distance:
                 #self.direction.rotate(math.pi)
@@ -261,8 +260,8 @@ class DaggerGoblin(Goblin):
             #else:
                 #self.pos += self.direction * self.speed
         else:
-            self.setDirection()
-            distance = (self.player.pos - self.pos).length()
+            self.setDirection(player)
+            distance = (player.pos - self.pos).length()
             safeDistance = 100
             if distance >= safeDistance:
                 self.hit = False
@@ -277,13 +276,13 @@ class DaggerGoblin(Goblin):
             super().draw(canvas)
 
 class Dragon(Enemy):
-    def __init__(self, pos, level, player):
+    def __init__(self, pos, level):
         radius = 10#will be large
         sprite = 1#replace with sprite
         speed = 3#will be slow
         base_exp = 7
         ideal_range = [5,17]
-        super().__init__(pos, radius, sprite, speed, ideal_range, player)
+        super().__init__(pos, radius, sprite, speed, ideal_range)
 
     def main_attack(self, player_pos):
         attack = create_attack(player.pos, IceBreath)

@@ -129,3 +129,6 @@ class Game:
                             self.player.increaseExp(item.exp)
                     array.remove(item)
                     break
+
+game = Game()
+game.start()

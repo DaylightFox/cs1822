@@ -270,7 +270,7 @@ class DaggerGoblin(Goblin):
             self.pos += self.direction * self.speed
             
     def draw(self, canvas):
-        if sprite==1:
+        if self.sprite==1:
             canvas.draw_circle(self.pos, self.radius, 1, "Gray", "Green")
         else:
             super().draw(canvas)
@@ -289,7 +289,7 @@ class Dragon(Enemy):
         self.attackList.append(attack)
         
     def draw(self, canvas):
-        if sprite==1:
+        if self.sprite==1:
             canvas.draw_circle(self.pos, self.radius, 1, "CadetBlue", "CadetBlue")
         else:
             super().draw(canvas)

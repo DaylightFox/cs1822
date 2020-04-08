@@ -157,13 +157,13 @@ class Wizard(Player):
         self.frame_count = 0
         
     def draw(self, canvas):
-        if -self.direction.x:#left
+        if self.direction.x < 0:#left
             self.center_source[0] = 16
-        elif self.direction.x:#right
+        elif self.direction.x > 0:#right
             self.center_source[0] = 112
-        elif self.direction.y:#down
+        elif self.direction.y > 0:#down
             self.center_source[0] = 48
-        elif -self.direction.y:#up
+        elif self.direction.y < 0:#up
             self.center_source[0] = 80
         else:
             self.center_source[0] = 48 #default looking down

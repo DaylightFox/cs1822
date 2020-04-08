@@ -103,7 +103,7 @@ class Game:
     
     def draw_all(self,canvas):
         collisions_handler = Collisions(self.player, self.current_room)
-        self.current_room.draw()
+        self.current_room.draw(canvas)
 
         collisions_handler.update()
         new_room = collisions_handler.getNewRoom()

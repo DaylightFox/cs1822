@@ -57,13 +57,8 @@ class AttackRoomInteraction(Interaction):
         attack.hit_room(room)
         
     def hit_resolver(attack, room):
-        pass
+        if isinstance(attack, ProjectileAttack):
+            attack.done = True
     
     def manageInteractions(self):
         super().manageInteractions(hit_detector, hit_resolver)
-        removeList = []
-        for a in range(len(interactor)):
-            attack = interactor[a]
-            if isinstance(attack, ProjectileAttack):
-                if sum(interactions[a]):
-                    attack.done = True

@@ -46,14 +46,16 @@ class Game:
     def start(self):
         self.change_state("game")#self.change_state("start screen")
         #probably extras
+        self.start_game()
         self.frame.set_draw_handler(self.draw_handler)
         self.frame.start()
         
     def start_game(self):#called from the start screen 
         #does stuff to prepare for the game to begin
         self.map.generate(self.__max_rooms, self.__random_rooms, [self.canvas_width, self.canvas_height])
-        self.rooms = self.map.getRooms()
-        self.interactions.append(AttackRoomInteraction(self.attacks, self.rooms))
+        #self.rooms = self.map.getRooms()
+        self.current_room = [self.map.getRooms()[0]]
+        self.interactions.append(AttackRoomInteraction(self.attacks, self.current_room))
 
     def change_state(self, newState):
         states = ["start screen","game","pause","corridor"]
@@ -76,7 +78,8 @@ class Game:
             pass #play the start screen
         elif self.state == "game":
             self.map.generate(self.__max_rooms, self.__random_rooms, [self.canvas_width, self.canvas_height])
-            self.current_room = self.map.getRooms()[0]
+            self.current_room.clear()
+            self.current_room.append(self.map.getRooms()[0])
             self.draw_all(canvas)
             pass #draw all and update all
         elif self.state == "pause": #pressing Esc while in game loop switches to pause
@@ -102,19 +105,20 @@ class Game:
         remove_objects()
     
     def draw_all(self,canvas):
-        collisions_handler = Collisions(self.player, self.current_room)
-        self.current_room.draw(canvas)
+        collisions_handler = Collisions(self.player, self.current_room[0])
+        self.current_room[0].draw(canvas)
 
         collisions_handler.update()
         new_room = collisions_handler.getNewRoom()
 
         if(new_room != None):
-            old_room = self.current_room
+            old_room = self.current_room[0]
             current_room = new_room
             self.player.setPos( current_room.getNewRoomPos(old_room) )
         if(collisions_handler.doGenerateNewMap()):
             self.map.generate(self.__max_rooms, self.__random_rooms, [self.canvas_width, self.canvas_height])
-            self.current_room = self.map.getRooms()[0]
+            self.current_room.clear()
+            self.current_room.append(self.map.getRooms()[0])
 
         for array in self.objects:
             for item in array:

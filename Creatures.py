@@ -61,7 +61,7 @@ class Creature:
     
     def create_attack(self, target_pos, attackClass):
         target_pos = Vector(target_pos[0], target_pos[1])
-        direction = (target_pos - self.pos).normalize
+        direction = (target_pos - self.pos).normalize()
         offset = 1
         source = self.pos + ((self.radius + offset) * direction)
         attack = attackClass(source, self.Dmg, direction)

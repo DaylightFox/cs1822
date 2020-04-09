@@ -26,7 +26,7 @@ class Game:
 
         self.player = Wizard( Vector(self.canvas_width/2, self.canvas_height/2))
         self.creatures.append(self.player)
-        self.health = PlayerHealthbar(self.player, ( 20, 20 ), ( 120, 120 ))
+        self.health = PlayerHealthbar(self.player, ( 20, 20 ), ( 170, 50 ))
         self.score = Score(self.canvas_width - 50, 5)
         self.floor = 0
 

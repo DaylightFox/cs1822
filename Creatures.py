@@ -18,7 +18,7 @@ class Creature:
         self.width_height_source = []
         self.width_height_dest = [self.radius*2, self.radius*2]
         self.speed = 0
-        self.direction = Vector(0,0)#unit vector
+        self.direction = Vector(0,1)#unit vector
         self.attackList = []
         self.level = 1
         self.levelScaleMultplier = 1
@@ -146,7 +146,8 @@ class Player(Creature):
             self.direction.add(Vector(-1,0))
         if self.right and (not self.left):
             self.direction.add(Vector(1,0))
-        self.direction.normalize()
+        if self.direction.length() > 0:
+            self.direction.normalize()
         
 class Wizard(Player):
     def __init__(self, pos):

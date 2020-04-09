@@ -61,7 +61,7 @@ class Creature:
     
     def create_attack(self, target_pos, attackClass):
         target_pos = Vector(target_pos[0], target_pos[1])
-        direction = (target_pos - self.pos).normalise
+        direction = (target_pos - self.pos).normalize
         offset = 1
         source = self.pos + ((self.radius + offset) * direction)
         attack = attackClass(source, self.Dmg, direction)
@@ -146,7 +146,7 @@ class Player(Creature):
             self.direction.add(Vector(-1,0))
         if self.right and (not self.left):
             self.direction.add(Vector(1,0))
-        self.direction.normalise()
+        self.direction.normalize()
         
 class Wizard(Player):
     def __init__(self, pos):
@@ -175,18 +175,18 @@ class Wizard(Player):
         super().update()
 
     def main_attack(self, mouse_pos):
-        attack = create_attack(mouse_pos, FireBolt)
+        attack = self.create_attack(mouse_pos, FireBolt)
         #mouse_pos = Vector(mouse_pos[0], mouse_pos[1])
-        #direction = (mouse_pos - self.pos).normalise
+        #direction = (mouse_pos - self.pos).normalize
         #offset = 1
         #source = self.pos + ((self.radius + offset) * direction)
         #attack = FireBolt(source, self.Dmg, direction)
         self.attackList.append(attack)
     
     def alt_attack(self, mouse_pos):
-        attack = create_attack(mouse_pos, BurningHands)
+        attack = self.create_attack(mouse_pos, BurningHands)
         #mouse_pos = Vector(mouse_pos[0], mouse_pos[1])
-        #direction = (mouse_pos - self.pos).normalise
+        #direction = (mouse_pos - self.pos).normalize
         #offset = 1
         #source = self.pos + ((self.radius + offset) * direction)
         #attack = BurningHands(source, self.Dmg, direction)
@@ -215,7 +215,7 @@ class Enemy(Creature):
         #increase Player exp
         
     def setDirection(self, player):
-        self.direction = (player.pos - self.pos).normalise
+        self.direction = (player.pos - self.pos).normalize
         
     def update(self, player):
         self.setDirection(player)
@@ -244,7 +244,7 @@ class DaggerGoblin(Goblin):
         self.hit = False
 
     def main_attack(self_pos):
-        attack = create_attack(player.pos, SwordSlash)
+        attack = self.create_attack(player.pos, SwordSlash)
         self.attackList.append(attack)
     
     def update(self, player):
@@ -285,7 +285,7 @@ class Dragon(Enemy):
         super().__init__(pos, radius, sprite, speed, ideal_range)
 
     def main_attack(self, player_pos):
-        attack = create_attack(player.pos, IceBreath)
+        attack = self.create_attack(player.pos, IceBreath)
         self.attackList.append(attack)
         
     def draw(self, canvas):

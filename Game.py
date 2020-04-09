@@ -77,9 +77,10 @@ class Game:
         if self.state == "start screen":
             pass #play the start screen
         elif self.state == "game":
-            self.map.generate(self.__max_rooms, self.__random_rooms, [self.canvas_width, self.canvas_height])
-            self.current_room.clear()
-            self.current_room.append(self.map.getRooms()[0])
+            #self.map.generate(self.__max_rooms, self.__random_rooms, [self.canvas_width, self.canvas_height])
+            #self.current_room.clear()
+            #self.current_room.append(self.map.getRooms()[0])
+            self.update_all()
             self.draw_all(canvas)
             pass #draw all and update all
         elif self.state == "pause": #pressing Esc while in game loop switches to pause
@@ -94,6 +95,8 @@ class Game:
             for item in array:
                 if isinstance(item, Enemy):
                     item.update(self.player)
+                elif isinstance(item, PlayerHealthbar):
+                    pass
                 else:
                     item.update()
                 if isinstance(item, Creature):
@@ -102,7 +105,7 @@ class Game:
         for attack in self.attacks:
             if attack.done:
                 removeList.append(attack)
-        remove_objects()
+        self.remove_objects()
     
     def draw_all(self,canvas):
         collisions_handler = Collisions(self.player, self.current_room[0])

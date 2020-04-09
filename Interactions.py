@@ -14,7 +14,7 @@ class Interaction:
         for i in range(len(self.interactor)):
             self.interactions[i].append(False)
     
-    def manageInteractions(self, intDetector, intResolver, sticky=True):
+    def manageInteractions(self, sticky=True):
         """
         intDetector is the function that detects the interaction
         intResolver is the function that resolves the interaction
@@ -25,18 +25,18 @@ class Interaction:
             for inted in self.interacted:
                 inted = self.interacted[j]
                 if sticky or not self.interactions[i,j]:
-                    if intDetector(inter, inted):
+                    if self.intDetector(inter, inted):
                         interactions[i][j] = True
-                        intResolver(inter, inted)
+                        self.intResolver(inter, inted)
 
 class AttackCreatureInteraction(Interaction):
     def __init__(self, attacks, creatures):
         super().__init__(attacks, creatures)
 
-    def hit_detector(attack, attacked):
+    def intDetector(self, attack, attacked):
         attack.hit_creature(attacked)
         
-    def hit_resolver(attack, attacked):
+    def intResolver(self, attack, attacked):
         attack.deal_damage(attacked)
         if isinstance(attack, ProjectileAttack):
                 attack.done = True
@@ -53,12 +53,12 @@ class AttackRoomInteraction(Interaction):
     def __init__(self, attacks, rooms):
         super().__init__(attacks, rooms)
     
-    def hit_detector(attack, room):
+    def intDetector(self, attack, room):
         attack.hit_room(room)
         
-    def hit_resolver(attack, room):
+    def intResolver(self, attack, room):
         if isinstance(attack, ProjectileAttack):
             attack.done = True
     
-    def manageInteractions(self):
-        super().manageInteractions(hit_detector, hit_resolver)
+    #def manageInteractions(self):
+        #super().manageInteractions(hit_detector, hit_resolver)

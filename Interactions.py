@@ -20,9 +20,9 @@ class Interaction:
         intResolver is the function that resolves the interaction
         sticky is True if the interations occour every game cycle(frame)
         """
-        for inter in self.interactor:
+        for i in range(len(self.interactor)):
             inter = self.interactor[i]
-            for inted in self.interacted:
+            for j in range(len(self.interacted)):
                 inted = self.interacted[j]
                 if sticky or not self.interactions[i,j]:
                     if self.intDetector(inter, inted):

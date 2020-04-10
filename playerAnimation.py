@@ -30,7 +30,7 @@ class MC:
         self.ListAttack = []
 
         #Spritesheet data
-        self.spritesheet = simplegui._load_local_image('mcsprite2.png')
+        self.spritesheet = simplegui._load_local_image('mcsprite.png')
         self.img_width = 184
         self.img_height = 184
         self.img_columns = 4

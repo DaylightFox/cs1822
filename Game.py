@@ -89,6 +89,18 @@ class Game:
             pass #run corridor 
         
     def update_all(self):
+        collisions_handler = Collisions(self.player, self.current_room[0])
+        collisions_handler.update()
+        new_room = collisions_handler.getNewRoom()
+        if(new_room != None):
+            old_room = self.current_room[0]
+            current_room = new_room
+            self.player.setPos( current_room.getNewRoomPos(old_room) )
+        if(collisions_handler.doGenerateNewMap()):
+            self.map.generate(self.__max_rooms, self.__random_rooms, [self.canvas_width, self.canvas_height])
+            self.current_room.clear()
+            self.current_room.append(self.map.getRooms()[0])
+        
         for interaction in self.interactions:
             interaction.manageInteractions()
         for array in self.objects:
@@ -108,21 +120,7 @@ class Game:
         self.remove_objects()
     
     def draw_all(self,canvas):
-        collisions_handler = Collisions(self.player, self.current_room[0])
         self.current_room[0].draw(canvas)
-
-        collisions_handler.update()
-        new_room = collisions_handler.getNewRoom()
-
-        if(new_room != None):
-            old_room = self.current_room[0]
-            current_room = new_room
-            self.player.setPos( current_room.getNewRoomPos(old_room) )
-        if(collisions_handler.doGenerateNewMap()):
-            self.map.generate(self.__max_rooms, self.__random_rooms, [self.canvas_width, self.canvas_height])
-            self.current_room.clear()
-            self.current_room.append(self.map.getRooms()[0])
-
         for array in self.objects:
             for item in array:
                 item.draw(canvas)

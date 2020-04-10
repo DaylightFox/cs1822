@@ -86,7 +86,7 @@ class ProjectileAttack(Attack):
         if self.sprite != 1:
             super().draw(canvas)
         else:
-            canvas.draw_circle(self.pos.get_p(), self.radius, 1, self.colour)
+            canvas.draw_circle(self.pos.get_p(), self.radius, 1, self.colour, self.colour)
             
     def update(self):
         self.pos += self.direction * self.speed

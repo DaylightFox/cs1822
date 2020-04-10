@@ -80,7 +80,7 @@ class ProjectileAttack(Attack):
         #return False
         
     def hit_room(self, room):
-        return(self.pos.x >= room.top_right.x) or (self.pos.x <= room.top_left.x) or (self.pos.y <= room.top_right.y) or (self.pos.y >= room.bot_right.y )
+        return (self.pos.x >= room.getCenter().x + room.getWidth()/2) or (self.pos.x <= room.getCenter().x - room.getWidth()/2) or (self.pos.y <= room.getCenter().y - room.getHeight()/2) or (self.pos.y >= room.getCenter().y + room.getHeight()/2)
             
     def draw(self,canvas):
         if self.sprite != 1:

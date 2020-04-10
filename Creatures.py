@@ -18,7 +18,7 @@ class Creature:
         self.width_height_source = []
         self.width_height_dest = [self.radius*2, self.radius*2]
         self.speed = 0
-        self.direction = Vector(0,1)#unit vector
+        self.direction = Vector(0,0)#unit vector or (0,0)
         self.attackList = []
         self.level = 1
         self.levelScaleMultplier = 1

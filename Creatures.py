@@ -148,6 +148,22 @@ class Player(Creature):
             self.direction.add(Vector(1,0))
         if self.direction.length() > 0:
             self.direction.normalize()
+            
+    def pauseMove(self, room):
+        wall_left = (room.getCenter().x - room.getWidth()/2)
+        wall_right = room.getCenter().x + room.getWidth()/2
+        wall_up = room.getCenter().y - room.getHeight()/2
+        wall_down = room.getCenter().y + room.getHeight()/2
+
+        if (self.pos.x - 5 < wall_left):
+            self.pos.x = wall_left
+        elif (self.pos.x + 5>= wall_right):
+            self.pos.x = wall_right
+        
+        if (self.pos.y - 5<= wall_up):
+            self.pos.y = wall_up
+        elif (self.pos.y + 5>= wall_down):
+            self.pos.y = wall_down
         
 class Wizard(Player):
     def __init__(self, pos):

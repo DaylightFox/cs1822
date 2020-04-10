@@ -188,7 +188,8 @@ class Wizard(Player):
         super().draw(canvas)
         
     def update(self):
-        self.frame_count = (self.frame_count+1) % 4
+        if (self.up or self.down or self.left or self.right):
+            self.frame_count = (self.frame_count+1) % 4
         super().update()
 
     def main_attack(self, mouse_pos):

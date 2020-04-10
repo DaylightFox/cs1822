@@ -48,7 +48,7 @@ class ConeAttack(Attack):
         return False
     
     def draw(self,canvas):
-        if self.colour != 1:
+        if self.sprite != 1:
             super().draw(canvas)
         else:
             p1 = self.pos.get_p()
@@ -83,7 +83,7 @@ class ProjectileAttack(Attack):
         return(self.pos.x >= room.top_right.x) or (self.pos.x <= room.top_left.x) or (self.pos.y <= room.top_right.y) or (self.pos.y >= room.bot_right.y )
             
     def draw(self,canvas):
-        if self.colour != 1:
+        if self.sprite != 1:
             super().draw(canvas)
         else:
             canvas.draw_circle(self.pos.get_p(), self.radius, 1, self.colour)

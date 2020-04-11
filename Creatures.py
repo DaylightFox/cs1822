@@ -155,14 +155,14 @@ class Player(Creature):
         wall_up = room.getCenter().y - room.getHeight()/2
         wall_down = room.getCenter().y + room.getHeight()/2
 
-        if (self.pos.x - 5 < wall_left):
+        if (self.pos.x - self.radius <= wall_left):
             self.pos.x = wall_left
-        elif (self.pos.x + 5>= wall_right):
+        elif (self.pos.x + self.radius >= wall_right):
             self.pos.x = wall_right
         
-        if (self.pos.y - 5<= wall_up):
+        if (self.pos.y - self.radius <= wall_up):
             self.pos.y = wall_up
-        elif (self.pos.y + 5>= wall_down):
+        elif (self.pos.y + self.radius >= wall_down):
             self.pos.y = wall_down
         
 class Wizard(Player):

@@ -8,7 +8,7 @@ import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 from Vector import Vector
 from Score import Score
 from Collisions import Collisions
-
+from startScreen import Start
 
 from startScreen import Start
 
@@ -38,6 +38,7 @@ class Game:
         self.__max_rooms = 12
         self.__random_rooms = 0.4
 
+        self.startScreen = Start()
         self.map = Map(self.__min_room_size, self.__min_room_size, self.canvas_width, self.canvas_height)
 
 
@@ -61,7 +62,7 @@ class Game:
         states = ["start screen","game","pause","corridor"]
         if newState in states:
             if newState == "start screen":
-                pass#set handlers
+                self.frame.set_mouseclick_handler(self.startScreen.KeyClick)
             elif newState == "game":
                 #set handlers
                 self.frame.set_mouseclick_handler(self.player.main_attack)
@@ -75,7 +76,7 @@ class Game:
 
     def draw_handler(self, canvas):#always draw handler
         if self.state == "start screen":
-            pass #play the start screen
+            self.startScreen.update(canvas) #draws start screen sequence. Returns text "game" when finished
         elif self.state == "game":
             #self.map.generate(self.__max_rooms, self.__random_rooms, [self.canvas_width, self.canvas_height])
             #self.current_room.clear()

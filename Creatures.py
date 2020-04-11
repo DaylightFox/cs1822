@@ -72,7 +72,7 @@ class Creature:
 
 class Player(Creature):
     def __init__(self, pos):
-        playerRadius = 16
+        playerRadius = 23
         sprite = 1#replace with default sprite
         super().__init__(pos, playerRadius, sprite)
         self.width_height_dest = [self.radius*2,self.radius*2]
@@ -169,22 +169,22 @@ class Wizard(Player):
     def __init__(self, pos):
         super().__init__(pos)
         self.sprite = simplegui._load_local_image('mcsprite.png')
-        self.center_source = [16,16]
-        self.width_height_source = [32,32]
+        self.center_source = [23,23]
+        self.width_height_source = [46,46]
         self.frame_count = 0
         
     def draw(self, canvas):
         if self.direction.x < 0:#left
-            self.center_source[0] = 16
+            self.center_source[0] = 23
         elif self.direction.x > 0:#right
-            self.center_source[0] = 112
+            self.center_source[0] = 161
         elif self.direction.y > 0:#down
-            self.center_source[0] = 48
+            self.center_source[0] = 69
         elif self.direction.y < 0:#up
-            self.center_source[0] = 80
+            self.center_source[0] = 115
         else:
-            self.center_source[0] = 48 #default looking down
-        self.center_source[1] = 32*self.frame_count + 16
+            self.center_source[0] = 69 #default looking down
+        self.center_source[1] = 46*self.frame_count + 23
         super().draw(canvas)
         
     def update(self):

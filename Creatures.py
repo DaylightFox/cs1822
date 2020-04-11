@@ -76,7 +76,7 @@ class Player(Creature):
         sprite = 1#replace with default sprite
         super().__init__(pos, playerRadius, sprite)
         self.width_height_dest = [self.radius*2,self.radius*2]
-        self.speed = 1
+        self.speed = 2
         self.levelScaleMultplier = 1.09
         self.exp = 0
         self.expTargetBase = 500
@@ -172,6 +172,8 @@ class Wizard(Player):
         self.center_source = [23,23]
         self.width_height_source = [46,46]
         self.frame_count = 0
+        self.frame_delay_count = 0
+        self.frame_delay = 4
         
     def draw(self, canvas):
         if self.direction.x < 0:#left
@@ -189,7 +191,9 @@ class Wizard(Player):
         
     def update(self):
         if (self.up or self.down or self.left or self.right):
-            self.frame_count = (self.frame_count+1) % 4
+            self.frame_delay_count = (self.frame_delay_count+1) % self.frame_delay
+            if not(self.frame_delay_count):
+                self.frame_count = (self.frame_count+1) % 4
         super().update()
 
     def main_attack(self, mouse_pos):

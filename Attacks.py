@@ -1,25 +1,77 @@
-try:
-    from Vector import Vector
-except ImportError:
-    from user304_rsf8mD0BOQ_1 import Vector
+from Vector import Vector
+import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 
 class Attack:
-    def __init__(self, pos, damage, direction):
-        self.pos = pos
+    def __init__(self, damage):
         self.damage = damage
-        self.direction = direction
-        self.sprite = 1  #replace with
-        self.colour = "white"#to be used if there is no sprite
-        self.center_source = []
-        self.width_height_source = [] 
-        self.width_height_dest = []
-        self.done = False
 
     def deal_damage(self, creature):
         creature.take_damage(self.damage)
         
-    def draw(self, canvas, rotation=0):
-        canvas.draw_image(self.sprite, self.center_source, self.width_height_source, self.pos.get_p(), self.width_height_dest, rotation)
+
+class Melee(Attack):
+    def __init__(self, damage):
+        super().__init__(damage)
+        
+
+class Projectile(Attack):
+    def __init__(self, damage, pos, vel, angle):
+        super().__init__(damage)
+        self.pos = pos
+        self.vel = vel
+        self.angle = angle
+
+        # Sprite date
+        self.spritesheet = simplegui.load_image("https://i.imgur.com/T8BwM8E.png")
+        self.img_width = 840
+        self.img_height = 54
+        self.img_columns = 10
+        self.img_rows = 6
+
+        # Fram data
+        self.frame_width = self.img_width / self.img_columns
+        self.frame_height = self.img_height / self.img_rows
+        self.frame_centre_x = self.frame_width / 2
+        self.frame_centre_y = self.frame_height / 2
+        self.frame_index = [1,0]
+        self.frame_duration = 2
+        self.frameclock = 0
+        self.radius = self.frame_width/2
+
+    def update_frameindex(self):
+        self.frame_index[0] = (self.frame_index[0] + 1) % self.img_columns
+        if self.frame_index[0] == 0:
+            self.frame_index[1] = (self.frame_index[1] + 1) % self.img_rows
+
+    def draw(self, canvas):
+        self.frameclock += 1
+        if (self.frameclock % self.frame_duration == 0):
+            self.update_frameindex()
+        
+        frame_centre = (self.frame_width * self.frame_index[0] + self.frame_centre_x, self.frame_height * self.frame_index[1] + self.frame_centre_y)
+        frame_size = (self.frame_width, self.frame_height)
+        canvas.draw_image(self.spritesheet, frame_centre, frame_size, self.pos.get_p(), frame_size, self.angle)
+
+    def getPos(self):
+        return(self.pos)
+
+    def isCollidingCreature(self, creature):
+        difference = creature.pos - self.pos
+        distance = difference.length()
+        return distance <= (self.radius + creature.radius)
+
+    def isCollidingWall(self, room):
+        return(room.isCollidingWall(self))
+
+    def update(self):
+        self.pos.add(self.vel)
+        #self.vel.multiply(0.85)
+
+class EnemyProjectile(Projectile):
+    def __init__(self, pos, vel, angle):
+        self.damage = 7
+        super().__init__(self.damage, pos, vel, angle)
+        self.spritesheet = simplegui.load_image("https://i.imgur.com/DYGyWeB.png")
 
 class ConeAttack(Attack):
     def __init__(self, pos, damage, direction, distance, angle):

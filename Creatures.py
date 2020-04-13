@@ -1,4 +1,6 @@
 from Attacks import *
+import math
+from random import randint
 
 try:
     from Vector import Vector
@@ -10,25 +12,31 @@ except ImportError:
     import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 
 class Creature:
-    def __init__(self, pos, radius, sprite):
+    def __init__(self, pos, radius, sprite, sprite_size, max_hp):
+        # Positional Vectors
         self.pos = pos #centre of sprite
-        self.radius = radius
-        self.sprite = sprite
-        self.center_source = []
-        self.width_height_source = []
-        self.width_height_dest = [self.radius*2, self.radius*2]
-        self.speed = 0
-        self.direction = Vector(0,0)#unit vector or (0,0)
-        self.attackList = []
-        self.level = 1
-        self.levelScaleMultplier = 1
-        self.exp = 0
-        self.maxHpBase = 1
-        self.maxHp = 1
-        self.currentHp = 1
-        self.Dmg = 1
-        self.DmgBase = 1
-        self.killed = False
+        self.vel = Vector(0,0)
+
+        # Sprite parameters
+        self.spritesheet = simplegui.load_image(sprite)
+        self.img_width = sprite_size[0]
+        self.img_height = sprite_size[1]
+        self.img_columns = 4
+        self.img_rows = 4
+
+        # Frame data
+        self.frame_width = self.img_width / self.img_columns
+        self.frame_height = self.img_height / self.img_rows
+        self.frame_centre_x = self.frame_width / 2
+        self.frame_centre_y = self.frame_height / 2
+        self.radius = self.frame_width/2
+        self.frame_index = [3,0]
+        self.frame_duration = 10
+        self.frameclock = 0
+
+        self.max_hp = max_hp
+        self.hp = max_hp
+        self.dead = False
         
     def getPos(self):
         return(self.pos)
@@ -37,27 +45,54 @@ class Creature:
         self.pos = pos
         
     def draw(self, canvas):
-        canvas.draw_image(self.sprite, self.center_source, self.width_height_source, self.pos.get_p(), self.width_height_dest)
+        self.frameclock += 1
+        if (self.frameclock % self.frame_duration == 0):
+            self.update_frameindex()
+        
+        frame_centre = (self.frame_width * self.frame_index[0] + self.frame_centre_x, self.frame_height * self.frame_index[1] + self.frame_centre_y)
+        frame_size = (self.frame_width, self.frame_height)
+        canvas.draw_image(self.spritesheet, frame_centre, frame_size, self.pos.get_p(), frame_size)
+
+    def update_frameindex(self):
+        self.frame_index[1] = (self.frame_index[1] + 1) % self.img_rows
 
     def take_damage(self, damage):
-        self.currentHp -= damage
-        if self.currentHp >= 0:
-            self.killed = True
+        self.hp -= damage
+        if self.hp <= 0:
+            self.die()
 
     def die(self):
-        a=1#placeholder
-        #run death animation
-        #increase Player exp
+        self.dead = True
 
+    def isDead(self):
+        return(self.dead)
+
+    def getHealth(self):
+        return(self.hp)
+
+    def getMaxHealth(self):
+        return(self.max_hp)
+
+    def resetHealth(self):
+        self.hp = self.max_hp
+
+    def restoreHealth(self, val):
+        self.hp += int(val)
+        if(self.hp > self.max_hp):
+            self.hp = self.max_hp
+
+    """
     def setLevel(self, level):
         self.level = level
         self.maxHp = int(self.maxHpBase * (
         self.levelScaleMultplier ** level))
         self.currentHp = self.maxHp
         self.Dmg = int(self.DmgBase * (self.levelScaleMultplier ** level))
-        
+
     def levelUp(self):
         self.setLevel(self.level + 1)
+
+    """
     
     def create_attack(self, target_pos, attackClass):
         target_pos = Vector(target_pos[0], target_pos[1])
@@ -68,86 +103,80 @@ class Creature:
         return attack
 
     def update(self):
-        self.pos += self.direction * self.speed
+        self.pos.add(self.vel)
+        self.vel.multiply(self.speed)
 
 class Player(Creature):
-    def __init__(self, pos):
-        playerRadius = 23
-        sprite = 1#replace with default sprite
-        super().__init__(pos, playerRadius, sprite)
-        self.width_height_dest = [self.radius*2,self.radius*2]
-        self.speed = 2
-        self.levelScaleMultplier = 1.09
-        self.exp = 0
-        self.expTargetBase = 500
-        self.expTarget = self.expTargetBase
-        self.maxHpBase = 300
-        self.maxHp = self.maxHpBase
-        self.currentHp = self.maxHp
-        self.DmgBase = 10
-        self.Dmg = self.DmgBase
-        self.up = False
-        self.down = False
-        self.left = False
-        self.right = False
-
-    def die(self):
-        print("Death!!!!!!!")
+    def __init__(self, pos, sprite, speed):
+        playerRadius = 8
+        sprite = sprite
+        sprite_size = (184, 184)
+        max_hp = 300
+        super().__init__(pos, playerRadius, sprite, sprite_size, max_hp)
         
     def needLevelUp(self):
         return self.exp >= self.expTarget
     
+    """
     def setLevel(self, level):
         super().setLevel(level)
         self.exp = 0
         self.expTarget = int(self.expTargetBase * (self.levelScaleMultplier ** level))
-    
+    """
+
     def increaseExp(self, x):
         self.exp += x
     
+    def draw(self, canvas):
+        super().draw(canvas)
+
     def update(self):
         super().update()
-        if self.needLevelUp():
-            self.levelUp()
-    
-    def moveD(self, key):
-        if key in [87,83,65,68]:
-            if key == 87:#w
-                self.up = True
-            elif key == 83:#s
-                self.down = True
-            elif key == 65:#a
-                self.left = True
-            elif key == 68:#d
-                self.right = True
-            self.setDirection()
-        elif key == 32:#space
-            pass#trigger alt_attack
-    
-    def moveU(self, key):
-        if key in [87,83,65,68]:
-            if key == 87:#w
-                self.up = False
-            elif key == 83:#s
-                self.down = False
-            elif key == 65:#a
-                self.left = False
-            elif key == 68:#d
-                self.right = False
-        self.setDirection()
         
-    def setDirection(self):
-        self.direction = Vector(0,0)
-        if self.up and (not self.down):
-            self.direction.add(Vector(0,-1))
-        if self.down and (not self.up):
-            self.direction.add(Vector(0,1))
-        if self.left and (not self.right):
-            self.direction.add(Vector(-1,0))
-        if self.right and (not self.left):
-            self.direction.add(Vector(1,0))
-        if self.direction.length() > 0:
-            self.direction.normalize()
+    def movement(self, keyboard, mouse):
+        if mouse.is_newpos():
+            direction = self.distFromMouse(mouse)
+            angleAlpha = direction.angle(Vector(1,0))
+            if (angleAlpha>0.785 and angleAlpha<2.356) and (mouse.pos[1]<=self.pos.y):
+                self.frame_index[0]=2
+            if (angleAlpha>0.785  and angleAlpha<2.356) and (mouse.pos[1]>=self.pos.y):
+                self.frame_index[0]=1
+            if (angleAlpha<=0.785):
+                self.frame_index[0]=3
+            if (angleAlpha>=2.356):
+                self.frame_index[0]=0
+            
+
+            if keyboard.up:
+                self.vel.add(Vector(0, -0.75))
+            if keyboard.down:
+                self.vel.add(Vector(0, 0.75))
+            if keyboard.right:
+                self.vel.add(Vector(0.75, 0))
+            if keyboard.left:
+                self.vel.add(Vector(-0.75, 0))
+            #if keyboard.spacebar:
+            #    if self.ultcount==10:
+            #        self.ulting=True
+            #if self.ultOn:
+            #    self.ultUpdate()
+            self.attack(mouse)
+            mouse.save_lastpos()
+        
+         #Input based movement + Sprite looking toward the direction the object is going
+        else:
+            if keyboard.up:
+                self.vel.add(Vector(0, -0.75))
+                self.frame_index[0]=2
+            if keyboard.down:
+                self.vel.add(Vector(0, 0.75))
+                self.frame_index[0]=1
+            if keyboard.right:
+                self.vel.add(Vector(0.75, 0))
+                self.frame_index[0]=3
+            if keyboard.left:
+                self.vel.add(Vector(-0.75, 0))
+                self.frame_index[0]=0
             
     def pauseMove(self, room):
         wall_left = (room.getCenter().x - room.getWidth()/2)
@@ -155,163 +184,342 @@ class Player(Creature):
         wall_up = room.getCenter().y - room.getHeight()/2
         wall_down = room.getCenter().y + room.getHeight()/2
 
-        if (self.pos.x - self.radius <= wall_left):
+        if (self.pos.x - 5 < wall_left):
             self.pos.x = wall_left
-        elif (self.pos.x + self.radius >= wall_right):
+        elif (self.pos.x + 5>= wall_right):
             self.pos.x = wall_right
         
-        if (self.pos.y - self.radius <= wall_up):
+        if (self.pos.y - 5<= wall_up):
             self.pos.y = wall_up
-        elif (self.pos.y + self.radius >= wall_down):
+        elif (self.pos.y + 5>= wall_down):
             self.pos.y = wall_down
         
+    def distFromMouse(self, mouse):
+        mousepos = mouse.getPos()
+        currpos = self.pos.get_p()
+        direction = Vector(mousepos[0]-currpos[0], mousepos[1]-currpos[1])
+        return direction
+
 class Wizard(Player):
     def __init__(self, pos):
-        super().__init__(pos)
-        self.sprite = simplegui._load_local_image('mcsprite.png')
-        self.center_source = [23,23]
-        self.width_height_source = [46,46]
-        self.frame_count = 0
-        self.frame_delay_count = 0
-        self.frame_delay = 4
+        self.sprite = "https://i.imgur.com/zOclqKw.png"
+        self.speed = 0.75
+        self.firespeed = 0
+        self.active_projectiles = []
+        self.damage = 5
+        super().__init__(pos, self.sprite, self.speed)
         
-    def draw(self, canvas):
-        if self.direction.x < 0:#left
-            self.center_source[0] = 23
-        elif self.direction.x > 0:#right
-            self.center_source[0] = 161
-        elif self.direction.y > 0:#down
-            self.center_source[0] = 69
-        elif self.direction.y < 0:#up
-            self.center_source[0] = 115
-        else:
-            self.center_source[0] = 69 #default looking down
-        self.center_source[1] = 46*self.frame_count + 23
+    def draw(self, canvas, keyboard, mouse):
+        super().movement(keyboard, mouse)
+        self.update()
         super().draw(canvas)
         
     def update(self):
-        if (self.up or self.down or self.left or self.right):
-            self.frame_delay_count = (self.frame_delay_count+1) % self.frame_delay
-            if not(self.frame_delay_count):
-                self.frame_count = (self.frame_count+1) % 4
         super().update()
 
-    def main_attack(self, mouse_pos):
-        attack = self.create_attack(mouse_pos, FireBolt)
-        #mouse_pos = Vector(mouse_pos[0], mouse_pos[1])
-        #direction = (mouse_pos - self.pos).normalize
-        #offset = 1
-        #source = self.pos + ((self.radius + offset) * direction)
-        #attack = FireBolt(source, self.Dmg, direction)
-        self.attackList.append(attack)
-    
-    def alt_attack(self, mouse_pos):
-        attack = self.create_attack(mouse_pos, BurningHands)
-        #mouse_pos = Vector(mouse_pos[0], mouse_pos[1])
-        #direction = (mouse_pos - self.pos).normalize
-        #offset = 1
-        #source = self.pos + ((self.radius + offset) * direction)
-        #attack = BurningHands(source, self.Dmg, direction)
-        self.attackList.append(attack)
+    def attack(self, mouse):
+        self.firespeed += 1
+        if mouse.is_newpos():
+            if (self.firespeed%8==0): #Firespeed
+                direction = self.distFromMouse(mouse)
+                direction.normalize()
+                offset = direction.copy()
+                direction.multiply(5)
+                currpos = self.pos.copy().add(offset.multiply(15))
+                if (mouse.pos[1]>currpos.y):
+                    angle = -direction.angle(Vector(-1, 0))
+                else:
+                    angle = (direction.angle(Vector(-1, 0)))
+                fireball = Projectile(self.damage, currpos, direction, angle)
+                self.active_projectiles.append(fireball)
+        mouse.save_lastpos()
+
+    def getProjectiles(self):
+        return(self.active_projectiles)
+
+    def removeProjectile(self, projectile):
+        for p in self.active_projectiles:
+            if(p == projectile):
+                self.active_projectiles.remove(projectile)
+
 
 
 
 
 class Enemy(Creature):
-    def __init__(self, pos, radius, sprite, speed, base_exp, level, ideal_range):
-        sprite = 1#replace with default sprite
-        super().__init__(pos, radius, sprite)
-        self.speed = speed
-        self.base_exp = base_exp
-        self.setLevel(level)
-        self.ideal_range = ideal_range#replace with 3/4 main attack range
+    def __init__(self, pos, radius, sprite, sprite_size, speed, base_exp, level, ideal_range, max_hp, attack_type, score):
+        """
+        Instantiates an Enemy class
 
+        Keyword arguments:
+        pos - a Vector object for the position of the enemy
+        radius - an integer with the size of the hitbox
+        sprite - a string containing a URL to a spritehseet
+        speed - an ineteger with the speed of the Enemy
+        base_exp - ?
+        level - ?
+        ideal_range - a tuple of two integers, the first being the minimum, the second being the maximum range
+        """
+        # Initialise Super
+        super().__init__(pos, radius, sprite, sprite_size, max_hp)
+
+        # Movement
+        self.speed_multiplier = speed
+        self.baseBehav = [Vector(1,0), Vector(0,-1), Vector(-1, 0), Vector(0,1)]
+        self.rotation = "CW" # CW for clockwise, ACW for Anti Clockwise
+
+        # Leveling
+        self.score = randint( score[0], score[1] )
+        self.base_exp = base_exp
+        #self.setLevel(level)
+        self.ideal_range = ideal_range
+
+        # Counter for behaviour
+        self.attack_speed = 0
+        self.baseCount = 0
+
+        # Attack type
+        self.attack_type = attack_type
+        self.bounce = False
+        self.bounce_count = 0
+
+    def getAttackType(self):
+        return(self.attack_type)
+
+    def isMelee(self):
+        return(self.attack_type == "M")
+    
+    def isRanged(self):
+        return(self.attack_type == "R")
+
+    def getScore(self):
+        return(self.score)
+
+    def inRange(self, player):
+        """
+        Returns true if the Enemy object is in range of the player
+        based on self.ideal_range, false otherwise
+
+        Keyword arguments:
+        player - the player object
+        """
+        direction = getDirectionTo(player)
+        distance = direction.length()
+        return(distance > self.ideal_range[0] and distance < self.ideal_range[1])
+
+    def getDirectionTo(self, player):
+        player_pos = player.getPos().get_p()
+        this_pos = self.getPos().get_p()
+        direction = Vector( player_pos[0] - this_pos[0],
+                            player_pos[1] - this_pos[1] )
+        return(direction)
+
+    def facePlayer(self, player):
+        direction = self.getDirectionTo(player)
+        distance = direction.length()
+        angleTeta = direction.angle(Vector(1,0))
+        if (distance>100):
+            angleAlpha = self.vel.angle(Vector(1,0))
+            if (angleAlpha>0.785 and angleAlpha<2.356) and (self.vel.y<=0):
+                self.frame_index[0]=2
+            if (angleAlpha>0.785  and angleAlpha<2.356) and (self.vel.y>=0):
+                self.frame_index[0]=1
+            if (angleAlpha<=0.785):
+                self.frame_index[0]=3
+            if (angleAlpha>=2.356):
+                self.frame_index[0]=0
+        else:
+            angleTeta = direction.angle(Vector(1,0))
+            if (angleTeta>0.785 and angleTeta<2.356) and (direction.y<=0):
+                self.frame_index[0]=2
+            if (angleTeta>0.785  and angleTeta<2.356) and (direction.y>=0):
+                self.frame_index[0]=1
+            if (angleTeta<=0.785):
+                self.frame_index[0]=3
+            if (angleTeta>=2.356):
+                self.frame_index[0]=0
+
+    def movement(self, player, room):
+        mvmt = self.getDirectionTo(player)
+        distance = mvmt.length()
+        if(self.bounce):
+            mvmt.normalize()
+            mvmt = -mvmt.multiply(self.speed_multiplier * 2)
+            self.vel = mvmt
+            self.bounce_count += 1
+            if(self.bounce_count % 30 == 0):
+                self.bounce = False
+        if (distance > self.ideal_range[1]):
+            mvmt.normalize()
+            mvmt.multiply(self.speed_multiplier)
+            self.vel = mvmt
+        if (distance <= self.ideal_range[0]):
+            mvmt = mvmt.normalize()
+            mvmt = - mvmt.multiply(self.speed_multiplier)
+            self.vel = mvmt
+        if (distance < self.ideal_range[1] and distance > self.ideal_range[0]):
+            mvmt = mvmt.normalize()
+            if(room.isCollidingWall(self)):
+                if(self.rotation == "CW"):
+                    mvmt.rotate(90)
+                    self.rotation = "ACW"
+                elif(self.rotation == "ACW"):
+                    mvmt.rotate_anti()
+                    self.rotation = "CW"
+            #mvmt = mvmt.rotate_anti()
+            mvmt = mvmt.multiply(self.speed_multiplier)
+            self.vel = mvmt
+        self.facePlayer(player)
+
+    def update_frameindex(self):
+        self.frame_index[1] = (self.frame_index[1] + 1) % self.img_rows
+
+    def draw(self, canvas, player, room):
+        self.movement(player, room)
+        self.update(player)
+
+        self.frameclock += 1
+        if (self.frameclock % self.frame_duration == 0):
+            self.update_frameindex()
+        
+        frame_centre = (self.frame_width * self.frame_index[0] + self.frame_centre_x, self.frame_height * self.frame_index[1] + self.frame_centre_y)
+        frame_size = (self.frame_width, self.frame_height)
+        canvas.draw_image(self.spritesheet, frame_centre, frame_size, self.pos.get_p(), frame_size)
+
+    """
     def setLevel(self, level):
         super().setLevel(level)
         expModifier = 1.08
         self.exp = self.base_exp * (expModifier**self.level)
-
-    def die(self):
-        super().die()
-        #run death animation
-        #increase Player exp
-        
-    def setDirection(self, player):
-        self.direction = (player.pos - self.pos).normalize
+    """
         
     def update(self, player):
-        self.setDirection(player)
-        distance = (player.pos - self.pos).length()
-        ideal_range = self.ideal_range
-        if ideal_range[0] <= distance <= ideal_range[0]:
-            self.main_attack(player.pos.get_p())
-        elif ideal_range[0] > distance:
-            self.direction.rotate_rad(math.pi)
-        else:
-            self.pos += self.direction * self.speed
+        self.pos.add(self.vel)
+        self.vel.multiply(0.75)
+        self.attack(player)
 
 class Goblin(Enemy):
-    def __init__(self, pos, level):
-        radius = 1#will be small
-        sprite = 1#replace with sprite
-        speed = 3#will be fast
+    def __init__(self, pos, radius, sprite, speed, level, ideal_range, max_hp, attack_type, score):
         base_exp = 5
-        ideal_range = 1
-        super().__init__(pos, radius, sprite, speed, base_exp, level, ideal_range)
+        sprite_size = (184, 184)
+        super().__init__(pos, radius, sprite, sprite_size, speed, base_exp, level, ideal_range, max_hp, attack_type, score)
 
 class DaggerGoblin(Goblin):
-    def __init__(self, pos, level):
-        super().__init__(pos, level)
-        self.ideal_range = [0.5,4]#approx
-        self.hit = False
+    def __init__(self, pos):
+        radius = 8 # 8 pixel radius
+        spritesheet = "https://i.imgur.com/zN5kluE.png"
+        speed = 2
+        ideal_range = (0, 5)
+        max_hp = 15
+        attack_type = "M"
+        self.damage = 3
+        score = (10, 20)
+        super().__init__(pos, radius, spritesheet, speed, 1, ideal_range, max_hp, attack_type, score)
 
-    def main_attack(self_pos):
-        attack = self.create_attack(player.pos, SwordSlash)
-        self.attackList.append(attack)
+    def attack(self, player):
+        self.attack_speed += 1
+        direction = self.getDirectionTo(player)
+        distance = direction.length()
+        if (distance < 5):
+            self.bounce = True
+            player.take_damage(self.damage)
+
+class MageGoblin(Goblin):
+    def __init__(self, pos):
+        radius = 8 # 8 pixel radius
+        spritesheet = "https://i.imgur.com/nAA2riI.png"
+        speed = 1.5
+        ideal_range = (90, 100)
+        max_hp = 15
+        attack_type = "R"
+        self.active_projectiles = []
+        score = (5, 10)
+        super().__init__(pos, radius, spritesheet, speed, 1, ideal_range, max_hp, attack_type, score)
+
+    def attack(self, player):
+        self.attack_speed += 1
+        direction = self.getDirectionTo(player)
+        distance = direction.length()
+        if (distance<170):
+            if (self.attack_speed % 20 == 0):
+
+                direction.normalize()
+                offset = direction.copy()
+                direction.multiply(4)
+                aim = self.pos.copy().add(offset.multiply(15))
+
+                if (player.getPos().y > self.getPos().y):
+                    angle = -direction.angle(Vector(-1, 0))
+                else:
+                    angle = (direction.angle(Vector(-1, 0)))
+                fireball = EnemyProjectile(aim, direction, angle)
+                self.active_projectiles.append(fireball)
     
-    def update(self, player):
-        if not self.hit:
-            super().update(player)
-            #ideal_range = self.ideal_range
-            #if ideal_range[0] <= distance <= ideal_range[0]:
-                #self.main_attack(player.pos.get_p())
-                #self.hit = True
-            #elif ideal_range[0] > distance:
-                #self.direction.rotate(math.pi)
-                #self.pos += self.direction * self.speed
-            #else:
-                #self.pos += self.direction * self.speed
-        else:
-            self.setDirection(player)
-            distance = (player.pos - self.pos).length()
-            safeDistance = 100
-            if distance >= safeDistance:
-                self.hit = False
-            else:
-                self.direction.rotate_rad(math.pi)
-            self.pos += self.direction * self.speed
-            
-    def draw(self, canvas):
-        if self.sprite==1:
-            canvas.draw_circle(self.pos, self.radius, 1, "Gray", "Green")
-        else:
-            super().draw(canvas)
+    def getProjectiles(self):
+        return(self.active_projectiles)
+
+    def removeProjectile(self, projectile):
+        for p in self.active_projectiles:
+            if(p == projectile):
+                self.active_projectiles.remove(projectile)
+
+class Zombie(Enemy):
+    def __init__(self, pos):
+        radius = 8 # 8 pixel radius
+        spritesheet = "https://i.imgur.com/8We82gB.png"
+        sprite_size = (128, 128)
+        speed = 1
+        ideal_range = (0, 5)
+        max_hp = 30
+        attack_type = "M"
+        self.damage = 10
+        score = (10, 20)
+        super().__init__(pos, radius, spritesheet, sprite_size, speed, 1, 1, ideal_range, max_hp, attack_type, score)
+
+    def attack(self, player):
+        self.attack_speed += 1
+        direction = self.getDirectionTo(player)
+        distance = direction.length()
+        if (distance < 5):
+            self.bounce = True
+            player.take_damage(self.damage)
 
 class Dragon(Enemy):
-    def __init__(self, pos, level):
-        radius = 10#will be large
-        sprite = 1#replace with sprite
-        speed = 3#will be slow
-        base_exp = 7
-        ideal_range = [5,17]
-        super().__init__(pos, radius, sprite, speed, ideal_range)
+    def __init__(self, pos):
+        radius = 10
+        spritesheet = "https://i.imgur.com/bbjre9N.png"
+        sprite_size = (192, 192)
+        speed = 0.75
+        ideal_range = (120, 200)
+        max_hp = 50
+        attack_type = "R"
+        self.active_projectiles = []
+        score = (100, 100)
+        super().__init__(pos, radius, spritesheet, sprite_size, speed, 1, 1, ideal_range, max_hp, attack_type, score)
 
-    def main_attack(self, player_pos):
-        attack = self.create_attack(player.pos, IceBreath)
-        self.attackList.append(attack)
-        
-    def draw(self, canvas):
-        if self.sprite==1:
-            canvas.draw_circle(self.pos, self.radius, 1, "CadetBlue", "CadetBlue")
-        else:
-            super().draw(canvas)
+    def attack(self, player):
+        self.attack_speed += 1
+        direction = self.getDirectionTo(player)
+        distance = direction.length()
+        if (distance < 220):
+            if (self.attack_speed % 10 == 0):
+
+                direction.normalize()
+                offset = direction.copy()
+                direction.multiply(4)
+                aim = self.pos.copy().add(offset.multiply(15))
+
+                if (player.getPos().y > self.getPos().y):
+                    angle = -direction.angle(Vector(-1, 0))
+                else:
+                    angle = (direction.angle(Vector(-1, 0)))
+                fireball = EnemyProjectile(aim, direction, angle)
+                self.active_projectiles.append(fireball)
+    
+    def getProjectiles(self):
+        return(self.active_projectiles)
+
+    def removeProjectile(self, projectile):
+        for p in self.active_projectiles:
+            if(p == projectile):
+                self.active_projectiles.remove(projectile)

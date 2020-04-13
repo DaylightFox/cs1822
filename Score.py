@@ -36,12 +36,13 @@ class Score:
         multiplier - a whole integer to multiply the score by
         """
         self.__score *= 1 + ( multiplier / 10 )
+        self.__score = int(self.__score)
 
-    def showScore(self, canvas):
+    def draw(self, canvas):
         """
         Draws the score on the screen
 
         Keyword arguments:
         canvas - the SimpleGUI canvas object
         """
-        canvas.draw_text("Score: " + str(self.__score), self.pos, 25 , 'white', 'monospace')
+        canvas.draw_text("Score: " + str(self.__score), self.__pos, 25 , 'white', 'monospace')

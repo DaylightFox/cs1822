@@ -1,9 +1,3 @@
-"""import Creatures
-try:
-    import simplegui
-except ImportError:
-    import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
-"""
 class PlayerHealthbar:
     def __init__(self, player, topL, botR):
         """
@@ -19,7 +13,7 @@ class PlayerHealthbar:
         self.width = botR[1] - topL[1]
         
     def draw(self, canvas):
-        hp_percent = self.player.currentHp / self.player.maxHp
+        hp_percent = self.player.getHealth() / self.player.getMaxHealth()
         split_x = self.topL[0] + hp_percent * self.length
         
         if hp_percent < 1:
@@ -28,25 +22,5 @@ class PlayerHealthbar:
         if hp_percent > 1:
             canvas.draw_line((self.topL[0], self.V_centre), (split_x - self.length, self.V_centre), self.width, "blue")
         
-        hp_str = str(self.player.currentHp)+"/"+str(self.player.maxHp)
+        hp_str = str(self.player.getHealth())+"/"+str(self.player.getMaxHealth())
         canvas.draw_text(hp_str, (self.topL[0], self.botR[1]), 12, "white")
-"""
-def inputHandler(key):
-    if key == simplegui.KEY_MAP["space"]:
-        p1.currentHp -= 1
-    else:
-        p1.currentHp += 1
-
-
-p1 = Creatures.Player((0,0))
-p1.maxHp = 300
-p1.currentHp = 300
-hpBar = PlayerHealthbar(p1, (10,25), (310,75))
-
-frame = simplegui.create_frame("Testing", 350,100)
-frame.set_draw_handler(hpBar.draw)
-frame.set_keydown_handler(inputHandler)
-frame.set_keyup_handler(inputHandler)
-
-frame.start()
-"""

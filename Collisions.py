@@ -11,7 +11,7 @@ class Collisions:
         if(door != None):
             self.__new_room = self.__room.getRoomFromDoor(door)
         if(self.__room.isEnd()):
-            if(self.__room.isCollidingLevelDoor(self.__sprite)):
+            if(self.__room.isCollidingLevelDoor(self.__sprite) and len(self.__room.getEnemies()) == 0):
                 self.__new_map = True
         if(self.__room.isCollidingWall(self.__sprite)):
             if(not self.__in_collision):

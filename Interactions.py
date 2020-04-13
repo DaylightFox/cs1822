@@ -1,64 +1,82 @@
-class Interaction:
-    def __init__(self, array1, array2):
-        self.interactor = array1
-        self.interacted = array2
-        self.interactions = []
-        for i in self.interactor:
-            self.interactions.append([False] * len(self.interacted))
-    
-    def appendInteractor(self, interactor):
-        self.interactor.append(interactor)
-        self.interactions.append([False] * len(self.interacted))
-    def appendInteracted(self, interacted):
-        self.interacted.append(interacted)
-        for i in range(len(self.interactor)):
-            self.interactions[i].append(False)
-    
-    def manageInteractions(self, sticky=True):
-        """
-        intDetector is the function that detects the interaction
-        intResolver is the function that resolves the interaction
-        sticky is True if the interations occour every game cycle(frame)
-        """
-        for i in range(len(self.interactor)):
-            inter = self.interactor[i]
-            for j in range(len(self.interacted)):
-                inted = self.interacted[j]
-                if sticky or not self.interactions[i,j]:
-                    if self.intDetector(inter, inted):
-                        interactions[i][j] = True
-                        self.intResolver(inter, inted)
 
-class AttackCreatureInteraction(Interaction):
-    def __init__(self, attacks, creatures):
-        super().__init__(attacks, creatures)
 
-    def intDetector(self, attack, attacked):
-        attack.hit_creature(attacked)
-        
-    def intResolver(self, attack, attacked):
-        attack.deal_damage(attacked)
-        if isinstance(attack, ProjectileAttack):
-                attack.done = True
+class PlayerInputInteraction:
 
-    def manageInterations(self, sticky=True):
-        super().manageInterations(hit_detector, hit_resolver)
-        removeList = []
-        for creature in interacted:
-            if creature.killed:
-                creature.die()
-                removeList.append(creature)
+    def __init__(self, player, keyboard, mouse):
+        self.player = player
+        self.keyboard = keyboard
+        self.mouse = mouse
 
-class AttackRoomInteraction(Interaction):
-    def __init__(self, attacks, rooms):
-        super().__init__(attacks, rooms)
+    def MCdraw(self, canvas):
+        self.player.draw(canvas, self.keyboard, self.mouse)
+
+    def MCdrag(self, position):
+        self.mouse.drag(position)
     
-    def intDetector(self, attack, room):
-        attack.hit_room(room)
-        
-    def intResolver(self, attack, room):
-        if isinstance(attack, ProjectileAttack):
-            attack.done = True
+    def MCclick(self, position):
+        self.mouse.click(position)
     
-    #def manageInteractions(self):
-        #super().manageInteractions(hit_detector, hit_resolver)
+    def MCkeyD(self, key):
+        self.keyboard.keyDown(key)
+    
+    def MCkeyU(self, key):
+        self.keyboard.keyUp(key)
+
+class PlayerGameInteraction:
+
+    def __init__(self, player, room):
+        self.player = player
+        self.enemies = room.getEnemies()
+        self.room = room
+    
+    def playerAttack(self, canvas):
+        remove=[]
+        for attack in self.player.getProjectiles():
+            if(attack.isCollidingWall(self.room)):
+                remove.append(attack)
+            elif(len(self.enemies) > 0):
+                for enemy in self.enemies:
+                    if attack.isCollidingCreature(enemy):
+                        remove.append(attack)
+                        attack.deal_damage(enemy)
+                    else:
+                        attack.draw(canvas)
+                        attack.update()
+            else:
+                attack.draw(canvas)
+                attack.update()
+        for attack in remove:
+            self.player.removeProjectile(attack)
+    
+    def ulting(self, canvas):
+        if (self.player.ultOn):
+            self.player.Ultimate.drawfb(canvas)
+            self.player.ultLength -= 1
+            #for i in self.listEnemy:
+                #if self.player.Ultimate.hit_creature(i):
+                    #self.player.Ultimate.deal_damge(i)
+        if (self.player.ultLength < 0):
+            self.player.ultOn = False
+            self.player.ultLength = 100
+
+    def enemyAttack(self, canvas):
+        for enemy in self.enemies:
+            if(enemy.isRanged()):
+                remove = []
+                for attack in enemy.getProjectiles():
+                    if attack.isCollidingCreature(self.player):
+                        remove.append(attack)
+                        attack.deal_damage(self.player)
+                    elif attack.isCollidingWall(self.room):
+                        remove.append(attack)
+                    else:
+                        attack.draw(canvas)
+                        attack.update()
+                for attack in remove:
+                    enemy.removeProjectile(attack)
+    
+    def process(self, canvas):
+        self.playerAttack(canvas)
+        #self.ulting(canvas)
+        self.enemyAttack(canvas)
+

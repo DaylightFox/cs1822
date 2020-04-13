@@ -1,22 +1,14 @@
-try:
-    import simplegui
-except ImportError :
-    import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
-
 from Vector import Vector
-from playerAnimation import*
-from Score import Score
+from Creatures import Wizard
 
 
 
-WIDTH = 500
-HEIGHT = 500
 
 '''
 Screen when character dies
 '''
 
-class End():
+class EndScreen():
     '''
     Arguments - 
     Score: Final Score achieved by player
@@ -29,27 +21,36 @@ class End():
     topLeftA - top left position of Victory screen text
 
     '''
-    def __init__(self, score, playerState):
-        self.mc = MC(Vector(WIDTH/2, HEIGHT/2))
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
+        self.bunny = Wizard(Vector(self.width/2, self.height/2))
         self.topLeftD = (130,100)
         self.topLeftA = (30, 100)
-        self.score = str(score)
+        self.score = 0
 
         self.playAgain = False
-        self.state = playerState
+        self.state = None
         self.playAgainKey = [300, 80]
 
+    def updatePlayerState(self, state):
+        # Expecting either "dead" or "alive"
+        self.state = state
+
+    def updateScore(self, score):
+        self.score = str(score)
 
     def willPlayAgain(self, pos):
         #defines click area for start key
-        a = WIDTH/4 + 10
-        b = HEIGHT - HEIGHT/4
+        a = self.width/4 + 10
+        b = self.height - self.height/4
         if (pos[0] >= a and pos[0] <= a + self.playAgainKey[0]) and (pos[1] >= b and pos[1] <= b + self.playAgainKey[1]):
             self.playAgain = True
 
     def playAgainDraw(self, canvas):
-        a = WIDTH/4 - 10 #topLeft
-        b = HEIGHT - HEIGHT/4
+        a = self.width/4 - 10 #topLeft
+        b = self.height - self.height/4
 
         #Rectangle Width and Height
         width = self.playAgainKey[0]
@@ -81,5 +82,5 @@ class End():
             elif (self.state == "dead"):
                 self.deathScreen(self.score, canvas)
         
-        if (self.playAgain == True):
-            print("start screen")
+    def doPlayAgain(self):
+        return(self.playAgain)

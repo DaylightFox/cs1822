@@ -24,7 +24,7 @@ class Room:
         self.__doors = {}
         self.__enemies = []
 
-        self.__tileset = simplegui._load_local_image("game-map-tileset.png")
+        self.__tileset = simplegui.load_image("https://i.imgur.com/a55akyp.png")
         self.__wall_sprite_size = ( 32, 32 )
         self.__wall_sprite_pos_dict = {"N": (  16 , ( 64 + self.__wall_sprite_size[1]/2 ) ),
                                        "E": ( ( 32 + self.__wall_sprite_size[0]/2 ), ( 64 + self.__wall_sprite_size[1]/2 ) ),
@@ -170,13 +170,24 @@ class Room:
         enemies - an array of enemy objects
         """
         for enemy in enemies:
-            self.__enemies.add(enemy)
+            self.__enemies.append(enemy)
 
     def getEnemies(self):
         """
         Returns an array of enemy objects in the given room
         """
         return(self.__enemies)
+
+    def removeEnemy(self, enemy):
+        """
+        Remove the given enemy from the list of enemies, if present
+
+        Keyword arguments:
+        enemy - a Creature (or inheritance of Creature) object
+        """
+        for e in self.getEnemies():
+            if( enemy == e ):
+                self.__enemies.remove(e)
 
     def getRandomPos(self):
         x = random.randint(self.__top_left.x+10, self.__top_right.x-10)

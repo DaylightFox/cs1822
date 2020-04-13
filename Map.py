@@ -72,24 +72,30 @@ class Map:
             r.addNeighbour(chosen_room, self.__invertHeading(heading))
             self.__rooms.append(r)
 
-        #self.__addEnemies()
+        self.__addEnemies()
+        print("Map Generated")
                     
 
     def __addEnemies(self):
         """
         Adds enemies to the rooms on map generated
         """
-        num_of_enemy_types = 3
+        enemy_types = 3
         for room in self.getRooms():
-            enemies = []
-            num_to_spawn = random.randint(1,2)
-            for e in range(num_to_spawn):
-                for i in range(num_of_enemy_types-1):
-                    if(i == 0):
-                        enemies.append( Goblin(room.getRandomPos()) )
-                    elif(i == 1):
+            if(not room.isStart() and not room.isEnd()):
+                enemies = []
+                num_to_spawn = random.randint(1, 4)
+                for e in range(num_to_spawn):
+                    e_type = random.randint(1, enemy_types)
+                    if(e_type == 1):
                         enemies.append( DaggerGoblin(room.getRandomPos()) )
-            room.addEnemies(enemies)
+                    elif(e_type == 2):
+                        enemies.append( Zombie(room.getRandomPos()) )
+                    else:
+                        enemies.append( MageGoblin(room.getRandomPos()) )
+                room.addEnemies(enemies)
+            elif(room.isEnd()):
+                room.addEnemies( [ Dragon( room.getRandomPos() ) ] )
 
 
 

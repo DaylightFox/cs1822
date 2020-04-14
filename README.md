@@ -1,4 +1,5 @@
 # Welcome To Our Game Project
+https://github.com/DaylightFox/cs1822
 
 ## How To Run
 To play the game, please run `python Game.py` and please make sure you have the SimpleGUICS2Pygame module installed

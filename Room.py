@@ -24,7 +24,7 @@ class Room:
         self.__doors = {}
         self.__enemies = []
 
-        self.__tileset = simplegui._load_local_image("game-map-tileset.png")
+        self.__tileset = simplegui._load_local_image("assets/game-map-tileset.png")
         self.__wall_sprite_size = ( 32, 32 )
         self.__wall_sprite_pos_dict = {"N": (  16 , ( 64 + self.__wall_sprite_size[1]/2 ) ),
                                        "E": ( ( 32 + self.__wall_sprite_size[0]/2 ), ( 64 + self.__wall_sprite_size[1]/2 ) ),

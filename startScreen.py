@@ -5,9 +5,7 @@ except ImportError :
     import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 
 from Vector import Vector
-from playerAnimation import*
-from Mouse import Mouse
-from Keyboard import Keyboard
+from Creatures import *
 
 '''
 Mouse and Keyboard are necessary for the player to be drawn.
@@ -33,18 +31,15 @@ class Start():
         self.beginGame = False
         self.counter = 0
 
-        self.titleImage= simplegui._load_local_image("Images/startscreen.png")
-        self.tutorialImage = simplegui._load_local_image("Images/tutorial.png")
+        self.titleImage= simplegui._load_local_image("assets/startscreen.png")
+        self.tutorialImage = simplegui._load_local_image("assets/tutorial.png")
 
         self.size = (2048, 2048)
         #self.resize = (150,150)
         self.centre = (2048/2, 2048/2)
 
         #SHOW Main CHARACTER
-        self.bunny = MC(Vector(WIDTH/2, 130))
-        self.kbd = Keyboard()
-        self.mouse = Mouse(self.bunny.pos.get_p())
-        self.mc = Interaction(self.bunny, self.kbd, self.mouse)
+        self.bunny = Wizard(Vector(WIDTH/2, 130))
 
     def KeyClick(self, pos):
         '''
@@ -83,7 +78,7 @@ class Start():
                           self.size,
                          (WIDTH/2, HEIGHT/2),
                          (WIDTH, HEIGHT))
-        self.mc.MCdraw(canvas)
+        self.bunny.draw(canvas)
         
     def titleSequence(self, canvas, text):
         '''

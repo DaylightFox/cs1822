@@ -168,7 +168,7 @@ class Player(Creature):
 class Wizard(Player):
     def __init__(self, pos):
         super().__init__(pos)
-        self.sprite = simplegui._load_local_image('mcsprite.png')
+        self.sprite = simplegui._load_local_image('assets/mcsprite.png')
         self.center_source = [23,23]
         self.width_height_source = [46,46]
         self.frame_count = 0

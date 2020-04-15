@@ -24,7 +24,7 @@ class Attack:
 
 class ConeAttack(Attack):
     def __init__(self, pos, damage, direction, distance, angle):
-        super().__init__(damage, pos, direction)
+        super().__init__(pos, damage, direction)
         self.distance = distance
         self.angle = angle
         self.done = True
@@ -53,11 +53,11 @@ class ConeAttack(Attack):
             super().draw(canvas)
         else:
             p1 = self.pos.get_p()
-            p2 = (self.direction.copy().rotate_rad(self.angle) * self.distance).get_p()
-            p3 = (self.direction.copy().rotate_rad(self.angle * 0.5) * self.distance).get_p()
-            p4 = (self.direction.copy() * self.distance).get_p()
-            p5 = (self.direction.copy().rotate_rad(self.angle * -0.5) * self.distance).get_p()
-            p6 = (self.direction.copy().rotate_rad(self.angle * -1) * self.distance).get_p()
+            p2 = (self.pos + self.direction.copy().rotate_rad(self.angle) * self.distance).get_p()
+            p3 = (self.pos + self.direction.copy().rotate_rad(self.angle * 0.5) * self.distance).get_p()
+            p4 = (self.pos + self.direction.copy() * self.distance).get_p()
+            p5 = (self.pos + self.direction.copy().rotate_rad(self.angle * -0.5) * self.distance).get_p()
+            p6 = (self.pos + self.direction.copy().rotate_rad(self.angle * -1) * self.distance).get_p()
             
             canvas.draw_polygon([p1,p2,p3,p4,p5,p6], 1, self.colour, self.colour)
             
@@ -95,7 +95,7 @@ class ProjectileAttack(Attack):
 class BurningHands(ConeAttack):
     def __init__(self, pos, damage, direction):
         angle = 0.5
-        distance = 15#subject to change
+        distance = 50#subject to change
         super().__init__(pos, damage, direction, distance, angle)
         self.colour = "red"
     

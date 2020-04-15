@@ -1,3 +1,5 @@
+from Attacks import *
+
 class Interaction:
     def __init__(self, array1, array2):
         self.interactor = array1
@@ -54,7 +56,8 @@ class AttackRoomInteraction(Interaction):
         super().__init__(attacks, rooms)
     
     def intDetector(self, attack, room):
-        attack.hit_room(room)
+        if isinstance(attack, ProjectileAttack):
+            attack.hit_room(room)
         
     def intResolver(self, attack, room):
         if isinstance(attack, ProjectileAttack):

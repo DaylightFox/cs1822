@@ -86,6 +86,7 @@ class Player(Creature):
         self.currentHp = self.maxHp
         self.DmgBase = 10
         self.Dmg = self.DmgBase
+        self.altAttacking = False
         self.up = False
         self.down = False
         self.left = False
@@ -135,7 +136,7 @@ class Player(Creature):
             elif key == 68:#d
                 self.right = False
         elif key == 32:#space
-            self.altAttacking = True
+            self.altAttacking = False
         self.setDirection()
         
     def setDirection(self):
@@ -207,8 +208,12 @@ class Wizard(Player):
         #attack = FireBolt(source, self.Dmg, direction)
         self.attackList.append(attack)
     
-    def alt_attack(self, mouse_pos):
-        attack = self.create_attack(mouse_pos, BurningHands)
+    def alt_attack(self):
+        if self.direction.length():
+            target_pos = (self.direction + self.pos).get_p()
+        else:
+            target_pos = (Vector(0,1) + self.pos).get_p()
+        attack = self.create_attack(target_pos, BurningHands)
         #mouse_pos = Vector(mouse_pos[0], mouse_pos[1])
         #direction = (mouse_pos - self.pos).normalize
         #offset = 1

@@ -101,6 +101,9 @@ class Game:
             self.map.generate(self.__max_rooms, self.__random_rooms, [self.canvas_width, self.canvas_height])
             self.current_room[0] = self.map.getRooms()[0]
         
+        #if self.player.altAttacking:
+            #self.player.alt_attack()
+        
         for interaction in self.interactions:
             interaction.manageInteractions()
         for array in self.objects:

@@ -122,7 +122,7 @@ class Player(Creature):
                 self.right = True
             self.setDirection()
         elif key == 32:#space
-            pass#trigger alt_attack
+            self.altAttacking = True
     
     def moveU(self, key):
         if key in [87,83,65,68]:
@@ -134,6 +134,8 @@ class Player(Creature):
                 self.left = False
             elif key == 68:#d
                 self.right = False
+        elif key == 32:#space
+            self.altAttacking = True
         self.setDirection()
         
     def setDirection(self):

@@ -3,6 +3,7 @@ try:
 except ImportError:
     from user304_rsf8mD0BOQ_1 import Vector
 
+
 class Attack:
     def __init__(self, pos, damage, direction):
         self.pos = pos

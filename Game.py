@@ -65,7 +65,7 @@ class Game:
                 self.frame.set_mouseclick_handler(self.startScreen.KeyClick)
             elif newState == "game":
                 #set handlers
-                self.frame.set_mouseclick_handler(self.player.main_attack)
+                self.frame.set_mouseclick_handler(self.game_click)
                 self.frame.set_keydown_handler(self.player.moveD)
                 self.frame.set_keyup_handler(self.player.moveU)
             elif newState == "pause":
@@ -101,8 +101,8 @@ class Game:
             self.map.generate(self.__max_rooms, self.__random_rooms, [self.canvas_width, self.canvas_height])
             self.current_room[0] = self.map.getRooms()[0]
         
-        if self.player.altAttacking:
-            self.player.alt_attack()
+        #if self.player.altAttacking:
+            #self.player.alt_attack()
         
         for interaction in self.interactions:
             interaction.manageInteractions()
@@ -137,6 +137,12 @@ class Game:
                             self.player.increaseExp(item.exp)
                     array.remove(item)
                     break
+
+    def game_click(self, mouse_pos):
+        if self.player.altAttacking:
+            self.player.alt_attack(mouse_pos)
+        else:
+            self.player.main_attack(mouse_pos)
 
 game = Game()
 game.start()

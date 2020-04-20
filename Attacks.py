@@ -23,11 +23,13 @@ class Attack:
         canvas.draw_image(self.sprite, self.center_source, self.width_height_source, self.pos.get_p(), self.width_height_dest, rotation)
 
 class ConeAttack(Attack):
-    def __init__(self, pos, damage, direction, distance, angle):
+    def __init__(self, pos, damage, direction, distance, angle, duration):
         super().__init__(pos, damage, direction)
         self.distance = distance
         self.angle = angle
-        self.done = True
+        self.done = False
+        self.duration = duration
+        self.frame_count = 0
         #self.launch()
     
     def hit_creature(self, creature):
@@ -62,7 +64,10 @@ class ConeAttack(Attack):
             canvas.draw_polygon([p1,p2,p3,p4,p5,p6], 1, self.colour, self.colour)
             
     def update(self):
-        self.done = not self.done
+        self.frame_count = (self.frame_count+1) % self.duration
+        if self.frame_count == 0:
+            self.done = True
+        #self.done = not self.done
 
 class ProjectileAttack(Attack):
     def __init__(self, pos, damage, direction, radius, speed):
@@ -96,7 +101,8 @@ class BurningHands(ConeAttack):
     def __init__(self, pos, damage, direction):
         angle = 0.5
         distance = 50#subject to change
-        super().__init__(pos, damage, direction, distance, angle)
+        duration = 20
+        super().__init__(pos, damage, direction, distance, angle, duration)
         self.colour = "red"
     
     def next_frame():
@@ -113,12 +119,14 @@ class SwordSlash(ConeAttack):
     def __init__(self, pos, damage, direction):
         angle = 2/3 * math.pi
         distance = 5#subject to change
-        super().__init__(pos, damage, direction, distance, angle)
+        duration = 30
+        super().__init__(pos, damage, direction, distance, angle, duration)
         self.colour = "white"
     
 class IceBreath(ConeAttack):
     def __init__(self, pos, damage, direction):
         angle = 0.6
         distance = 20#subject to change
-        super().__init__(pos, damage, direction, distance, angle)
+        duration = 60
+        super().__init__(pos, damage, direction, distance, angle, duration)
         self.colour = "aqua"

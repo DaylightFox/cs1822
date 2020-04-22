@@ -170,7 +170,7 @@ class Room:
         enemies - an array of enemy objects
         """
         for enemy in enemies:
-            self.__enemies.add(enemy)
+            self.__enemies.append(enemy)
 
     def getEnemies(self):
         """

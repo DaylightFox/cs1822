@@ -1,4 +1,5 @@
 from Attacks import *
+import math
 
 try:
     from Vector import Vector
@@ -244,7 +245,7 @@ class Enemy(Creature):
         #increase Player exp
         
     def setDirection(self, player):
-        self.direction = (player.pos - self.pos).normalize
+        self.direction = (player.pos - self.pos).normalize()
         
     def update(self, player):
         self.setDirection(player)
@@ -259,7 +260,7 @@ class Enemy(Creature):
 
 class Goblin(Enemy):
     def __init__(self, pos, level):
-        radius = 1#will be small
+        radius = 20#will be small
         sprite = 1#replace with sprite
         speed = 3#will be fast
         base_exp = 5
@@ -300,7 +301,7 @@ class DaggerGoblin(Goblin):
             
     def draw(self, canvas):
         if self.sprite==1:
-            canvas.draw_circle(self.pos, self.radius, 1, "Gray", "Green")
+            canvas.draw_circle(self.pos.get_p(), self.radius, 1, "Gray", "Green")
         else:
             super().draw(canvas)
 
@@ -311,7 +312,7 @@ class Dragon(Enemy):
         speed = 3#will be slow
         base_exp = 7
         ideal_range = [5,17]
-        super().__init__(pos, radius, sprite, speed, ideal_range)
+        super().__init__(pos, radius, sprite, speed, base_exp, level, ideal_range)
 
     def main_attack(self, player_pos):
         attack = self.create_attack(player.pos, IceBreath)
@@ -319,6 +320,6 @@ class Dragon(Enemy):
         
     def draw(self, canvas):
         if self.sprite==1:
-            canvas.draw_circle(self.pos, self.radius, 1, "CadetBlue", "CadetBlue")
+            canvas.draw_circle(self.pos.get_p(), self.radius, 1, "CadetBlue", "CadetBlue")
         else:
             super().draw(canvas)

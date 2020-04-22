@@ -53,7 +53,7 @@ class Game:
         
     def start_game(self):#called from the start screen 
         #does stuff to prepare for the game to begin
-        self.map.generate(self.__max_rooms, self.__random_rooms, [self.canvas_width, self.canvas_height])
+        self.map.generate(self.__max_rooms, self.__random_rooms, [self.canvas_width, self.canvas_height], self.floor)
         #self.rooms = self.map.getRooms()
         self.current_room = [self.map.getRooms()[0]]
         self.interactions.append(AttackRoomInteraction(self.attacks, self.current_room))
@@ -97,8 +97,10 @@ class Game:
             old_room = self.current_room[0]
             self.current_room[0] = new_room
             self.player.setPos( self.current_room[0].getNewRoomPos(old_room) )
+            for enemy in self.current_room[0].getEnemies():
+                self.creatures.append(enemy)
         if(collisions_handler.doGenerateNewMap()):
-            self.map.generate(self.__max_rooms, self.__random_rooms, [self.canvas_width, self.canvas_height])
+            self.map.generate(self.__max_rooms, self.__random_rooms, [self.canvas_width, self.canvas_height], self.floor)
             self.current_room[0] = self.map.getRooms()[0]
         
         #if self.player.altAttacking:

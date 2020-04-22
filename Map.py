@@ -18,8 +18,9 @@ class Map:
         self.__max_neighbours = 3
         self.__show_map = debug # for debug purposes
         self.__tile_size = 32
+        self.__level = 0
 
-    def generate(self, max_rooms, random_percentage, screen_size):
+    def generate(self, max_rooms, random_percentage, screen_size, level):
         """
         Generates a list of rooms with a size of `max_rooms`
 
@@ -28,6 +29,7 @@ class Map:
         random_percentage - the percent of rooms to keep for adding randomly to the map
         screen_size - a tuple of ints that represent the screen size
         """
+        self.__level = level
         self.__rooms = []
         linear_rooms = int((max_rooms + 1) * (1 - random_percentage))
         random_rooms = max_rooms - linear_rooms
@@ -87,13 +89,13 @@ class Map:
                 for e in range(num_to_spawn):
                     e_type = random.randint(1, enemy_types)
                     if(e_type == 1):
-                        enemies.append( DaggerGoblin(room.getRandomPos()) )
+                        enemies.append( DaggerGoblin(room.getRandomPos(), self.__level))
                     #elif(e_type == 2):
                         #enemies.append( Zombie(room.getRandomPos()) )
                     #else:
                         #enemies.append( MageGoblin(room.getRandomPos()) )
             elif(room.isEnd()):
-                enemies.append(Dragon( room.getRandomPos() ))
+                enemies.append( Dragon(room.getRandomPos(), self.__level))
             room.addEnemies( enemies )
 
 

@@ -28,7 +28,7 @@ class Interaction:
                 inted = self.interacted[j]
                 if sticky or not self.interactions[i,j]:
                     if self.intDetector(inter, inted):
-                        interactions[i][j] = True
+                        #self.interactions[i][j] = True
                         self.intResolver(inter, inted)
 
 class AttackCreatureInteraction(Interaction):

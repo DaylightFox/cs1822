@@ -97,6 +97,9 @@ class Game:
             old_room = self.current_room[0]
             self.current_room[0] = new_room
             self.player.setPos( self.current_room[0].getNewRoomPos(old_room) )
+            for creature in self.creatures:
+                if issubclass(type(creature), Enemy):
+                    self.removeList.append(creature)
             for enemy in self.current_room[0].getEnemies():
                 self.creatures.append(enemy)
         if(collisions_handler.doGenerateNewMap()):
@@ -139,6 +142,7 @@ class Game:
                             self.player.increaseExp(item.exp)
                     array.remove(item)
                     break
+        self.removeList.clear()
 
     def game_click(self, mouse_pos):
         if self.player.altAttacking:

@@ -36,7 +36,7 @@ class AttackCreatureInteraction(Interaction):
         super().__init__(attacks, creatures)
 
     def intDetector(self, attack, attacked):
-        attack.hit_creature(attacked)
+        return attack.hit_creature(attacked)
         
     def intResolver(self, attack, attacked):
         attack.deal_damage(attacked)
@@ -57,7 +57,7 @@ class AttackRoomInteraction(Interaction):
     
     def intDetector(self, attack, room):
         if isinstance(attack, ProjectileAttack):
-            attack.hit_room(room)
+            return attack.hit_room(room)
         
     def intResolver(self, attack, room):
         if isinstance(attack, ProjectileAttack):

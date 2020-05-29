@@ -2,7 +2,7 @@ try:
     from Vector import Vector
 except ImportError:
     from user304_rsf8mD0BOQ_1 import Vector
-
+import math
 
 class Attack:
     def __init__(self, pos, damage, direction):
@@ -86,6 +86,11 @@ class ProjectileAttack(Attack):
         #return False
         
     def hit_room(self, room):
+        #print("East:",(self.pos.x >= room.getCenter().x + room.getWidth()/2))
+        #print("West:",(self.pos.x <= room.getCenter().x - room.getWidth()/2))
+        #print("North:",(self.pos.y <= room.getCenter().y - room.getHeight()/2))
+        #print("South:",(self.pos.y >= room.getCenter().y + room.getHeight()/2))
+        #print((self.pos.x >= room.getCenter().x + room.getWidth()/2) or (self.pos.x <= room.getCenter().x - room.getWidth()/2) or (self.pos.y <= room.getCenter().y - room.getHeight()/2) or (self.pos.y >= room.getCenter().y + room.getHeight()/2))
         return (self.pos.x >= room.getCenter().x + room.getWidth()/2) or (self.pos.x <= room.getCenter().x - room.getWidth()/2) or (self.pos.y <= room.getCenter().y - room.getHeight()/2) or (self.pos.y >= room.getCenter().y + room.getHeight()/2)
             
     def draw(self,canvas):

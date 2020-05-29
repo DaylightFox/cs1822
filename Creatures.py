@@ -251,10 +251,11 @@ class Enemy(Creature):
         self.setDirection(player)
         distance = (player.pos - self.pos).length()
         ideal_range = self.ideal_range
-        if ideal_range[0] <= distance <= ideal_range[0]:
-            self.main_attack(player.pos.get_p())
+        if ideal_range[0] <= distance <= ideal_range[1]:
+            self.main_attack(player)
         elif ideal_range[0] > distance:
             self.direction.rotate_rad(math.pi)
+            self.pos += self.direction * self.speed
         else:
             self.pos += self.direction * self.speed
 
@@ -270,11 +271,11 @@ class Goblin(Enemy):
 class DaggerGoblin(Goblin):
     def __init__(self, pos, level):
         super().__init__(pos, level)
-        self.ideal_range = [0.5,4]#approx
+        self.ideal_range = [20,60]#approx
         self.hit = False
 
-    def main_attack(self_pos):
-        attack = self.create_attack(player.pos, SwordSlash)
+    def main_attack(self, player):
+        attack = self.create_attack(player.pos.get_p(), SwordSlash)
         self.attackList.append(attack)
     
     def update(self, player):

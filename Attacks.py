@@ -35,7 +35,11 @@ class ConeAttack(Attack):
     def hit_creature(self, creature):
         difference = creature.pos - self.pos
         if difference.length() <= self.distance:
-            angle = self.direction.angle(difference.get_normalized())
+            cosAngle = self.direction.dot(difference) / (self.direction.length() * difference.length())
+            if abs(cosAngle)>1:
+                cosAngle = 1
+            angle = math.acos(cosAngle)
+            #angle = self.direction.angle(difference.get_normalized())
             if angle <= self.angle:
                 return True
             

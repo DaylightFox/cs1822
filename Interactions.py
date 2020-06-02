@@ -71,6 +71,8 @@ class CreatureCreatureInteraction(Interaction):
         super().__init__(creatures, creatures)
     
     def intDetector(self, creature1, creature2):
+        if (creature1 == creature2):
+            return False
         return (creature1.pos - creature2.pos).length() <= (creature1.radius + creature2.radius)
     
     def intResolver(self, creature1, creature2):

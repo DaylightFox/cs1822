@@ -77,5 +77,5 @@ class CreatureCreatureInteraction(Interaction):
     
     def intResolver(self, creature1, creature2):
         difference = creature2.pos - creature1.pos
-        newPos = creature2.pos + difference.normalize().multiply(creature1.radius + creature2.radius)
+        newPos = creature2.pos + difference.get_normalized().multiply(creature1.radius + creature2.radius - difference.length())
         creature2.pos = newPos

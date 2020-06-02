@@ -65,3 +65,15 @@ class AttackRoomInteraction(Interaction):
     
     #def manageInteractions(self):
         #super().manageInteractions(hit_detector, hit_resolver)
+
+class CreatureCreatureInteraction(Interaction):
+    def __init__(self, creatures):
+        super().__init__(creatures, creatures)
+    
+    def intDetector(self, creature1, creature2):
+        return (creature1.pos - creature2.pos).length() <= (creature1.radius + creature2.radius)
+    
+    def intResolver(self, creature1, creature2):
+        difference = creature2.pos - creature1.pos
+        newPos = creature2.pos + difference.normalize().multiply(creature1.radius + creature2.radius)
+        creature2.pos = newPos

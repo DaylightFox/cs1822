@@ -32,7 +32,7 @@ class Game:
 
         self.objects = [self.creatures, self.attacks, [self.health]]
         self.removeList = []
-        self.interactions = [AttackCreatureInteraction(self.attacks, self.creatures)]
+        self.interactions = [AttackCreatureInteraction(self.attacks, self.creatures), CreatureCreatureInteraction(self.creatures)]
         
         self.__min_room_size = 256
         self.__max_rooms = 12

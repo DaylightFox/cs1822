@@ -126,9 +126,9 @@ class FireBolt(ProjectileAttack):
         
 class SwordSlash(ConeAttack):
     def __init__(self, pos, damage, direction):
-        angle = 2/3 * math.pi
-        distance = 5#subject to change
-        duration = 30
+        angle = 4/3 * math.pi
+        distance = 10#subject to change
+        duration = 2
         super().__init__(pos, damage, direction, distance, angle, duration)
         self.colour = "white"
     

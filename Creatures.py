@@ -42,8 +42,9 @@ class Creature:
 
     def take_damage(self, damage):
         self.currentHp -= damage
-        if self.currentHp >= 0:
+        if self.currentHp <= 0:
             self.killed = True
+        #print(str(type(self)) + ":" , self.currentHp , "/" , self.maxHp , "\t" , self.killed)
 
     def die(self):
         a=1#placeholder
@@ -271,7 +272,7 @@ class Goblin(Enemy):
 class DaggerGoblin(Goblin):
     def __init__(self, pos, level):
         super().__init__(pos, level)
-        self.ideal_range = [20,60]#approx
+        self.ideal_range = [0,10]#approx
         self.hit = False
 
     def main_attack(self, player):

@@ -250,7 +250,7 @@ class Enemy(Creature):
         
     def update(self, player):
         self.setDirection(player)
-        distance = (player.pos - self.pos).length()
+        distance = (player.pos - self.pos).length() - (self.radius + player.radius)
         ideal_range = self.ideal_range
         if ideal_range[0] <= distance <= ideal_range[1]:
             self.main_attack(player)
